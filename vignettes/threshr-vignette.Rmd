@@ -1,0 +1,21 @@
+---
+title: "Introducing threshr: Threshold Selection and Uncertainty for Extreme Value Analysis"
+author: "Paul J. Northrop"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introducing threshr: Threshold Selection and Uncertainty for Extreme Value Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: threshr.bib
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+```
+
+The *threshr* package
+@revdbayes.
+
+## References
+
