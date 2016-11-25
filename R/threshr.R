@@ -19,7 +19,6 @@
 #' @docType package
 #' @name threshr
 #' @import methods
-#' @importFrom stats runif
 NULL
 
 #' Storm peak significant wave heights from the Gulf of Mexico
