@@ -2,8 +2,11 @@ Package: threshr
 Title: Threshold Selection and Uncertainty for Extreme Value Analysis
 Version: 0.0.0.9000
 Date: 2016-11-24
-Authors@R: person(c("Paul", "J."), "Northrop", email = "p.northrop@ucl.ac.uk",
-  role = c("aut", "cre", "cph"))
+Authors@R: c(
+    person(c("Paul", "J."), "Northrop", email = "p.northrop@ucl.ac.uk", 
+      role = c("aut", "cre", "cph")),
+    person("Nicolas", "Attalides", role = "aut")
+    )
 Description: Provides functions for the selection of extreme value threshold.
   See the 'threshr' website for more information, documentation and examples.
 Imports: stats,

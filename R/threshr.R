@@ -35,3 +35,17 @@ NULL
 #'  Statistical Society: Series C (Applied Statistics)}.
 #'  doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
 "gom"
+
+#' Storm peak significant wave heights from the North Sea
+#'
+#' A numeric vector containing 628 hindcasts of storm peak significant wave
+#' heights, metres, from 1964 to 1995 at an unnamed location in the North Sea.
+#'
+#'@format A vector containing 628 observations.
+#'@source Oceanweather Inc. (1995) NEXT -- North Sea hindcast study.
+#'@references Northrop, P. J., N. Attalides, and P. Jonathan. (2016).
+#'  Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
+#'  Application to Ocean Storm Severity. \emph{Journal of the Royal
+#'  Statistical Society: Series C (Applied Statistics)}.
+#'  doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
+"ns"
