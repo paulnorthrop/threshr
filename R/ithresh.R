@@ -1,3 +1,11 @@
+# Look for names of u_vec and v_vec
+# If there store them.
+# Otherwise, calculate the non-exceedance probs and store them (0, 100)
+# Add to returned object.
+# Use in plot.thresh()
+# Also xlab, ylab etc.
+# In plot.thresh, options to have quantile on lower axis, value on upper axis
+
 # =========================== thresh ===========================
 #
 #' Threshold selection in the i.i.d. case (peaks over threshold).
@@ -71,6 +79,7 @@ ithresh <- function(data, method = c("stability", "naj", "nc", "wadsworth"),
   method <- match.arg(method)
   temp <- naj_fn(data = data, u_vec = u_vec, v_vec = v_vec,
                  naj_control = naj_control, ...)
+  class(temp) <- "thresh"
   return(temp)
 }
 
@@ -130,7 +139,6 @@ naj_fn <- function(data, u_vec, v_vec = max(u_vec), naj_control = list(),
     temp <- rpost(n = n, model = "bingp", data = data, prior = gp_prior,
                   thresh = u, bin_prior = bin_prior)
     theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
-    print(dim(theta))
     # Simulate from the bin-GP posterior after removal of the maximum value.
     temp_rm <- rpost(n = n, model = "bingp", data = data, prior = gp_prior,
                      thresh = u, bin_prior = bin_prior)
@@ -143,7 +151,14 @@ naj_fn <- function(data, u_vec, v_vec = max(u_vec), naj_control = list(),
                                   u1 = u, u2.vec = v_vals, z.max = data_max,
                                   z.rm = data_rm)
   }
-  return(pred)
+  # Calculate threshold weights.  Shift to avoid underflow.
+  shoof <- matrix(colMeans(pred*!is.infinite(pred), na.rm = TRUE),
+                  ncol = n_v, nrow = n_u, byrow = TRUE)
+  tweights <- apply(exp(pred - shoof), 2, function(x) x / sum(x, na.rm =TRUE))
+  temp <- list(tweights = tweights, u_vec = u_vec, v_vec = v_vec,
+               method = "naj")
+  return(temp)
+
 }
 
 # =========================== bloocv ===========================

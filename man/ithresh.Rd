@@ -70,7 +70,7 @@ See the threshr vignette for further details and examples.
 # NAJ 2016
 library(revdbayes)
 data(gom)
-u_vec <- quantile(gom, probs = seq(0.65, 0.95, by = 0.05))
+u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 v_vec <- quantile(gom, probs = c(0.8, 0.85, 0.9, 0.95))
 naj_control <- list(prior_args = list(max_xi = 1))
 gom_naj <- ithresh(data = gom, method = "naj", u_vec = u_vec, v_vec = v_vec)
