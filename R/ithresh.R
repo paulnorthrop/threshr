@@ -1,7 +1,8 @@
-# Look for names of u_vec and v_vec
-# If there store them.
-# Otherwise, calculate the non-exceedance probs and store them (0, 100)
-# Add to returned object.
+# Add stuff like method to returned object.
+# cv -> cv, cv_egp1, ...
+# nc -> ?
+# wadsworth -> ?
+
 # Use in plot.thresh()
 # Also xlab, ylab etc.
 # In plot.thresh, options to have quantile on lower axis, value on upper axis
@@ -22,17 +23,17 @@
 #'   \itemize{
 #'     \item {"stability"} {A parameter estimate stability plot for the GP
 #'       shape parameter \eqn{\xi}}
-#'     \item {"naj"} {Northrop, Attalides and Jonathan (2016)}
+#'     \item {"cv"} {Northrop, Attalides and Jonathan (2016)}
 #'     \item {"nc"} {Northrop and Coleman (2014)}
 #'     \item {"wadsworth"} {Wadsworth (2015)}
 #'   }
 #' @param u_vec A numeric vector. A vector of \emph{training} thresholds
 #'   at which inferences are made from the GP model.
-#' @param v_vec A numeric vector. Relevant only if \code{method = "naj"}.
+#' @param v_vec A numeric vector. Relevant only if \code{method = "cv"}.
 #'   A vector of \emph{validation} thresholds used to quantify the predictive
 #'   performance of the GP models fitted at the thresholds in \code{u_vec}.
-#' @param naj_control A list of (optional) arguments for use if
-#'   \code{method = "naj"}.  In particular:
+#' @param cv_control A list of (optional) arguments for use if
+#'   \code{method = "cv"}.  In particular:
 #' \itemize{
 #'   \item {\code{prior}} {A prior for the GP parameters, set using
 #'     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}.
@@ -66,50 +67,64 @@
 #'   \code{\link[revdbayes]{revdbayes}} package for details of how to set a
 #'   prior distribution for the exceedance probability \eqn{p}.
 #' @examples
-#' # NAJ 2016
+#' # cv 2016
 #' library(revdbayes)
 #' data(gom)
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' v_vec <- quantile(gom, probs = c(0.8, 0.85, 0.9, 0.95))
-#' naj_control <- list(prior_args = list(max_xi = 1))
-#' gom_naj <- ithresh(data = gom, method = "naj", u_vec = u_vec, v_vec = v_vec)
+#' cv_control <- list(prior_args = list(max_xi = 1))
+#' gom_cv <- ithresh(data = gom, method = "cv", u_vec = u_vec, v_vec = v_vec)
 #' @export
-ithresh <- function(data, method = c("stability", "naj", "nc", "wadsworth"),
-                   u_vec, v_vec = max(u_vec), naj_control = list(), ...) {
+ithresh <- function(data, method = c("stability", "cv", "nc", "wadsworth"),
+                   u_vec, v_vec = max(u_vec), cv_control = list(), ...) {
   method <- match.arg(method)
-  temp <- naj_fn(data = data, u_vec = u_vec, v_vec = v_vec,
-                 naj_control = naj_control, ...)
+  temp <- cv_fn(data = data, u_vec = u_vec, v_vec = v_vec,
+                 cv_control = cv_control, ...)
+  #
+  if (is.null(names(u_vec))) {
+    temp$u_ps <- round(100 * sapply(u_vec, function(x) mean(data < x)))
+  } else {
+    temp$u_ps <- as.numeric(substr(names(u_vec), 1, nchar(names(u_vec),
+                                                     type = "c") - 1))
+  }
+  if (is.null(names(v_vec))) {
+    temp$v_ps <- round(100 * sapply(v_vec, function(x) mean(data < x)))
+  } else {
+    temp$v_ps <- as.numeric(substr(names(v_vec), 1, nchar(names(v_vec),
+                                                     type = "c") - 1))
+  }
+  temp$data <- data
   class(temp) <- "thresh"
   return(temp)
 }
 
-# =========================== naj_fn ===========================
+# =========================== cv_fn ===========================
 
-naj_fn <- function(data, u_vec, v_vec = max(u_vec), naj_control = list(),
+cv_fn <- function(data, u_vec, v_vec = max(u_vec), cv_control = list(),
                    ...) {
   # Extract arguments for passing to revdbayes function rpost -----------------
   # GP prior.
-  if (is.null(naj_control$prior)) {
-    naj_control$prior <- "flat"
+  if (is.null(cv_control$prior)) {
+    cv_control$prior <- "flat"
   }
-  if (is.null(naj_control$h_prior$min_xi)) {
-    naj_control$h_prior$min_xi <- -1
+  if (is.null(cv_control$h_prior$min_xi)) {
+    cv_control$h_prior$min_xi <- -1
   }
-  for_set_prior <- c(list(prior = naj_control$prior, model = "gp"),
-                     naj_control$h_prior)
+  for_set_prior <- c(list(prior = cv_control$prior, model = "gp"),
+                     cv_control$h_prior)
   gp_prior <- do.call(set_prior, for_set_prior)
   # Binomial prior.
-  if (is.null(naj_control$bin_prior)) {
-    naj_control$bin_prior <- "jeffreys"
+  if (is.null(cv_control$bin_prior)) {
+    cv_control$bin_prior <- "jeffreys"
   }
-  for_set_bin_prior <- c(list(prior = naj_control$bin_prior),
-                         naj_control$h_bin_prior)
+  for_set_bin_prior <- c(list(prior = cv_control$bin_prior),
+                         cv_control$h_bin_prior)
   bin_prior <- do.call(set_bin_prior, for_set_bin_prior)
   # Size of samples from posterior distributions.
-  if (is.null(naj_control$n)) {
+  if (is.null(cv_control$n)) {
     n <- 1000
   } else {
-    n <- naj_control$n
+    n <- cv_control$n
   }
   # Set up quantities for passing t
   # Put thresholds in ascending order ...
@@ -156,7 +171,7 @@ naj_fn <- function(data, u_vec, v_vec = max(u_vec), naj_control = list(),
                   ncol = n_v, nrow = n_u, byrow = TRUE)
   tweights <- apply(exp(pred - shoof), 2, function(x) x / sum(x, na.rm =TRUE))
   temp <- list(tweights = tweights, u_vec = u_vec, v_vec = v_vec,
-               method = "naj")
+               method = "cv")
   return(temp)
 
 }
