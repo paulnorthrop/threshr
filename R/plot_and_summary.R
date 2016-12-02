@@ -20,7 +20,7 @@
 #' @param legend_pos The position of the legend (if required) specified using
 #'   the argument \code{x} in \code{\link[graphics]{legend}}.
 #' @param ... Additional arguments passed on to \code{\link[graphics]{matplot}
-#'   and/or \code{\link[graphics]{legend}.
+#'   and/or \code{\link[graphics]{legend} and/or \code{\link[graphics]{axis}.
 #' @details Add some details.
 #' @examples
 #' # cv 2016
@@ -32,7 +32,7 @@
 #' gom_cv <- ithresh(data = gom, method = "cv", u_vec = u_vec, v_vec = v_vec)
 #' plot(gom_cv)
 #' @export
-plot.thresh <- function(x, y, prob = TRUE, top_scale = TRUE, add_legend = TRUE,
+plot.thresh <- function(x, y, prob = TRUE, top_scale = TRUE, add_legend = FALSE,
                         legend_pos = "topleft", ...) {
   if (!inherits(x, "thresh")) {
     stop("use only with \"thresh\" objects")
@@ -44,7 +44,6 @@ plot.thresh <- function(x, y, prob = TRUE, top_scale = TRUE, add_legend = TRUE,
     if (prob) {
       v_data <- x$v_ps
       x_lab <- "quantile of training threshold / %"
-      leg_title <- ""
     } else {
       v_data <- x$v_vec
       x_lab <- "threshold"
@@ -61,10 +60,13 @@ plot.thresh <- function(x, y, prob = TRUE, top_scale = TRUE, add_legend = TRUE,
   xy_args <- list(x = x_data, y = y_data)
   # Look for user-supplied arguments to matplot.
   user_args <- list(...)
-  matplot_cond <- names(user_args) %in% formalArgs(graphics::matplot)
-  matplot_args <- user_args[matplot_cond]
-  legend_cond <- names(user_args) %in% formalArgs(graphics::legend)
-  legend_args <- user_args[legend_cond]
+  m_cond <- names(user_args) %in% methods::formalArgs(graphics::matplot)
+  a_cond <- names(user_args) %in% methods::formalArgs(graphics::axis)
+  l_cond <- names(user_args) %in% methods::formalArgs(graphics::legend)
+  legend_args <- user_args[l_cond]
+  matplot_args <- user_args[(!l_cond & !a_cond) | m_cond]
+  axis_args <- user_args[(!l_cond & !m_cond) | a_cond]
+  axis_args$col <- 1
   if (is.null(matplot_args$xlab)) {
     matplot_args$xlab <- x_lab
   }
@@ -89,9 +91,12 @@ plot.thresh <- function(x, y, prob = TRUE, top_scale = TRUE, add_legend = TRUE,
   all_args <- c(xy_args, matplot_args)
   if (x$method == "cv" & prob == TRUE) {
     do.call(graphics::matplot, c(all_args, axes = FALSE))
-    graphics::axis(1, at = unique(c(pretty(x$u_ps), x$v_ps)))
-    graphics::axis(2)
-    graphics::box()
+    axis_args$side <- 2
+    do.call(graphics::axis, axis_args)
+    axis_args$side <- 1
+    axis_args$at <- unique(c(pretty(x$u_ps), x$v_ps))
+    do.call(graphics::axis, axis_args)
+    box()
   } else {
     do.call(graphics::matplot, all_args)
   }
@@ -100,13 +105,18 @@ plot.thresh <- function(x, y, prob = TRUE, top_scale = TRUE, add_legend = TRUE,
     top_vals <- pretty(t_data)
     if (prob) {
       top_vals <- top_vals[top_vals < max(x$u_vec)]
-      graphics::axis(3, at = 100 * ecdf(x$data)(top_vals), labels = top_vals)
+      axis_args$side <- 3
+      axis_args$at <- 100 * ecdf(x$data)(top_vals)
+      axis_args$labels <- top_vals
+      do.call(graphics::axis, axis_args)
     } else {
       if (x$method == "cv") {
         top_vals <- unique(c(top_vals, x$v_ps))
       }
-      graphics::axis(3, at = quantile(x$data, probs = top_vals / 100),
-           labels = top_vals)
+      axis_args$side <- 3
+      axis_args$at <- quantile(x$data, probs = top_vals / 100)
+      axis_args$labels <- top_vals
+      do.call(graphics::axis, axis_args)
     }
   }
   # Add a legend?
