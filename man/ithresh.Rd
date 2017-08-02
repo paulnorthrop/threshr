@@ -2,35 +2,36 @@
 % Please edit documentation in R/ithresh.R
 \name{ithresh}
 \alias{ithresh}
-\title{Threshold selection in the i.i.d. case (peaks over threshold).}
+\title{Threshold selection in the i.i.d. case (peaks over threshold)}
 \usage{
-ithresh(data, method = c("stability", "naj", "nc", "wadsworth"), u_vec,
-  v_vec = max(u_vec), naj_control = list(), ...)
+ithresh(data, u_vec, n_v = 1, use_rcpp = TRUE, ...)
 }
 \arguments{
 \item{data}{A numeric vector of observations.}
 
-\item{method}{A character scalar.  The method to be used.
-\itemize{
-  \item {"stability"} {A parameter estimate stability plot for the GP
-    shape parameter \eqn{\xi}}
-  \item {"naj"} {Northrop, Attalides and Jonathan (2016)}
-  \item {"nc"} {Northrop and Coleman (2014)}
-  \item {"wadsworth"} {Wadsworth (2015)}
-}}
-
 \item{u_vec}{A numeric vector. A vector of \emph{training} thresholds
-at which inferences are made from the GP model.}
+at which inferences are made from the GP model.  Any duplicated values
+will be removed. These could be set at sample quantiles of \code{data}
+using \code{\link[stats]{quantile}}.}
 
-\item{v_vec}{A numeric vector. Relevant only if \code{method = "naj"}.
-A vector of \emph{validation} thresholds used to quantify the predictive
-performance of the GP models fitted at the thresholds in \code{u_vec}.}
+\item{n_v}{A numeric scalar.
+The \code{n_v} largest values in \code{u_vec} will be used to quantify
+the predictive performance of the GP models fitted at the thresholds
+in \code{u_vec}.}
 
-\item{naj_control}{A list of (optional) arguments for use if
-  \code{method = "naj"}.  In particular:
+\item{use_rcpp}{A logical scalar.  If TRUE (the default) use the
+revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
+simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.}
+
+\item{...}{Further (optional) arguments to be passed to the
+  \code{\link[revdbayes]{revdbayes}} function
+  \code{\link[revdbayes]{rpost_rcpp}} (or \code{\link[revdbayes]{rpost}}).
+  In particular:
 \itemize{
+  \item {\code{n}} {The size of the posterior sample used to perform
+    predictive inference.  Default: \code{n = 1000}.}
   \item {\code{prior}} {A prior for the GP parameters, set using
-    \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}.
+    \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}
     with \code{min_xi = -1}.}
   \item {\code{h_prior}} {A list of further arguments (hyperparameters)
     for the GP prior specified in \code{prior}.}
@@ -39,12 +40,7 @@ performance of the GP models fitted at the thresholds in \code{u_vec}.}
     Default: \code{prior = "jeffreys"}.}
   \item {\code{h_bin_prior}} {A list of further arguments (hyperparameters)
     for the binomial prior specified in \code{bin_prior}.}
-  \item {\code{n}} {The size of the posterior sample used to perform
-    predictive inference.  Default: \code{n = 1000}.}
-  \item {...} {Further arguments to \code{prior} or \code{bin_prior}.}
 }}
-
-\item{...}{Further argments to be passed to}
 }
 \value{
 An object (list) of class \code{"thresh"}.
@@ -60,25 +56,41 @@ excesses.
 }
 \details{
 Add some details.
-\emph{parameter estimate stability plot}:
 \emph{Northrop, Attalides and Jonathan (2016)}:
-\emph{Northrop and Coleman (2014)}:
-\emph{Wadsworth (2015)}:
 See the threshr vignette for further details and examples.
 }
 \examples{
-# NAJ 2016
-library(revdbayes)
-data(gom)
 u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-v_vec <- quantile(gom, probs = c(0.8, 0.85, 0.9, 0.95))
-naj_control <- list(prior_args = list(max_xi = 1))
-gom_naj <- ithresh(data = gom, method = "naj", u_vec = u_vec, v_vec = v_vec)
+
+# Cross-validation approach
+gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
+plot(gom_cv)
+
+u_vec <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
+# Cross-validation approach
+cv_control <- list(prior = "mdi", h_prior = list(a = 0.6))
+ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 4,
+  prior = "mdi", h_prior = list(a = 0.6))
+plot(ns_cv)
+}
+\references{
+Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
+  Bayesian extreme value analyses using reference priors
+  \emph{Statistica Sinica}, \strong{26}(2), 721--743
+  \url{http://dx.doi.org/10.5705/ss.2014.034}.
+
+Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
+  Cross-validatory extreme value threshold selection and uncertainty
+  with application to ocean storm severity.
+  \emph{Journal of the Royal Statistical Society Series C: Applied
+  Statistics}, \strong{66}(1), 93-120.
+  \url{http://dx.doi.org/10.1111/rssc.12159}
 }
 \seealso{
 \code{\link[revdbayes]{rpost}} in the
   \code{\link[revdbayes]{revdbayes}} package for details of the arguments
-  that can be passed to \code{rpost}.
+  that can be passed to
+  \code{\link[revdbayes]{rpost_rcpp}}/\code{\link[revdbayes]{rpost}}.
 
 \code{\link[revdbayes]{set_prior}} in the
   \code{\link[revdbayes]{revdbayes}} package for details of how to set a
@@ -87,5 +99,6 @@ gom_naj <- ithresh(data = gom, method = "naj", u_vec = u_vec, v_vec = v_vec)
 \code{\link[revdbayes]{set_bin_prior}} in the
   \code{\link[revdbayes]{revdbayes}} package for details of how to set a
   prior distribution for the exceedance probability \eqn{p}.
-}
 
+\code{\link[stats]{quantile}}.
+}

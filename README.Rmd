@@ -14,19 +14,15 @@ knitr::opts_chunk$set(
 
 ## threshr: Threshold Selection and Uncertainty for Extreme Value Analysis
 
-### What does threshr?
+Note: threshr is under construction!
 
-The `threshr` package 
+### What does threshr do?
+
+The `threshr` package ...
 
 ### A simple example
 
 ### Installation
-
-To get the current released version from CRAN:
-
-```{r installation, eval = FALSE}
-install.packages("threshr")
-```
 
 ### Vignette
 

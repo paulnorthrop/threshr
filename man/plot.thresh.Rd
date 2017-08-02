@@ -4,7 +4,8 @@
 \alias{plot.thresh}
 \title{Plot diagnostics for a thresh}
 \usage{
-\method{plot}{thresh}(x, y, ...)
+\method{plot}{thresh}(x, y, which_val = NULL, prob = TRUE,
+  top_scale = TRUE, add_legend = FALSE, legend_pos = "topleft", ...)
 }
 \arguments{
 \item{x}{an object of class "thresh", a result of a call to
@@ -12,7 +13,27 @@
 
 \item{y}{Not used.}
 
-\item{...}{Additional arguments passed on to \code{matplot}.}
+\item{which_val}{A numeric vector specifying the validation thresholds, that
+is the indices of the argument \code{v_vec} to \code{\link{ithresh}}.}
+
+\item{prob}{A logical scalar.  If \code{TRUE} then the levels of thresholds
+are represented by the proportion of observations that lie below a
+threshold.  If \code{prob = FALSE} then the values of the thresholds are
+used.}
+
+\item{top_scale}{A logical scalar indicating Whether or not to add a scale
+to the top horizontal axis.  If this is added it gives the threshold on
+the scale not chosen by \code{prob}.}
+
+\item{add_legend}{A logical scalar indicating whether or not to add a
+legend to the plot.  If \code{method = "cv"} then the legend gives the
+levels of the validation thresholds.}
+
+\item{legend_pos}{The position of the legend (if required) specified using
+the argument \code{x} in \code{\link[graphics]{legend}}.}
+
+\item{...}{Additional arguments passed on to \code{\link[graphics]{matplot}}
+and/or \code{\link[graphics]{legend}} and/or \code{\link[graphics]{axis}}.}
 }
 \description{
 \code{plot} method for class "thresh".
@@ -21,13 +42,9 @@
 Add some details.
 }
 \examples{
-# NAJ 2016
-library(revdbayes)
-data(gom)
 u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-v_vec <- quantile(gom, probs = c(0.8, 0.85, 0.9, 0.95))
-naj_control <- list(prior_args = list(max_xi = 1))
-gom_naj <- ithresh(data = gom, method = "naj", u_vec = u_vec, v_vec = v_vec)
-plot(gom_naj)
-}
 
+gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
+plot(gom_cv)
+
+}

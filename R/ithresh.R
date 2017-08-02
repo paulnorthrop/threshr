@@ -1,15 +1,6 @@
-# Add stuff like method to returned object.
-# cv -> cv, cv_egp1, ...
-# nc -> ?
-# wadsworth -> ?
-
-# Use in plot.thresh()
-# Also xlab, ylab etc.
-# In plot.thresh, options to have quantile on lower axis, value on upper axis
-
-# =========================== thresh ===========================
+# =========================== ithresh ===========================
 #
-#' Threshold selection in the i.i.d. case (peaks over threshold).
+#' Threshold selection in the i.i.d. case (peaks over threshold)
 #'
 #' Produces diagnostic plots to assist in the selection of an extreme value
 #' threshold in the case where the data can be treated as independent and
@@ -19,24 +10,26 @@
 #' making inferences from a Generalised Pareto (GP) model for threshold
 #' excesses.
 #' @param data  A numeric vector of observations.
-#' @param method A character scalar.  The method to be used.
-#'   \itemize{
-#'     \item {"stability"} {A parameter estimate stability plot for the GP
-#'       shape parameter \eqn{\xi}}
-#'     \item {"cv"} {Northrop, Attalides and Jonathan (2016)}
-#'     \item {"nc"} {Northrop and Coleman (2014)}
-#'     \item {"wadsworth"} {Wadsworth (2015)}
-#'   }
 #' @param u_vec A numeric vector. A vector of \emph{training} thresholds
-#'   at which inferences are made from the GP model.
-#' @param v_vec A numeric vector. Relevant only if \code{method = "cv"}.
-#'   A vector of \emph{validation} thresholds used to quantify the predictive
-#'   performance of the GP models fitted at the thresholds in \code{u_vec}.
-#' @param cv_control A list of (optional) arguments for use if
-#'   \code{method = "cv"}.  In particular:
+#'   at which inferences are made from the GP model.  Any duplicated values
+#'   will be removed. These could be set at sample quantiles of \code{data}
+#'   using \code{\link[stats]{quantile}}.
+#' @param n_v A numeric scalar.
+#'   The \code{n_v} largest values in \code{u_vec} will be used to quantify
+#'   the predictive performance of the GP models fitted at the thresholds
+#'   in \code{u_vec}.
+#' @param use_rcpp A logical scalar.  If TRUE (the default) use the
+#'   revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
+#'   simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.
+#' @param ... Further (optional) arguments to be passed to the
+#'   \code{\link[revdbayes]{revdbayes}} function
+#'   \code{\link[revdbayes]{rpost_rcpp}} (or \code{\link[revdbayes]{rpost}}).
+#'   In particular:
 #' \itemize{
+#'   \item {\code{n}} {The size of the posterior sample used to perform
+#'     predictive inference.  Default: \code{n = 1000}.}
 #'   \item {\code{prior}} {A prior for the GP parameters, set using
-#'     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}.
+#'     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}
 #'     with \code{min_xi = -1}.}
 #'   \item {\code{h_prior}} {A list of further arguments (hyperparameters)
 #'     for the GP prior specified in \code{prior}.}
@@ -45,65 +38,91 @@
 #'     Default: \code{prior = "jeffreys"}.}
 #'   \item {\code{h_bin_prior}} {A list of further arguments (hyperparameters)
 #'     for the binomial prior specified in \code{bin_prior}.}
-#'   \item {\code{n}} {The size of the posterior sample used to perform
-#'     predictive inference.  Default: \code{n = 1000}.}
-#'   \item {...} {Further arguments to \code{prior} or \code{bin_prior}.}
 #' }
-#' @param ... Further argments to be passed to
 #' @details Add some details.
-#' \emph{parameter estimate stability plot}:
 #' \emph{Northrop, Attalides and Jonathan (2016)}:
-#' \emph{Northrop and Coleman (2014)}:
-#' \emph{Wadsworth (2015)}:
 #' See the threshr vignette for further details and examples.
 #' @return An object (list) of class \code{"thresh"}.
 #' @seealso \code{\link[revdbayes]{rpost}} in the
 #'   \code{\link[revdbayes]{revdbayes}} package for details of the arguments
-#'   that can be passed to \code{rpost}.
+#'   that can be passed to
+#'   \code{\link[revdbayes]{rpost_rcpp}}/\code{\link[revdbayes]{rpost}}.
 #' @seealso \code{\link[revdbayes]{set_prior}} in the
 #'   \code{\link[revdbayes]{revdbayes}} package for details of how to set a
 #'   prior distribution for GP parameters.
 #' @seealso \code{\link[revdbayes]{set_bin_prior}} in the
 #'   \code{\link[revdbayes]{revdbayes}} package for details of how to set a
 #'   prior distribution for the exceedance probability \eqn{p}.
+#' @seealso \code{\link[stats]{quantile}}.
 #' @examples
-#' # cv 2016
-#' library(revdbayes)
-#' data(gom)
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-#' v_vec <- quantile(gom, probs = c(0.8, 0.85, 0.9, 0.95))
-#' cv_control <- list(prior_args = list(max_xi = 1))
-#' gom_cv <- ithresh(data = gom, method = "cv", u_vec = u_vec, v_vec = v_vec)
+#'
+#' # Cross-validation approach
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
+#' plot(gom_cv)
+#'
+#' u_vec <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
+#' # Cross-validation approach
+#' cv_control <- list(prior = "mdi", h_prior = list(a = 0.6))
+#' ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 4,
+#'   prior = "mdi", h_prior = list(a = 0.6))
+#' plot(ns_cv)
+#' @references Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
+#'   Bayesian extreme value analyses using reference priors
+#'   \emph{Statistica Sinica}, \strong{26}(2), 721--743
+#'   \url{http://dx.doi.org/10.5705/ss.2014.034}.
+#' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
+#'   Cross-validatory extreme value threshold selection and uncertainty
+#'   with application to ocean storm severity.
+#'   \emph{Journal of the Royal Statistical Society Series C: Applied
+#'   Statistics}, \strong{66}(1), 93-120.
+#'   \url{http://dx.doi.org/10.1111/rssc.12159}
 #' @export
-ithresh <- function(data, method = c("stability", "cv", "nc", "wadsworth"),
-                   u_vec, v_vec = max(u_vec), cv_control = list(), ...) {
-  method <- match.arg(method)
-  temp <- cv_fn(data = data, u_vec = u_vec, v_vec = v_vec,
-                 cv_control = cv_control, ...)
-  #
+ithresh <- function(data, u_vec, n_v = 1, use_rcpp = TRUE, ...) {
+  # Put thresholds in ascending order and remove any repeated values.
+  u_vec <- unique(sort(u_vec))
+  n_u <- length(u_vec)
+  if (n_v > n_u) {
+    n_v <- n_u
+    warning("n_v has been set to length(u_vec)")
+  }
+  v_vec <- u_vec[(n_u - n_v + 1):n_u]
+  temp <- cv_fn(data = data, u_vec = u_vec, v_vec = v_vec, n_u = n_u,
+                n_v = n_v, use_rcpp = use_rcpp, ...)
   if (is.null(names(u_vec))) {
     temp$u_ps <- round(100 * sapply(u_vec, function(x) mean(data < x)))
   } else {
     temp$u_ps <- as.numeric(substr(names(u_vec), 1, nchar(names(u_vec),
                                                      type = "c") - 1))
   }
+  temp$data <- data
+  class(temp) <- "thresh"
   if (is.null(names(v_vec))) {
     temp$v_ps <- round(100 * sapply(v_vec, function(x) mean(data < x)))
   } else {
     temp$v_ps <- as.numeric(substr(names(v_vec), 1, nchar(names(v_vec),
                                                      type = "c") - 1))
   }
-  temp$data <- data
-  class(temp) <- "thresh"
   return(temp)
 }
 
 # =========================== cv_fn ===========================
 
-cv_fn <- function(data, u_vec, v_vec = max(u_vec), cv_control = list(),
-                   ...) {
+cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
   # Extract arguments for passing to revdbayes function rpost -----------------
   # GP prior.
+  cv_control <- list(...)
+  # Check for arguments passed in ... that are not formal arguments of
+  # rpost_rcpp/rpost or ru_rcpp/ru.
+  in_rpost <- names(cv_control) %in% methods::formalArgs(revdbayes::rpost_rcpp)
+  in_ru <- names(cv_control) %in% methods::formalArgs(rust::ru_rcpp)
+  rogue_names <- !in_rpost & !in_ru
+  rogue_args <- cv_control[rogue_names]
+  if (length(rogue_args) > 0) {
+    warning("The following arguments have been ignored", immediate. = TRUE)
+    print(rogue_args)
+    cv_control[rogue_names] <- NULL
+  }
   if (is.null(cv_control$prior)) {
     cv_control$prior <- "flat"
   }
@@ -112,138 +131,153 @@ cv_fn <- function(data, u_vec, v_vec = max(u_vec), cv_control = list(),
   }
   for_set_prior <- c(list(prior = cv_control$prior, model = "gp"),
                      cv_control$h_prior)
-  gp_prior <- do.call(set_prior, for_set_prior)
+  gp_prior <- do.call(revdbayes::set_prior, for_set_prior)
+  cv_control$prior <- NULL
+  cv_control$h_prior <- NULL
   # Binomial prior.
   if (is.null(cv_control$bin_prior)) {
     cv_control$bin_prior <- "jeffreys"
   }
   for_set_bin_prior <- c(list(prior = cv_control$bin_prior),
                          cv_control$h_bin_prior)
-  bin_prior <- do.call(set_bin_prior, for_set_bin_prior)
+  bin_prior <- do.call(revdbayes::set_bin_prior, for_set_bin_prior)
+  cv_control$bin_prior <- NULL
+  cv_control$h_bin_prior <- NULL
   # Size of samples from posterior distributions.
   if (is.null(cv_control$n)) {
     n <- 1000
   } else {
     n <- cv_control$n
   }
-  # Set up quantities for passing t
-  # Put thresholds in ascending order ...
-  u_vec <- sort(u_vec)
-  v_vec <- sort(v_vec)
-  # Validation tresholds must be above the lowest training threshold ...
-  if (min(v_vec) < min(u_vec)) {
-    warning("validation thresholds below min(u_vec) have been ignored",
-            immediate. = TRUE)
-    v_vec <- v_vec[v_vec >= min(u_vec)]
-  }
-  # Set the numbers of training and validation thresholds.
-  n_u <- length(u_vec)
-  n_v <- length(v_vec)
+  cv_control$n <- NULL
+  # Set up quantities for passing to revdbayes::rpost()
   # Locate the largest observation(s) in the data.
   j_max <- which(data == max(data))
   data_max <- data[j_max]
+  # Check that the highest validation threshold is lower than
+  # the largest observation.
+  if (v_vec[n_v] >= data_max) {
+    stop("max(v_vec) must be less than max(data")
+  }
+  n_max <- length(data_max)
   # Remove (one of the) the largest observation(s)
   data_rm <- data[-j_max[1]]
+  n_rm <- length(data_rm)
   #
   # A matrix to store the measures of predictive performance.
-  pred <- matrix(NA, nrow = n_u, ncol = n_v)
-    # Loop over the training thresholds -------------------------------------
+  pred_perf <- matrix(NA, nrow = n_u, ncol = n_v)
+  pred_perf_rcpp <- matrix(NA, nrow = n_u, ncol = n_v)
+  # Set the revdbayes posterior simulation function.
+  if (use_rcpp) {
+    gp_postsim <- revdbayes::rpost_rcpp
+  } else {
+    gp_postsim <- revdbayes::rpost
+  }
+  #
+  for_post <- c(list(n = n, model = "bingp", prior = gp_prior,
+                   bin_prior = bin_prior), cv_control)
+  # Loop over the training thresholds -------------------------------------
   for (i in 1:n_u){
-    # Simulate from (full) bin-GP posterior.
     u <- u_vec[i]
-    temp <- rpost(n = n, model = "bingp", data = data, prior = gp_prior,
-                  thresh = u, bin_prior = bin_prior)
-    theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
+    # Simulate from (full) bin-GP posterior.
+    temp <- do.call(gp_postsim, c(for_post, list(data = data, thresh = u)))
     # Simulate from the bin-GP posterior after removal of the maximum value.
-    temp_rm <- rpost(n = n, model = "bingp", data = data, prior = gp_prior,
-                     thresh = u, bin_prior = bin_prior)
+    temp_rm <- do.call(gp_postsim, c(for_post, list(data = data_rm, thresh = u)))
+    # Combine binomial and GP posterior simulated values.
+    theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
     theta_rm <- cbind(temp_rm$bin_sim_vals, temp_rm$sim_vals)
     # Carry out leave-one-out Bayesian cross-validation -------------------
-    # Which validation thresholds are >= u ?
-    which_v <- which(v_vec >= u - 1e-10)
+    which_v <- which(v_vec >= u)
     v_vals <- v_vec[which_v]           # select the validation thresholds
-    pred[i, which_v] <- bloocv(z = data, theta = theta, theta.rm = theta_rm,
-                                  u1 = u, u2.vec = v_vals, z.max = data_max,
-                                  z.rm = data_rm)
+    pred_perf[i, which_v] <- bloocv(z = data, theta = theta,
+                                    theta_rm = theta_rm, u1 = u,
+                                    u2_vec = v_vals, z_max = data_max,
+                                    z_rm = data_rm, n = n)
   }
-  # Calculate threshold weights.  Shift to avoid underflow.
-  shoof <- matrix(colMeans(pred*!is.infinite(pred), na.rm = TRUE),
-                  ncol = n_v, nrow = n_u, byrow = TRUE)
-  tweights <- apply(exp(pred - shoof), 2, function(x) x / sum(x, na.rm =TRUE))
-  temp <- list(tweights = tweights, u_vec = u_vec, v_vec = v_vec,
-               method = "cv")
+  temp <- list(pred_perf = pred_perf, u_vec = u_vec, v_vec = v_vec)
   return(temp)
 
 }
 
-# =========================== bloocv ===========================
+# =========================== new_bloocv ===========================
 
-bloocv <- function(z, theta, theta.rm, u1, u2.vec, z.max, z.rm){
+bloocv <- function(z, theta, theta_rm, u1, u2_vec, z_max, z_rm, n){
   #
-  N1 <- sum(z.rm<=u1)             # number of values that do not exceed u1
-  z.gt.u1 <- z.rm[z.rm>u1]        # data greater than u1
-  p1 <- theta[,1]                 # p.u from posterior sample
-  temp <- my.stuff(u1=u1,theta=theta,u2=u2.vec,z.gt.u1=z.gt.u1)
-  t.col <- ncol(temp)             # ... so that we can extract the correct columns
-  n2 <- length(u2.vec)            # number of validation thresholds considered
-  p2 <- as.matrix(temp[,(t.col-n2+1):t.col])
+  n1 <- sum(z_rm <= u1)      # number of values that do not exceed u1
+  z_gt_u1 <- z_rm[z_rm > u1] # data greater than u1 (not including maximum)
+  n2 <- length(u2_vec)       # number of validation thresholds considered
+  n_max <- length(z_max)     # cardinality of max(z)
   #
-  #----------------------- Function pred.u2 ---------------------------#
-  pred.u2 <- function(k){
+  # Posterior samples of (p,sigma,xi) at training threshold u1 ...
+  p1 <- theta[, 1]           # p.u from posterior sample
+  sigma_1 <- theta[, 2]
+  xi <- theta[, 3]
+  xi_near_0 <- abs(xi) < 1e-6
+  pow1 <- -1 / xi
+  pow2 <- -1 + pow1
+  mp1 <- 1 / (1 - p1)
+  # Probability of exceeding validation threshold u2, for each u2
+  p_gt_u2 <- function(x) {
+    xx <- (x - u1) / sigma_1
+    ifelse(xi_near_0, exp(-xx + xi * xx ^ 2 / 2), (1 + xi * xx) ^ pow1)
+  }
+  templ <- numeric(n)
+  p_2_vec <- p1 * vapply(u2_vec, p_gt_u2, templ)
+  # n.sim by (1+length(u2_vec)) matrix
+  # bin-GP density at each observation greater than u1
+  f_gt_u1 <- function(x) {
+    xx <- (x - u1) / sigma_1
+    ifelse(xi_near_0, exp(-xx + xi * xx * (xx - 2) / 2), (1 + xi * xx) ^ pow2)
+  }
+  fgp_r <- vapply(z_gt_u1, f_gt_u1, templ) / sigma_1
+  #
+  temp <- p1 * fgp_r
+  p2 <- p_2_vec
+  #
+  #----------------------- Function pred_u2 ---------------------------#
+  pred_u2 <- function(k) {
     # Contribution for each z that is less than or equal to u1
     t1 <- 1
-    if (N1>0) t1 <- mean((1-p2[,k])/(1-p1))/mean(1/(1-p1))
+    if (n1 > 0) {
+      t1 <- mean((1 - p2[, k]) * mp1) / mean(mp1)
+    }
     # Contributions from zs that are in (u1,u2]
     t2 <- 1
-    if (min(z.gt.u1)<=u2.vec[k]){
-      W2 <- which(z.gt.u1<=u2.vec[k])
-      fr2 <- as.matrix(temp[,W2])
-      t2 <- colMeans((1-p2[,k])/fr2/p1)/colMeans(1/fr2/p1)
+    if (min(z_gt_u1) <= u2_vec[k]) {
+      w2 <- which(z_gt_u1 <= u2_vec[k])
+      fr2 <- temp[, w2, drop = FALSE]
+      mp2 <- 1 / fr2
+      t2 <- colMeans((1 - p2[, k]) * mp2) / colMeans(mp2)
     }
     # Contributions from zs that are greater than u2
     t3 <- 1
-    if (max(z.gt.u1)>u2.vec[k]){
-      W3 <- which(z.gt.u1>u2.vec[k])
-      fr3 <- as.matrix(temp[,W3])
-      t3 <- 1/colMeans(1/fr3/p1)
+    if (max(z_gt_u1) > u2_vec[k]) {
+      w3 <- which(z_gt_u1 > u2_vec[k])
+      fr3 <- temp[, w3, drop = FALSE]
+      t3 <- 1 / colMeans(1 / fr3)
     }
-    # Contribution from z.max (NB. it is possible that z.max < u2)
-    p1 <- theta.rm[,1]
-    temp.rm <- my.stuff(u1=u1,theta=theta.rm,u2=u2.vec,z.max=z.max[1],for.max=T)
-    p2 <- as.matrix(temp.rm[,-1])
-    fn <- temp.rm[,1] # bin-GP density at max(z)
-    t4 <- ifelse(z.max[1]>u2.vec[k],mean(p1*fn),mean(1-p2[,k]))
-    n.max <- length(z.max)          # cardinality of max(z)
     #
-    N1*log(t1)+sum(log(t2))+sum(log(t3))+n.max*log(t4)
+    return(n1 * log(t1) + sum(log(t2)) + sum(log(t3)))
   }
-  #--------------------- End of function pred.u2 ----------------------#
+  #--------------------- End of function pred_u2 ----------------------#
   #
-  sapply(1:n2,pred.u2)
+  t123 <- vapply(1:n2, pred_u2, 0)
   #
+  # Contribution from z_max
+  p1 <- theta_rm[, 1]
+  sigma_1 <- theta_rm[, 2]
+  xi <- theta_rm[, 3]
+  xi_near_0 <- abs(xi) < 1e-6
+  pow2 <- -(1 + 1 / xi)
+  # bin-GP density at max(z)
+  xx <- (z_max - u1) / sigma_1
+  lin_max <- 1 + xi * xx
+  t4 <- ifelse(lin_max > 0,
+               ifelse(xi_near_0, exp(-xx + xi * xx * (xx - 2) / 2),
+                      lin_max ^ pow2),
+               0)
+  t4 <- mean(p1 * t4 / sigma_1)
+  #
+  return(t123 + n_max * log(t4))
 }
 
-#################################################################################
-
-my.stuff <- function(u1,theta,u2=u1,z.max=NULL,z.gt.u1=NULL,for.max=F){
-  #
-  # Quantities required to estimate f(y_r | y_(r))
-  # u1    : training threshold
-  # u2    : validation threshold (u1 <= u2) (Default: u2=u1)
-  # theta : (m by 3) matrix: (p.u.1, sigma.1, xi)
-  #
-  # Posterior samples of (p,sigma,xi) at training threshold u1 ...
-  p.1 <- theta[,1]; sigma.1 <- theta[,2]; xi <- theta[,3]
-  # Probability of exceeding validation threshold u2, for each u2
-  # (Note: this could be zero)
-  p.2.vec <- sapply(u2,function(xx) p.1*apply(cbind(1+xi*(xx-u1)/sigma.1,0),1,max)^(-1/xi))
-  # bin-GP density at max(z)
-  fGP.n <- ifelse(1+xi*(z.max-u1)/sigma.1>0,(1+xi*(z.max-u1)/sigma.1)^(-(1+1/xi))/sigma.1,0)
-  if (for.max) return(cbind(fGP.n,p.2.vec)) # n.sim by (1+length(u2.vec)) matrix
-  # bin-GP density at each observation greater than u1
-  fGP.r <- sapply(z.gt.u1,function(xx) (1+xi*(xx-u1)/sigma.1)^(-(1+1/xi))/sigma.1)
-  #
-  cbind(fGP.r,p.2.vec) # n.sim by (length(z.gt.u)+length(u2.vec)) matrix
-}# .............. end of function my.stuff()
-
-#################################################################################

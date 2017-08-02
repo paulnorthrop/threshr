@@ -14,8 +14,13 @@ bibliography: threshr.bib
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
-The *threshr* package
+**Under construction**
+
+The *threshr* package ...
 @revdbayes.
 
 ## References
 
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({  "HTML-CSS": { minScaleAdjust: 125, availableFonts: [] }  });
+</script>
