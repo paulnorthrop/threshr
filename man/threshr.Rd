@@ -28,8 +28,6 @@ Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
   \url{http://dx.doi.org/10.1111/rssc.12159}
 }
 \seealso{
-\code{\link[revdbayes]{set_prior}} and
-  \code{\link[revdbayes]{rpost}}: functions from the
-  \code{\link{revdbayes}} package used to set an extreme value prior density
-  and to sample from a extreme value posterior density respectively.
+The packages \code{\link[revdbayes]{revdbayes}} and
+  \code{\link[rust]{rust}}.
 }

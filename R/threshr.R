@@ -18,10 +18,8 @@
 #'   Statistics}, \strong{66}(1), 93-120.
 #'   \url{http://dx.doi.org/10.1111/rssc.12159}
 #'
-#' @seealso \code{\link[revdbayes]{set_prior}} and
-#'   \code{\link[revdbayes]{rpost}}: functions from the
-#'   \code{\link{revdbayes}} package used to set an extreme value prior density
-#'   and to sample from a extreme value posterior density respectively.
+#' @seealso The packages \code{\link[revdbayes]{revdbayes}} and
+#'   \code{\link[rust]{rust}}.
 #' @docType package
 #' @name threshr
 #' @import methods
