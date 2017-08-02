@@ -55,23 +55,22 @@ making inferences from a Generalised Pareto (GP) model for threshold
 excesses.
 }
 \details{
-Add some details.
+Details to be added ...
 \emph{Northrop, Attalides and Jonathan (2016)}:
 See the threshr vignette for further details and examples.
 }
 \examples{
+
+# Gulf of Mexico significant wave heights
 u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-
-# Cross-validation approach
 gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
-plot(gom_cv)
+plot(gom_cv, lwd = 2)
 
+# North Sea significant wave heights
 u_vec <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
-# Cross-validation approach
-cv_control <- list(prior = "mdi", h_prior = list(a = 0.6))
-ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 4,
+ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 3,
   prior = "mdi", h_prior = list(a = 0.6))
-plot(ns_cv)
+plot(ns_cv, lwd = 2)
 }
 \references{
 Northrop, P.J. and Attalides, N. (2016) Posterior propriety in

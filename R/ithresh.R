@@ -39,7 +39,7 @@
 #'   \item {\code{h_bin_prior}} {A list of further arguments (hyperparameters)
 #'     for the binomial prior specified in \code{bin_prior}.}
 #' }
-#' @details Add some details.
+#' @details Details to be added ...
 #' \emph{Northrop, Attalides and Jonathan (2016)}:
 #' See the threshr vignette for further details and examples.
 #' @return An object (list) of class \code{"thresh"}.
@@ -55,18 +55,17 @@
 #'   prior distribution for the exceedance probability \eqn{p}.
 #' @seealso \code{\link[stats]{quantile}}.
 #' @examples
+#'
+#' # Gulf of Mexico significant wave heights
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-#'
-#' # Cross-validation approach
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
-#' plot(gom_cv)
+#' plot(gom_cv, lwd = 2)
 #'
+#' # North Sea significant wave heights
 #' u_vec <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
-#' # Cross-validation approach
-#' cv_control <- list(prior = "mdi", h_prior = list(a = 0.6))
-#' ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 4,
+#' ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 3,
 #'   prior = "mdi", h_prior = list(a = 0.6))
-#' plot(ns_cv)
+#' plot(ns_cv, lwd = 2)
 #' @references Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
 #'   Bayesian extreme value analyses using reference priors
 #'   \emph{Statistica Sinica}, \strong{26}(2), 721--743
@@ -112,17 +111,6 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
   # Extract arguments for passing to revdbayes function rpost -----------------
   # GP prior.
   cv_control <- list(...)
-  # Check for arguments passed in ... that are not formal arguments of
-  # rpost_rcpp/rpost or ru_rcpp/ru.
-  in_rpost <- names(cv_control) %in% methods::formalArgs(revdbayes::rpost_rcpp)
-  in_ru <- names(cv_control) %in% methods::formalArgs(rust::ru_rcpp)
-  rogue_names <- !in_rpost & !in_ru
-  rogue_args <- cv_control[rogue_names]
-  if (length(rogue_args) > 0) {
-    warning("The following arguments have been ignored", immediate. = TRUE)
-    print(rogue_args)
-    cv_control[rogue_names] <- NULL
-  }
   if (is.null(cv_control$prior)) {
     cv_control$prior <- "flat"
   }
@@ -150,6 +138,17 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
     n <- cv_control$n
   }
   cv_control$n <- NULL
+  # Check for arguments passed in ... that are not formal arguments of
+  # rpost_rcpp/rpost or ru_rcpp/ru.
+  in_rpost <- names(cv_control) %in% methods::formalArgs(revdbayes::rpost_rcpp)
+  in_ru <- names(cv_control) %in% methods::formalArgs(rust::ru_rcpp)
+  rogue_names <- !in_rpost & !in_ru
+  rogue_args <- cv_control[rogue_names]
+  if (length(rogue_args) > 0) {
+    warning("The following arguments have been ignored", immediate. = TRUE)
+    print(rogue_args)
+    cv_control[rogue_names] <- NULL
+  }
   # Set up quantities for passing to revdbayes::rpost()
   # Locate the largest observation(s) in the data.
   j_max <- which(data == max(data))
