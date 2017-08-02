@@ -83,7 +83,7 @@ plot.thresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
     matplot_args$ylab <- y_lab
   }
   if (is.null(matplot_args$type)) {
-    matplot_args$type <- "b"
+    matplot_args$type <- "l"
   }
   if (is.null(matplot_args$col)) {
     matplot_args$col <- 1
