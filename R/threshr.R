@@ -9,7 +9,7 @@
 #'   overview of the package.
 #'
 #' @references Northrop, P. J. (2016). revdbayes: Ratio-of-Uniforms Sampling
-#'   for Bayesian Extreme Value Analysis. R package version 1.1.0.
+#'   for Bayesian Extreme Value Analysis. R package version 1.2.0.
 #'   \url{https://cran.r-project.org/package=revdbayes}.
 #' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 #'   Cross-validatory extreme value threshold selection and uncertainty
