@@ -4,7 +4,7 @@
 \alias{ithresh}
 \title{Threshold selection in the i.i.d. case (peaks over threshold)}
 \usage{
-ithresh(data, u_vec, n_v = 1, use_rcpp = TRUE, ...)
+ithresh(data, u_vec, n_v = 1, npy = NULL, use_rcpp = TRUE, ...)
 }
 \arguments{
 \item{data}{A numeric vector of observations.  Any missing values will
@@ -19,6 +19,17 @@ using \code{\link[stats]{quantile}}.}
 The \code{n_v} largest values in \code{u_vec} will be used as
 validation thresholds to quantify the predictive performance of the
 GP models fitted at the thresholds in \code{u_vec}.}
+
+\item{npy}{A numeric scalar. The mean number of observations per year
+  of data, after excluding any missing values, i.e. the number of
+  non-missing observations divided by total number of years of non-missing
+  data.
+
+  The value of \code{npy} does not affect any calculation in
+  \code{ithresh}, it only affects subsequent extreme value inferences using
+  \code{predict.ithresh}.  However, setting \code{npy} in the call to
+  \code{rpost} avoids the need to supply \code{npy} when calling
+  \code{predict.ithresh}.}
 
 \item{use_rcpp}{A logical scalar.  If TRUE (the default) use the
 revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
@@ -60,6 +71,14 @@ An object (list) of class \code{"ithresh"}, containing the
       each element in \code{u_vec}.
     \item{\code{v_ps}:} A numeric vector.  The values in \code{u_ps}
       that correspond to the validation thresholds.
+    \item{\code{sim_vals}:} A numeric matrix with 4 columns and
+      \code{n} x \code{length(u_vec)} rows.  The \eqn{j}th block of
+      \code{n} rows contains in columns 1-3 the posterior samples of
+      the threshold exceedance probability, the GP scale
+      parameter and the GP shape parameter respectively, and in
+      column 4 the value of \eqn{j}.
+    \item{\code{n}:} A numeric scalar.  The value of \code{n}.
+    \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
     \item{\code{data}:} The argument \code{data} to \code{ithresh}
       detailed above, with any missing values removed.
   }
@@ -99,7 +118,6 @@ For a given threshold in \code{u_vec}:
   and the introductory threshr vignette for further details and examples.
 }
 \examples{
-
 # Gulf of Mexico significant wave heights, default priors.
 u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)

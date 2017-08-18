@@ -25,6 +25,16 @@
 #'   The \code{n_v} largest values in \code{u_vec} will be used as
 #'   validation thresholds to quantify the predictive performance of the
 #'   GP models fitted at the thresholds in \code{u_vec}.
+#' @param npy A numeric scalar. The mean number of observations per year
+#'   of data, after excluding any missing values, i.e. the number of
+#'   non-missing observations divided by total number of years of non-missing
+#'   data.
+#'
+#'   The value of \code{npy} does not affect any calculation in
+#'   \code{ithresh}, it only affects subsequent extreme value inferences using
+#'   \code{predict.ithresh}.  However, setting \code{npy} in the call to
+#'   \code{rpost} avoids the need to supply \code{npy} when calling
+#'   \code{predict.ithresh}.
 #' @param use_rcpp A logical scalar.  If TRUE (the default) use the
 #'   revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
 #'   simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.
@@ -80,6 +90,14 @@
 #'       each element in \code{u_vec}.
 #'     \item{\code{v_ps}:} A numeric vector.  The values in \code{u_ps}
 #'       that correspond to the validation thresholds.
+#'     \item{\code{sim_vals}:} A numeric matrix with 4 columns and
+#'       \code{n} x \code{length(u_vec)} rows.  The \eqn{j}th block of
+#'       \code{n} rows contains in columns 1-3 the posterior samples of
+#'       the threshold exceedance probability, the GP scale
+#'       parameter and the GP shape parameter respectively, and in
+#'       column 4 the value of \eqn{j}.
+#'     \item{\code{n}:} A numeric scalar.  The value of \code{n}.
+#'     \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
 #'     \item{\code{data}:} The argument \code{data} to \code{ithresh}
 #'       detailed above, with any missing values removed.
 #'   }
@@ -96,7 +114,6 @@
 #'   \eqn{p}.
 #' @seealso \code{\link[stats]{quantile}}.
 #' @examples
-#'
 #' # Gulf of Mexico significant wave heights, default priors.
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
@@ -122,7 +139,7 @@
 #'   Statistics}, \strong{66}(1), 93-120.
 #'   \url{http://dx.doi.org/10.1111/rssc.12159}
 #' @export
-ithresh <- function(data, u_vec, n_v = 1, use_rcpp = TRUE, ...) {
+ithresh <- function(data, u_vec, n_v = 1, npy = NULL, use_rcpp = TRUE, ...) {
   # Remove missing values from data
   data <- as.numeric(na.omit(data))
   # Put thresholds in ascending order and remove any repeated values.
@@ -151,6 +168,7 @@ ithresh <- function(data, u_vec, n_v = 1, use_rcpp = TRUE, ...) {
     temp$v_ps <- as.numeric(substr(names(v_vec), 1, nchar(names(v_vec),
                                                      type = "c") - 1))
   }
+  temp$npy <- npy
   temp$data <- data
   class(temp) <- "ithresh"
   return(temp)
@@ -221,6 +239,8 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
   #
   for_post <- c(list(n = n, model = "bingp", prior = gp_prior,
                    bin_prior = bin_prior), cv_control)
+  # A matrix to store the posterior samples for each threshold
+  sim_vals <- matrix(NA, ncol = 4, nrow = n * n_u)
   # Loop over the training thresholds -------------------------------------
   for (i in 1:n_u){
     u <- u_vec[i]
@@ -238,8 +258,12 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
                                     theta_rm = theta_rm, u1 = u,
                                     u2_vec = v_vals, z_max = data_max,
                                     z_rm = data_rm, n = n)
+    # Save the posterior samples values
+    which_rows <- (1 + (i - 1) * n):(i * n)
+    sim_vals[which_rows, ] <- cbind(theta, i)
   }
-  temp <- list(pred_perf = pred_perf, u_vec = u_vec, v_vec = v_vec)
+  temp <- list(pred_perf = pred_perf, u_vec = u_vec, v_vec = v_vec,
+               sim_vals = sim_vals, n = n)
   return(temp)
 
 }
