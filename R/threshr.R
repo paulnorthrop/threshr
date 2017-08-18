@@ -33,10 +33,11 @@ NULL
 #'
 #'@format A vector containing 315 observations.
 #'@source Oceanweather Inc. (2005) GOMOS -- Gulf of Mexico hindcast study.
-#'@references Northrop, P. J., N. Attalides, and P. Jonathan. (2016).
+#'@references Northrop, P. J., N. Attalides, and P. Jonathan. (2017).
 #'  Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
 #'  Application to Ocean Storm Severity. \emph{Journal of the Royal
-#'  Statistical Society: Series C (Applied Statistics)}.
+#'  Statistical Society: Series C (Applied Statistics)}, \strong{66}(1),
+#'  93-120.
 #'  doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
 "gom"
 
@@ -47,9 +48,10 @@ NULL
 #'
 #'@format A vector containing 628 observations.
 #'@source Oceanweather Inc. (1995) NEXT -- North Sea hindcast study.
-#'@references Northrop, P. J., N. Attalides, and P. Jonathan. (2016).
+#'@references Northrop, P. J., N. Attalides, and P. Jonathan. (2017).
 #'  Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
 #'  Application to Ocean Storm Severity. \emph{Journal of the Royal
-#'  Statistical Society: Series C (Applied Statistics)}.
+#'  Statistical Society: Series C (Applied Statistics)}, \strong{66}(1),
+#'  93-120.
 #'  doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
 "ns"

@@ -17,10 +17,11 @@ heights, metres, from 1900 to 2005 at an unnamed location in the Gulf
 of Mexico.
 }
 \references{
-Northrop, P. J., N. Attalides, and P. Jonathan. (2016).
+Northrop, P. J., N. Attalides, and P. Jonathan. (2017).
  Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
  Application to Ocean Storm Severity. \emph{Journal of the Royal
- Statistical Society: Series C (Applied Statistics)}.
+ Statistical Society: Series C (Applied Statistics)}, \strong{66}(1),
+ 93-120.
  doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
 }
 \keyword{datasets}
