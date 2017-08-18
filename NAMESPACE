@@ -2,6 +2,7 @@
 
 S3method(plot,ithresh)
 S3method(plot,stability)
+S3method(predict,ithresh)
 export(ithresh)
 export(stability)
 import(methods)
