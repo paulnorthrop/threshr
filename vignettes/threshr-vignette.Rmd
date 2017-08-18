@@ -14,10 +14,49 @@ bibliography: threshr.bib
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
-**Under construction**
+*** Under construction! ***
 
 The *threshr* package ...
 @revdbayes.
+
+## Parameter estimate stability plot using `stability` 
+
+```{r, fig.show='hold', fig.height=5, fig.width=7, fig.align='center'}
+library(threshr)
+# Set a vector of thresholds
+u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+
+# Symmetric confidence intervals
+gom_stab <- stability(data = gom, u_vec = u_vec)
+plot(gom_stab)
+
+# Profile-likelihood-based confidence intervals
+gom_stab <- stability(data = gom, u_vec = u_vec, prof = TRUE)
+plot(gom_stab)
+```
+
+## Cross-validatory predictive performance for i.i.d data using `ithresh`
+
+We produce plots like those in the top row of Figure 7 in @NAJ2017.
+The scale on the top axis is
+
+```{r, fig.show='hold', fig.height=5, fig.width=7, fig.align='center'}
+# North Sea significant wave heights
+set.seed(44)
+ns_u_vec <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
+ns_cv <- ithresh(data = ns, u_vec = ns_u_vec, n_v = 3,
+  prior = "mdi", h_prior = list(a = 0.6))
+plot(ns_cv, lwd = 2, cex.axis = 0.8, add_legend = TRUE, legend_pos = "topright")
+mtext("significant wave height / m", side = 3, line = 2.5)
+
+# Gulf of Mexico significant wave heights
+set.seed(44)
+gom_u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+gom_cv <- ithresh(data = gom, u_vec = gom_u_vec, n_v = 4,
+  prior = "mdi", h_prior = list(a = 0.6))
+plot(gom_cv, lwd = 2, cex.axis = 0.8, add_legend = TRUE, legend_pos = "topleft")
+mtext("significant wave height / m", side = 3, line = 2.5)
+```
 
 ## References
 
