@@ -2,22 +2,28 @@
 #
 #' Threshold selection in the i.i.d. case (peaks over threshold)
 #'
-#' Produces diagnostic plots to assist in the selection of an extreme value
+#' Produces a diagnostic plot to assist in the selection of an extreme value
 #' threshold in the case where the data can be treated as independent and
 #' identically distributed (i.i.d.) observations.  For example, it could be
 #' that these observations are the cluster maxima resulting from the
-#' declustering of time series data.  The diagnostic plots are based on
-#' making inferences from a Generalised Pareto (GP) model for threshold
-#' excesses.
+#' declustering of time series data.  The plot is based on the predictive
+#' ability of the models fitted using each of a user-supplied set of
+#' thresholds, assessed using leave-one-out cross-validation.
+#' These models are based on a Generalized Pareto (GP) distribution for
+#' threshold excesses and a binomial model for the probability of threshold
+#' exceedance.  See
+#' \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
+#' for details.
+#'
 #' @param data  A numeric vector of observations.
 #' @param u_vec A numeric vector. A vector of \emph{training} thresholds
 #'   at which inferences are made from the GP model.  Any duplicated values
 #'   will be removed. These could be set at sample quantiles of \code{data}
 #'   using \code{\link[stats]{quantile}}.
 #' @param n_v A numeric scalar.
-#'   The \code{n_v} largest values in \code{u_vec} will be used to quantify
-#'   the predictive performance of the GP models fitted at the thresholds
-#'   in \code{u_vec}.
+#'   The \code{n_v} largest values in \code{u_vec} will be used as
+#'   validation thresholds to quantify the predictive performance of the
+#'   GP models fitted at the thresholds in \code{u_vec}.
 #' @param use_rcpp A logical scalar.  If TRUE (the default) use the
 #'   revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
 #'   simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.
@@ -39,10 +45,43 @@
 #'   \item {\code{h_bin_prior}} {A list of further arguments (hyperparameters)
 #'     for the binomial prior specified in \code{bin_prior}.}
 #' }
-#' @details Details to be added ...
-#' \emph{Northrop, Attalides and Jonathan (2016)}:
-#' See the threshr vignette for further details and examples.
-#' @return An object (list) of class \code{"thresh"}.
+#' @details For a given threshold in \code{u_vec}:
+#' \itemize{
+#'   \item {the number of values in \code{data} that exceed the threshold,
+#'     and the amounts (the \emph{threshold excesses}) by which these value
+#'     exceed the threshold are calculated;}
+#'   \item {\code{\link[revdbayes]{rpost_rcpp}}
+#'     (or \code{\link[revdbayes]{rpost}}) is used to sample from the posterior
+#'     distributions of the parameters of a GP model for the threshold
+#'     excesses and a binomial model for the probability of threshold
+#'     exceedance;}
+#'   \item {the ability of this binomial-GP model to predict data
+#'     thresholded at the threshold(s) specified by \code{n_v} is
+#'     assessed using leave-one-out cross-validation (the measure of
+#'     this is given in equation (7) of
+#'     \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.}
+#' }
+#'   See \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
+#'   and the introductory threshr vignette for further details and examples.
+#' @return An object (list) of class \code{"thresh"}, containing the components
+#'   \itemize{
+#'     \item{\code{pred_perf}:} A numeric matrix with \code{length(u_vec)}
+#'     rows and \code{n_v} columns.  Each column contains the values of
+#'     the measure of predictive performance
+#'     \item{\code{u_vec}:} The argument \code{u_vec} to \code{ithresh}.
+#'     \item{\code{v_vec}:} A numeric vector.  The validation thresholds
+#'       implied by the argument \code{n_v} to \code{ithresh}.
+#'     \item{\code{u_ps}:} A numeric vector. The approximate levels of the
+#'       sample quantiles to which the values in \code{u_vec} correspond,
+#'       i.e. the approximate percentage of the data the lie at or below
+#'       each element in \code{u_vec}.
+#'     \item{\code{v_ps}:} A numeric vector.  The values in \code{u_ps}
+#'       that correspond to the validation thresholds.
+#'     \item{\code{data}:} The argument \code{data} to \code{ithresh}
+#'       detailed above, with any missing values removed.
+#'   }
+#' @seealso \code{\link{plot.thresh}} for the S3 plot method for objects of
+#'   class \code{thresh}.
 #' @seealso \code{\link[revdbayes]{rpost}} in the
 #'   \code{\link[revdbayes]{revdbayes}} package for details of the arguments
 #'   that can be passed to
@@ -78,9 +117,15 @@
 #'   \url{http://dx.doi.org/10.1111/rssc.12159}
 #' @export
 ithresh <- function(data, u_vec, n_v = 1, use_rcpp = TRUE, ...) {
+  # Remove missing values from data
+  data <- as.numeric(na.omit(data))
   # Put thresholds in ascending order and remove any repeated values.
   u_vec <- unique(sort(u_vec))
   n_u <- length(u_vec)
+  # Check that the highest threshold is lower than the largest observation.
+  if (u_vec[n_u] >= max(data)) {
+    stop("max(u_vec) must be less than max(data)")
+  }
   if (n_v > n_u) {
     n_v <- n_u
     warning("n_v has been set to length(u_vec)")
@@ -94,14 +139,14 @@ ithresh <- function(data, u_vec, n_v = 1, use_rcpp = TRUE, ...) {
     temp$u_ps <- as.numeric(substr(names(u_vec), 1, nchar(names(u_vec),
                                                      type = "c") - 1))
   }
-  temp$data <- data
-  class(temp) <- "thresh"
   if (is.null(names(v_vec))) {
     temp$v_ps <- round(100 * sapply(v_vec, function(x) mean(data < x)))
   } else {
     temp$v_ps <- as.numeric(substr(names(v_vec), 1, nchar(names(v_vec),
                                                      type = "c") - 1))
   }
+  temp$data <- data
+  class(temp) <- "thresh"
   return(temp)
 }
 
@@ -153,11 +198,6 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
   # Locate the largest observation(s) in the data.
   j_max <- which(data == max(data))
   data_max <- data[j_max]
-  # Check that the highest validation threshold is lower than
-  # the largest observation.
-  if (v_vec[n_v] >= data_max) {
-    stop("max(v_vec) must be less than max(data")
-  }
   n_max <- length(data_max)
   # Remove (one of the) the largest observation(s)
   data_rm <- data[-j_max[1]]
