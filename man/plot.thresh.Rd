@@ -43,8 +43,8 @@ Add some details.
 }
 \examples{
 u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-
 gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
-plot(gom_cv)
+plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
+mtext("significant wave height / m", side = 3, line = 2.5)
 
 }
