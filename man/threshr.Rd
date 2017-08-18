@@ -7,10 +7,17 @@
 \title{threshr: Threshold Selection and Uncertainty for Extreme Value Analysis}
 \description{
 Provides functions for the selection of extreme value threshold.
-See the 'threshr' website for more information, documentation and examples.
+At the moment only the simplest case, where the data can be treated as
+independent identically distributed observations, is considered.
+Future releases will tackle more general situations.
+See the 'threshr' website for more information, documentation
+and examples.
 }
 \details{
-The main function in the threshr package is
+The main function in the threshr package is \code{\link{ithresh}},
+  which uses leave-one-out cross-validation in a Bayesian seup to compare
+  the predictive ability resulting from the use of each of a user-supplied
+  set of thresholds.
 
   See \code{vignette("threshr-vignette", package = "threshr")} for an
   overview of the package.
