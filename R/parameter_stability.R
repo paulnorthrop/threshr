@@ -2,7 +2,7 @@
 #
 #' Generalised Pareto parameter estimate stability
 #'
-#' Uses maximum likelihood estimation to fits a Generalised Pareto (GP)
+#' Uses maximum likelihood estimation to fit a Generalised Pareto (GP)
 #' model to threshold excesses over a range of thresholds.
 #' The threshold excesses are treated as independent and identically
 #' distributed (i.i.d.) observations.
