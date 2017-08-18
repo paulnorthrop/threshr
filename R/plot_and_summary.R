@@ -2,9 +2,9 @@
 
 #' Plot diagnostics for a thresh
 #'
-#' \code{plot} method for class "thresh".
+#' \code{plot} method for class "ithresh".
 #'
-#' @param x an object of class "thresh", a result of a call to
+#' @param x an object of class "ithresh", a result of a call to
 #'   \code{\link{ithresh}}.
 #' @param y Not used.
 #' @param which_val A numeric vector specifying the validation thresholds, that
@@ -31,10 +31,10 @@
 #' mtext("significant wave height / m", side = 3, line = 2.5)
 #'
 #' @export
-plot.thresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
+plot.ithresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
                         add_legend = FALSE, legend_pos = "topleft", ...) {
-  if (!inherits(x, "thresh")) {
-    stop("use only with \"thresh\" objects")
+  if (!inherits(x, "ithresh")) {
+    stop("use only with \"ithresh\" objects")
   }
   # Use only the validation thresholds in columns which_val.
   if (!is.null(which_val)) {
@@ -149,7 +149,7 @@ plot.thresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
 #' \code{plot} method for objects of class "stability" returned from
 #' \code{\link{stability}}
 #'
-#' @param x an object of class "thresh", a result of a call to
+#' @param x an object of class "stability", a result of a call to
 #'   \code{\link{stability}}.
 #' @param y Not used.
 #' @param prob A logical scalar.  If \code{TRUE} then the levels of thresholds

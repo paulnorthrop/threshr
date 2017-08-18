@@ -8,7 +8,7 @@
   "excesses", "opposite"), vertical = TRUE, ...)
 }
 \arguments{
-\item{x}{an object of class "thresh", a result of a call to
+\item{x}{an object of class "stability", a result of a call to
 \code{\link{stability}}.}
 
 \item{y}{Not used.}

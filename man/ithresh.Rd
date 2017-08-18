@@ -45,7 +45,8 @@ simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.}
 }}
 }
 \value{
-An object (list) of class \code{"thresh"}, containing the components
+An object (list) of class \code{"ithresh"}, containing the
+  components
   \itemize{
     \item{\code{pred_perf}:} A numeric matrix with \code{length(u_vec)}
     rows and \code{n_v} columns.  Each column contains the values of

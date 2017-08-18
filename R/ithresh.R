@@ -65,7 +65,8 @@
 #' }
 #'   See \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
 #'   and the introductory threshr vignette for further details and examples.
-#' @return An object (list) of class \code{"thresh"}, containing the components
+#' @return An object (list) of class \code{"ithresh"}, containing the
+#'   components
 #'   \itemize{
 #'     \item{\code{pred_perf}:} A numeric matrix with \code{length(u_vec)}
 #'     rows and \code{n_v} columns.  Each column contains the values of
@@ -151,7 +152,7 @@ ithresh <- function(data, u_vec, n_v = 1, use_rcpp = TRUE, ...) {
                                                      type = "c") - 1))
   }
   temp$data <- data
-  class(temp) <- "thresh"
+  class(temp) <- "ithresh"
   return(temp)
 }
 
