@@ -6,16 +6,17 @@
 #' threshold in the case where the data can be treated as independent and
 #' identically distributed (i.i.d.) observations.  For example, it could be
 #' that these observations are the cluster maxima resulting from the
-#' declustering of time series data.  The plot is based on the predictive
-#' ability of the models fitted using each of a user-supplied set of
-#' thresholds, assessed using leave-one-out cross-validation.
+#' declustering of time series data.  The predictive ability of models
+#' fitted using each of a user-supplied set of thresholds is assessed using
+#' leave-one-out cross-validation in a Bayesian setup.
 #' These models are based on a Generalized Pareto (GP) distribution for
 #' threshold excesses and a binomial model for the probability of threshold
 #' exceedance.  See
 #' \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
 #' for details.
 #'
-#' @param data  A numeric vector of observations.
+#' @param data  A numeric vector of observations.  Any missing values will
+#'   be removed.
 #' @param u_vec A numeric vector. A vector of \emph{training} thresholds
 #'   at which inferences are made from the GP model.  Any duplicated values
 #'   will be removed. These could be set at sample quantiles of \code{data}
@@ -36,12 +37,13 @@
 #'     predictive inference.  Default: \code{n = 1000}.}
 #'   \item {\code{prior}} {A prior for the GP parameters, set using
 #'     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}
-#'     with \code{min_xi = -1}.}
+#'     with \code{min_xi = -1}.}  See \code{\link[revdbayes]{set_prior}}
+#'     for details.
 #'   \item {\code{h_prior}} {A list of further arguments (hyperparameters)
 #'     for the GP prior specified in \code{prior}.}
 #'   \item {\code{bin_prior}} {A prior for the threshold exceedance
 #'     probability \eqn{p}, set using \code{\link[revdbayes]{set_bin_prior}}.
-#'     Default: \code{prior = "jeffreys"}.}
+#'     Default: \code{prior = "jeffreys"}}, i.e. Beta(1/2, 1/2).
 #'   \item {\code{h_bin_prior}} {A list of further arguments (hyperparameters)
 #'     for the binomial prior specified in \code{bin_prior}.}
 #' }
@@ -67,7 +69,7 @@
 #'   \itemize{
 #'     \item{\code{pred_perf}:} A numeric matrix with \code{length(u_vec)}
 #'     rows and \code{n_v} columns.  Each column contains the values of
-#'     the measure of predictive performance
+#'     the measure of predictive performance.
 #'     \item{\code{u_vec}:} The argument \code{u_vec} to \code{ithresh}.
 #'     \item{\code{v_vec}:} A numeric vector.  The validation thresholds
 #'       implied by the argument \code{n_v} to \code{ithresh}.
@@ -86,25 +88,28 @@
 #'   \code{\link[revdbayes]{revdbayes}} package for details of the arguments
 #'   that can be passed to
 #'   \code{\link[revdbayes]{rpost_rcpp}}/\code{\link[revdbayes]{rpost}}.
-#' @seealso \code{\link[revdbayes]{set_prior}} in the
+#' @seealso \code{\link[revdbayes]{set_prior}} and
+#'   \code{\link[revdbayes]{set_bin_prior}} in the
 #'   \code{\link[revdbayes]{revdbayes}} package for details of how to set a
-#'   prior distribution for GP parameters.
-#' @seealso \code{\link[revdbayes]{set_bin_prior}} in the
-#'   \code{\link[revdbayes]{revdbayes}} package for details of how to set a
-#'   prior distribution for the exceedance probability \eqn{p}.
+#'   prior distributions for GP parameters and for the exceedance probability
+#'   \eqn{p}.
 #' @seealso \code{\link[stats]{quantile}}.
 #' @examples
 #'
-#' # Gulf of Mexico significant wave heights
+#' # Gulf of Mexico significant wave heights, default priors.
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
-#' plot(gom_cv, lwd = 2)
+#' plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
+#' mtext("significant wave height / m", side = 3, line = 2.5)
 #'
-#' # North Sea significant wave heights
+#' # North Sea significant wave heights,
+#' # GP prior: pi(sigma_u, xi) = sigma_u^{-1} exp(-0.6 xi), xi >= -1.
 #' u_vec <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
 #' ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 3,
-#'   prior = "mdi", h_prior = list(a = 0.6))
-#' plot(ns_cv, lwd = 2)
+#'                  prior = "mdi", h_prior = list(a = 0.6))
+#' plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
+#' mtext("significant wave height / m", side = 3, line = 2.5)
+#'
 #' @references Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
 #'   Bayesian extreme value analyses using reference priors
 #'   \emph{Statistica Sinica}, \strong{26}(2), 721--743
