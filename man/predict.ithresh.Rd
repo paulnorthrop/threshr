@@ -5,8 +5,8 @@
 \title{Predictive distribution function of the largest value observed in N years.}
 \usage{
 \method{predict}{ithresh}(object, npy = NULL, n_years = 100,
-  which_u = "best", which_v = 1, u_prior = NULL, type = c("p", "d", "q",
-  "i", "r"), ...)
+  which_u = c("best", "all"), which_v = 1L, u_prior = NULL,
+  type = c("p", "d", "q", "i", "r"), ...)
 }
 \arguments{
 \item{object}{An object of class "ithresh", a result of a call to
@@ -17,9 +17,10 @@ of data, after excluding any missing values, i.e. the number of
 non-missing observations divided by total number of years of non-missing
 data.}
 
-\item{n_years}{A numeric vector. Values of N.}
+\item{n_years}{A numeric vector. Value(s) of N.  If \code{which_u = "all"}
+then \code{n_years} must have length one.}
 
-\item{which_u}{Either a character scalar or a numeric vector.
+\item{which_u}{Either a character scalar or a numeric scalar.
 
   If \code{which_u} is a character scalar it must be either "best" or "all".
   If \code{which_u = "best"} then the threshold achieving the largest
@@ -34,9 +35,9 @@ data.}
   and column \code{n_v} of the measures of predictive performance in
   \code{object$pred_perf}.
 
-  Otherwise, \code{which_u} is a numeric vector that indicates which
-  elements of \code{u_vec} the user wishes to select as thresholds on
-  which to base prediction, that is, it must contain integers in
+  Otherwise, \code{which_u} is a numeric scalar that indicates which
+  element of \code{u_vec} the user wishes to select as a threshold on
+  which to base prediction, that is, it must contain an integer from
   {1, ..., \code{length(object$u_vec)}}.}
 
 \item{which_v}{A numeric scalar. Indicates which element of
@@ -46,7 +47,9 @@ all thresholds (if \code{which_u = "all"}).}
 
 \item{u_prior}{A numeric vector.  Prior probabilities for the thresholds
 in \code{u_prior}.  By default this is set to a vector of length
-\code{length(u_vec)} with each element equal to 1/\code{length(u_vec)}.}
+\code{length(u_vec)} with each element equal to 1/\code{length(u_vec)}.
+\code{u_prior} is normalized to have sum equal to 1 inside
+\code{predict.ithresh}.}
 
 \item{type}{A character vector.  Indicates which type of inference is
   required:
@@ -62,7 +65,11 @@ in \code{u_prior}.  By default this is set to a vector of length
 \code{\link[revdbayes]{predict.evpost}}, in particular \code{x}.}
 }
 \value{
-An object of class "pred_ithresh"
+An object of class "ithreshpred" with a similar structure to
+  an object of class "evpred" returned from
+  \code{\link[revdbayes]{predict.evpost}}.
+  In addition, the object contains \code{which_u} and \code{which_v}
+  and \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec}.
 }
 \description{
 \code{predict} method for class "ithresh".
@@ -76,6 +83,8 @@ u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 npy_gom <- length(gom)/105
 gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
 pjn <- predict(gom_cv, npy = npy_gom)
+plot(pjn)
+
 }
 \references{
 Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
