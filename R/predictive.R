@@ -29,20 +29,20 @@
 #'   If \code{which_u} is a character scalar it must be either "best" or "all".
 #'   If \code{which_u = "best"} then the threshold achieving the largest
 #'   measure of predictive performance in \code{object$pred_perf}, based
-#'   on the validation threshold selected using \code{n_v}, is used to
+#'   on the validation threshold selected using \code{which_v}, is used to
 #'   perform prediction.
 #'   If \code{which_u = "all"} then \emph{all} the thresholds are used to
 #'   perform prediction.  The inferences from each threshold are weighted
 #'   according to equation (15) in
 #'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
 #'   based on the prior probabilities of thresholds in \code{u_prior}
-#'   and column \code{n_v} of the measures of predictive performance in
+#'   and column \code{which_v} of the measures of predictive performance in
 #'   \code{object$pred_perf}.
 #'
 #'   Otherwise, \code{which_u} is a numeric scalar that indicates which
 #'   element of \code{u_vec} the user wishes to select as a threshold on
-#'   which to base prediction, that is, it must contain an integer from
-#'   {1, ..., \code{length(object$u_vec)}}.
+#'   which to base prediction, that is, \code{which_u} must be an integer
+#'   in {1, ..., \code{length(object$u_vec)}}.
 #' @param which_v A numeric scalar. Indicates which element of
 #'   \code{object$v_vec} is used in selecting a single threshold
 #'   (if \code{which_u = "best"}) or weighting the inferences from
