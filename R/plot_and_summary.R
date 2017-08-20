@@ -48,7 +48,7 @@ plot.ithresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
   # Calculate threshold weights.  Shift to avoid underflow.
   n_u <- length(x$u_vec)
   n_v <- length(x$v_vec)
-  shoof <- matrix(colMeans(x$pred_perf*!is.infinite(x$pred_perf),
+  shoof <- matrix(colMeans(x$pred_perf * !is.infinite(x$pred_perf),
                            na.rm = TRUE), ncol = n_v, nrow = n_u,
                   byrow = TRUE)
   y_data <- apply(exp(x$pred_perf - shoof), 2,
