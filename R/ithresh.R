@@ -47,8 +47,8 @@
 #'     predictive inference.  Default: \code{n = 1000}.}
 #'   \item {\code{prior}} {A prior for the GP parameters, set using
 #'     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}
-#'     with \code{min_xi = -1}.}  See \code{\link[revdbayes]{set_prior}}
-#'     for details.
+#'     with \code{min_xi = -1}.  See \code{\link[revdbayes]{set_prior}}
+#'     for details.}
 #'   \item {\code{h_prior}} {A list of further arguments (hyperparameters)
 #'     for the GP prior specified in \code{prior}.}
 #'   \item {\code{bin_prior}} {A prior for the threshold exceedance
@@ -101,8 +101,8 @@
 #'     \item{\code{data}:} The argument \code{data} to \code{ithresh}
 #'       detailed above, with any missing values removed.
 #'   }
-#' @seealso \code{\link{plot.thresh}} for the S3 plot method for objects of
-#'   class \code{thresh}.
+#' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
+#'   class \code{ithresh}.
 #' @seealso \code{\link[revdbayes]{rpost}} in the
 #'   \code{\link[revdbayes]{revdbayes}} package for details of the arguments
 #'   that can be passed to
@@ -114,6 +114,7 @@
 #'   \eqn{p}.
 #' @seealso \code{\link[stats]{quantile}}.
 #' @examples
+#' \dontrun{
 #' # Gulf of Mexico significant wave heights, default priors.
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
@@ -127,7 +128,7 @@
 #'                  prior = "mdi", h_prior = list(a = 0.6))
 #' plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
 #' mtext("significant wave height / m", side = 3, line = 2.5)
-#'
+#' }
 #' @references Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
 #'   Bayesian extreme value analyses using reference priors
 #'   \emph{Statistica Sinica}, \strong{26}(2), 721--743
@@ -141,7 +142,7 @@
 #' @export
 ithresh <- function(data, u_vec, n_v = 1, npy = NULL, use_rcpp = TRUE, ...) {
   # Remove missing values from data
-  data <- as.numeric(na.omit(data))
+  data <- as.numeric(stats::na.omit(data))
   # Put thresholds in ascending order and remove any repeated values.
   u_vec <- unique(sort(u_vec))
   n_u <- length(u_vec)

@@ -44,8 +44,8 @@ simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.}
     predictive inference.  Default: \code{n = 1000}.}
   \item {\code{prior}} {A prior for the GP parameters, set using
     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}
-    with \code{min_xi = -1}.}  See \code{\link[revdbayes]{set_prior}}
-    for details.
+    with \code{min_xi = -1}.  See \code{\link[revdbayes]{set_prior}}
+    for details.}
   \item {\code{h_prior}} {A list of further arguments (hyperparameters)
     for the GP prior specified in \code{prior}.}
   \item {\code{bin_prior}} {A prior for the threshold exceedance
@@ -118,6 +118,7 @@ For a given threshold in \code{u_vec}:
   and the introductory threshr vignette for further details and examples.
 }
 \examples{
+\dontrun{
 # Gulf of Mexico significant wave heights, default priors.
 u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
@@ -131,7 +132,7 @@ ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 3,
                  prior = "mdi", h_prior = list(a = 0.6))
 plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
 mtext("significant wave height / m", side = 3, line = 2.5)
-
+}
 }
 \references{
 Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
@@ -147,8 +148,8 @@ Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
   \url{http://dx.doi.org/10.1111/rssc.12159}
 }
 \seealso{
-\code{\link{plot.thresh}} for the S3 plot method for objects of
-  class \code{thresh}.
+\code{\link{plot.ithresh}} for the S3 plot method for objects of
+  class \code{ithresh}.
 
 \code{\link[revdbayes]{rpost}} in the
   \code{\link[revdbayes]{revdbayes}} package for details of the arguments
