@@ -5,8 +5,8 @@
 \title{Predictive distribution function of the largest value observed in N years.}
 \usage{
 \method{predict}{ithresh}(object, npy = NULL, n_years = 100,
-  which_u = c("best", "all"), which_v = 1L, u_prior = NULL,
-  type = c("p", "d", "q", "i", "r"), ...)
+  which_u = c("best", "all"), which_v = 1L, u_prior = rep(1,
+  length(object$u_vec)), type = c("p", "d", "q", "i", "r"), x = NULL)
 }
 \arguments{
 \item{object}{An object of class "ithresh", a result of a call to
@@ -43,13 +43,24 @@ then \code{n_years} must have length one.}
 \item{which_v}{A numeric scalar. Indicates which element of
 \code{object$v_vec} is used in selecting a single threshold
 (if \code{which_u = "best"}) or weighting the inferences from
-all thresholds (if \code{which_u = "all"}).}
+all thresholds (if \code{which_u = "all"}).
+Note: the default, \code{which_v = 1} gives the \emph{lowest} of the
+validation thresholds in \code{object$v_vec}.}
 
-\item{u_prior}{A numeric vector.  Prior probabilities for the thresholds
-in \code{u_prior}.  By default this is set to a vector of length
-\code{length(u_vec)} with each element equal to 1/\code{length(u_vec)}.
-\code{u_prior} is normalized to have sum equal to 1 inside
-\code{predict.ithresh}.}
+\item{u_prior}{A numeric vector.  Prior probabilities for the training
+  thresholds in \code{u_vec}.  Only used if \code{which_u = "all"}.
+
+  Only the first
+  \code{length(object$u_vec) - length(object$v_vec) + which_v}
+  elements of \code{u_prior} are used.  This is because only training
+  thresholds up to and including \code{object$v_vec[which_v]} are relevant.
+  \code{u_prior} must have length \code{length(object$u_vec)} or
+  \code{length(object$u_vec) - length(object$v_vec) + which_v}.
+
+  If \code{u_prior} is not supplied then all (relevant) training thresholds
+  are given equal prior probability.
+  \code{u_prior} is normalized to have sum equal to 1 inside
+  \code{predict.ithresh}.}
 
 \item{type}{A character vector.  Indicates which type of inference is
   required:
@@ -61,15 +72,23 @@ in \code{u_prior}.  By default this is set to a vector of length
   \item "r" for random generation from the predictive distribution.
 }}
 
-\item{...}{Additional arguments passed on to
-\code{\link[revdbayes]{predict.evpost}}, in particular \code{x}.}
+\item{x}{A numeric vector.  The argument \code{x} of
+\code{\link[revdbayes]{predict.evpost}}.  In the current context this
+must be a vector (not a matrix, as suggested by the documentation of
+\code{\link[revdbayes]{predict.evpost}}).}
+
+\item{...}{Additional optional arguments. At present no optional arguments
+are used.}
 }
 \value{
 An object of class "ithreshpred" with a similar structure to
   an object of class "evpred" returned from
   \code{\link[revdbayes]{predict.evpost}}.
-  In addition, the object contains \code{which_u} and \code{which_v}
-  and \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec}.
+  In addition, the object contains
+  \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec},
+  \code{which_v} and the index \code{best_u} in
+  \code{u_vec = object$u_vec} of the best training threshold based on
+  the value of \code{which_v}.
 }
 \description{
 \code{predict} method for class "ithresh".

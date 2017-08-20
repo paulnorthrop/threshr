@@ -47,9 +47,20 @@
 #'   \code{object$v_vec} is used in selecting a single threshold
 #'   (if \code{which_u = "best"}) or weighting the inferences from
 #'   all thresholds (if \code{which_u = "all"}).
-#' @param u_prior  A numeric vector.  Prior probabilities for the thresholds
-#'   in \code{u_prior}.  By default this is set to a vector of length
-#'   \code{length(u_vec)} with each element equal to 1/\code{length(u_vec)}.
+#'   Note: the default, \code{which_v = 1} gives the \emph{lowest} of the
+#'   validation thresholds in \code{object$v_vec}.
+#' @param u_prior  A numeric vector.  Prior probabilities for the training
+#'   thresholds in \code{u_vec}.  Only used if \code{which_u = "all"}.
+#'
+#'   Only the first
+#'   \code{length(object$u_vec) - length(object$v_vec) + which_v}
+#'   elements of \code{u_prior} are used.  This is because only training
+#'   thresholds up to and including \code{object$v_vec[which_v]} are relevant.
+#'   \code{u_prior} must have length \code{length(object$u_vec)} or
+#'   \code{length(object$u_vec) - length(object$v_vec) + which_v}.
+#'
+#'   If \code{u_prior} is not supplied then all (relevant) training thresholds
+#'   are given equal prior probability.
 #'   \code{u_prior} is normalized to have sum equal to 1 inside
 #'   \code{predict.ithresh}.
 #' @param type A character vector.  Indicates which type of inference is
@@ -61,14 +72,21 @@
 #'   \item "i" for predictive intervals,
 #'   \item "r" for random generation from the predictive distribution.
 #' }
-#' @param ... Additional arguments passed on to
-#'   \code{\link[revdbayes]{predict.evpost}}, in particular \code{x}.
+#' @param x A numeric vector.  The argument \code{x} of
+#'   \code{\link[revdbayes]{predict.evpost}}.  In the current context this
+#'   must be a vector (not a matrix, as suggested by the documentation of
+#'   \code{\link[revdbayes]{predict.evpost}}).
+#' @param ... Additional optional arguments. At present no optional arguments
+#'   are used.
 #' @details Add details
 #' @return An object of class "ithreshpred" with a similar structure to
 #'   an object of class "evpred" returned from
 #'   \code{\link[revdbayes]{predict.evpost}}.
-#'   In addition, the object contains \code{which_u} and \code{which_v}
-#'   and \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec}.
+#'   In addition, the object contains
+#'   \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec},
+#'   \code{which_v} and the index \code{best_u} in
+#'   \code{u_vec = object$u_vec} of the best training threshold based on
+#'   the value of \code{which_v}.
 #' @examples
 #' \dontrun{
 #' # Gulf of Mexico significant wave heights, default priors.
@@ -87,8 +105,8 @@
 #' @export
 predict.ithresh <- function(object, npy = NULL, n_years = 100,
                             which_u = c("best", "all"), which_v = 1L,
-                            u_prior = NULL, type = c("p", "d", "q", "i", "r"),
-                            ...) {
+                            u_prior = rep(1, length(object$u_vec)),
+                            type = c("p", "d", "q", "i", "r"), x = NULL) {
   if (!inherits(object, "ithresh")) {
     stop("object must be of class ''ithresh'', produced by ithresh()")
   }
@@ -112,15 +130,6 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   if (!is.numeric(which_v) || !(which_v %in% 1:n_v)) {
     stop("'which_v' must be in 1:length(object$v_vec)")
   }
-  # u_prior must be a numeric vector of length n_u with no negative entries
-  p_bad <- !is.numeric(u_prior) || length(u_prior) != n_u || any(u_prior < 0)
-  if (!is.null(u_prior)) {
-    if (p_bad) {
-      stop("'u_prior' must be a non-negative length(object$u_vec)-vector")
-    } else {
-      u_prior <- u_prior / sum(u_prior)
-    }
-  }
   # Check that npy has been supplied
   if (!is.null(object$npy) & !is.null(npy)) {
     warning(paste("Two values of npy supplied.  The value npy = ", npy,
@@ -137,22 +146,22 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   }
   # Select the user's option based on which_u -----------
   if (which_u == "best" || is.numeric(which_u)) {
-    # Best threshold
-    if (which_u == "best") {
-      which_u <- which.max(object$pred_perf[, which_v])
-    }
     # Create a list object of class "evpost" for revdbayes::predict.evpost().
     evpost_obj <- list()
     class(evpost_obj) <- "evpost"
-    # Extract posterior sample for this threshold
     n <- object$n
-    which_rows <- (1 + (which_u - 1) * n):(which_u * n)
+    evpost_obj$model <- "bingp"
+    # Best threshold
+    if (which_u == "best") {
+      best_u <- which.max(object$pred_perf[, which_v])
+    }
+    # Extract posterior sample for this threshold
+    which_rows <- (1 + (best_u - 1) * n):(best_u * n)
     evpost_obj$bin_sim_vals <- object$sim_vals[which_rows, 1]
     evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
-    evpost_obj$model <- "bingp"
-    evpost_obj$thresh <- object$u_vec[which_u]
+    evpost_obj$thresh <- object$u_vec[best_u]
     for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
-                               npy = npy, type = type)
+                               npy = npy, type = type, x = x)
     ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
   }
   # Need to do this: type = "p" only, do for all thresholds
@@ -161,20 +170,45 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   # Create $x and $y as matrices: averaged column first
   if (which_u == "all") {
     # All thresholds
-    which_u <- which.max(object$pred_perf[, which_v])
+    ptw <- post_thresh_weights(x = object, which_v = which_v,
+                               u_prior = u_prior)
+    n_t <- length(ptw)
     # Create a list object of class "evpost" for revdbayes::predict.evpost().
     evpost_obj <- list()
     class(evpost_obj) <- "evpost"
-    # Extract posterior sample for this threshold
     n <- object$n
-    which_rows <- (1 + (which_u - 1) * n):(which_u * n)
+    evpost_obj$model <- "bingp"
+    # We need to call predict.evpost() with the same x for each threshold
+    # Base this on the default x for the 'best' threshold.
+    best_u <- which.max(object$pred_perf[, which_v])
+    # Extract posterior sample for this threshold
+    which_rows <- (1 + (best_u - 1) * n):(best_u * n)
     evpost_obj$bin_sim_vals <- object$sim_vals[which_rows, 1]
     evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
-    evpost_obj$model <- "bingp"
-    evpost_obj$thresh <- object$u_vec[which_u]
-    for_predict_evpost <- list(object = evpost_obj, n_years = n_years, npy = npy,
-                               type = type)
+    evpost_obj$thresh <- object$u_vec[best_u]
+    for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
+                               npy = npy, type = type, x = x)
     ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
+    x_vals <- ret_obj$x
+    others <- (1:n_t)[-best_u]
+    # Create matrix: y_val
+    y_val <- matrix(NA, ncol = 1 + n_t, nrow = length(x_vals))
+    y_val[, 1 + best_u] <- ret_obj$y
+    for (i in others) {
+      # Extract posterior sample for this threshold
+      which_rows <- (1 + (i - 1) * n):(i * n)
+      evpost_obj$bin_sim_vals <- object$sim_vals[which_rows, 1]
+      evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
+      evpost_obj$thresh <- object$u_vec[i]
+      for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
+                                 npy = npy, type = type, x = x_vals)
+      temp <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
+      y_val[, 1 + i] <- temp$y
+    }
+    # Calculate the weighted mean of
+    y_val[, 1] <- apply(y_val[, -1], 1, stats::weighted.mean, w = ptw)
+    ret_obj$y <- y_val
+    return(ret_obj)
   }
   ret_obj$which_u <- which_u
   ret_obj$u_vec <- object$u_vec
@@ -182,5 +216,51 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   ret_obj$v_vec <- object$v_vec
   class(ret_obj) <- "ithreshpred"
   return(ret_obj)
+}
+
+post_thresh_weights <- function(x, which_v = 1, u_prior = NULL) {
+  #
+  # Calculate the posterior threshold weights using equation (15) of
+  # Northrop, Attalides and Jonathan (2017).
+  #
+  # Args:
+  #   x       : A object of class "ithresh" returned by ithresh.
+  #   which_v : A numeric scalar.  Indicates which validation threshold,
+  #             i.e. which element of x$v_vec and hence which column of
+  #             x$pred_perf containing the measures of predictiv performance,
+  #             is used.
+  #   u_prior : A numeric vector.  Prior probabilities for the thresholds
+  #             in u_vec.  If this is NULL then it is set to a vector of
+  #             length length(x$u_vec) with each element equal to
+  #             1/\code{length(x$u_vec)}.
+  # Returns:
+  #
+  # Use only the validation thresholds in column which_v.
+  t_vals <- as.numeric(stats::na.omit(x$pred_perf[, which_v]))
+  # Check that u_prior is suitable:
+  # a numeric vector of length n_u or n_t with no negative entries
+  if (!is.numeric(u_prior)) {
+    stop("'u_prior' must be a numeric vector")
+  }
+  n_t <- length(t_vals)
+  n_u <- length(x$u_vec)
+  if (length(u_prior) != n_u & length(u_prior) != n_t) {
+    mess1 <- "'u_prior' must have length \n length(object$u_vec) or"
+    mess2 <- "\n length(object$u_vec) - length(object$v_vec) + which_v"
+    stop(mess1, mess2)
+  }
+  if (any(u_prior < 0)) {
+    stop("'u_prior' must no have any negative entries")
+  }
+  # Shoof t_vals so that it is centred on zero (ignoring any -Inf values)
+  t_vals <- t_vals - mean(t_vals[is.finite(t_vals)])
+  # Truncate u_prior to have length equal to that of t_vals.
+  u_prior <- u_prior[1:length(t_vals)]
+  # Normalize the remaining weights.
+  u_prior <- u_prior / sum(u_prior)
+  # Calculate posterior threshold weights.
+  ptw <- exp(t_vals) * u_prior
+  ptw <- ptw / sum(ptw)
+  return(ptw)
 }
 
