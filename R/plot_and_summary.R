@@ -25,11 +25,12 @@
 #'   and/or \code{\link[graphics]{legend}} and/or \code{\link[graphics]{axis}}.
 #' @details Add some details.
 #' @examples
+#' \dontrun{
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
 #' plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
 #' mtext("significant wave height / m", side = 3, line = 2.5)
-#'
+#' }
 #' @export
 plot.ithresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
                         add_legend = FALSE, legend_pos = "topleft", ...) {
@@ -109,9 +110,9 @@ plot.ithresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
   }
   do.call(graphics::axis, axis_args)
   if (!is.null(axis_args$lwd)) {
-    box(lwd = axis_args$lwd)
+    graphics::box(lwd = axis_args$lwd)
   } else {
-    box()
+    graphics::box()
   }
   # Add top scale?
   if (top_scale) {
@@ -119,13 +120,13 @@ plot.ithresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
     if (prob) {
       top_vals <- top_vals[top_vals < max(x$u_vec)]
       axis_args$side <- 3
-      axis_args$at <- 100 * ecdf(x$data)(top_vals)
+      axis_args$at <- 100 * stats::ecdf(x$data)(top_vals)
       axis_args$labels <- top_vals
       do.call(graphics::axis, axis_args)
     } else {
       top_vals <- unique(c(top_vals, x$v_ps))
       axis_args$side <- 3
-      axis_args$at <- quantile(x$data, probs = top_vals / 100)
+      axis_args$at <- stats::quantile(x$data, probs = top_vals / 100)
       axis_args$labels <- top_vals
       do.call(graphics::axis, axis_args)
     }
@@ -243,9 +244,9 @@ plot.stability <- function(x, y, prob = TRUE,
   axis_args$at <- pretty(x_data)
   do.call(graphics::axis, axis_args)
   if (!is.null(axis_args$lwd)) {
-    box(lwd = axis_args$lwd)
+    graphics::box(lwd = axis_args$lwd)
   } else {
-    box()
+    graphics::box()
   }
   # Add top scale?
   if (top_scale != "none") {
@@ -257,11 +258,12 @@ plot.stability <- function(x, y, prob = TRUE,
       if (prob) {
         x_pos <- c(pretty(x_data), max(x_data))
         axis_args$at <- x_pos
-        axis_args$labels <- signif(quantile(x$data, probs = x_pos / 100), 2)
+        axis_args$labels <- signif(stats::quantile(x$data, probs = x_pos
+                                                   / 100), 2)
       } else {
         top_vals <- pretty(t_data)
         top_vals <- unique(c(top_vals, max(x$u_ps)))
-        axis_args$at <- quantile(x$data, probs = top_vals / 100)
+        axis_args$at <- stats::quantile(x$data, probs = top_vals / 100)
         axis_args$labels <- top_vals
       }
     }
@@ -269,4 +271,47 @@ plot.stability <- function(x, y, prob = TRUE,
   }
 }
 
+
+# ============================== summary.ithresh ==============================
+
+#' Summarizing measures of thresholds' predictive performance
+#'
+#' \code{summary} method for class "ithresh"
+#'
+#' @param object an object of class "ithresh", a result of a call to
+#'   \code{ithresh}.
+#' @param ... Additional optional arguments. At present no optional
+#'   arguments are used.
+#' @return Returns a numeric matrix with 3 columns and \code{n_v} rows,
+#'   where \code{n_v} is an argument to \code{\link{ithresh}} that
+#'   determines how many of the largest training thresholds are used
+#'   a validation thresholds.  The columns contain:
+#' \itemize{
+#'   \item {column 1:} {the validation threshold v}
+#'   \item {column 2:} {the best training threshold u judged using the
+#'     validation threshold v}
+#'   \item {column 3:} {the index of the vector \code{u_vec} of training
+#'     thresholds to which the threshold in column2 corresponds}
+#' }
+#' @examples
+#' \dontrun{
+#' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
+#' summary(gom_cv)
+#' }
+#' @seealso \code{\link{plot.ithresh}} for a threshold diagnostic plot or
+#'   to plot posterior samples for a chosen threshold.
+#' @export
+summary.ithresh <- function(object, ...) {
+  if (!inherits(object, "ithresh")) {
+    stop("use only with \"ithresh\" objects")
+  }
+  # Find the best training threshold for each validation threshold
+  which_best <- apply(object$pred_perf, 2, which.max)
+  u_best <- object$u_vec[which_best]
+  res <- cbind(object$v_vec, u_best, which_best)
+  rownames(res) <- 1:4
+  colnames(res) <- c("v", "best u", "index of u_vec")
+  return(res)
+}
 
