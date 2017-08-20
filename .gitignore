@@ -1,3 +1,5 @@
 inst/doc
 .Rproj.user
+.Rhistory
+.Rdata
 R/highest_threshold.R
