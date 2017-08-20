@@ -78,13 +78,14 @@ An object of class "ithreshpred" with a similar structure to
 Add details
 }
 \examples{
+\dontrun{
 # Gulf of Mexico significant wave heights, default priors.
 u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 npy_gom <- length(gom)/105
 gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
 pjn <- predict(gom_cv, npy = npy_gom)
 plot(pjn)
-
+}
 }
 \references{
 Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
