@@ -4,7 +4,7 @@
 \alias{ithresh}
 \title{Threshold selection in the i.i.d. case (peaks over threshold)}
 \usage{
-ithresh(data, u_vec, n_v = 1, npy = NULL, use_rcpp = TRUE, ...)
+ithresh(data, u_vec, ..., n_v = 1, npy = NULL, use_rcpp = TRUE)
 }
 \arguments{
 \item{data}{A numeric vector of observations.  Any missing values will
@@ -14,26 +14,6 @@ be removed.}
 at which inferences are made from the GP model.  Any duplicated values
 will be removed. These could be set at sample quantiles of \code{data}
 using \code{\link[stats]{quantile}}.}
-
-\item{n_v}{A numeric scalar.
-The \code{n_v} largest values in \code{u_vec} will be used as
-validation thresholds to quantify the predictive performance of the
-GP models fitted at the thresholds in \code{u_vec}.}
-
-\item{npy}{A numeric scalar. The mean number of observations per year
-  of data, after excluding any missing values, i.e. the number of
-  non-missing observations divided by total number of years of non-missing
-  data.
-
-  The value of \code{npy} does not affect any calculation in
-  \code{ithresh}, it only affects subsequent extreme value inferences using
-  \code{predict.ithresh}.  However, setting \code{npy} in the call to
-  \code{rpost} avoids the need to supply \code{npy} when calling
-  \code{predict.ithresh}.}
-
-\item{use_rcpp}{A logical scalar.  If TRUE (the default) use the
-revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
-simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.}
 
 \item{...}{Further (optional) arguments to be passed to the
   \code{\link[revdbayes]{revdbayes}} function
@@ -54,6 +34,26 @@ simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.}
   \item {\code{h_bin_prior}} {A list of further arguments (hyperparameters)
     for the binomial prior specified in \code{bin_prior}.}
 }}
+
+\item{n_v}{A numeric scalar.
+The \code{n_v} largest values in \code{u_vec} will be used as
+validation thresholds to quantify the predictive performance of the
+GP models fitted at the thresholds in \code{u_vec}.}
+
+\item{npy}{A numeric scalar. The mean number of observations per year
+  of data, after excluding any missing values, i.e. the number of
+  non-missing observations divided by total number of years of non-missing
+  data.
+
+  The value of \code{npy} does not affect any calculation in
+  \code{ithresh}, it only affects subsequent extreme value inferences using
+  \code{predict.ithresh}.  However, setting \code{npy} in the call to
+  \code{rpost} avoids the need to supply \code{npy} when calling
+  \code{predict.ithresh}.}
+
+\item{use_rcpp}{A logical scalar.  If TRUE (the default) use the
+revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
+simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.}
 }
 \value{
 An object (list) of class \code{"ithresh"}, containing the

@@ -140,7 +140,7 @@
 #'   Statistics}, \strong{66}(1), 93-120.
 #'   \url{http://dx.doi.org/10.1111/rssc.12159}
 #' @export
-ithresh <- function(data, u_vec, n_v = 1, npy = NULL, use_rcpp = TRUE, ...) {
+ithresh <- function(data, u_vec, ..., n_v = 1, npy = NULL, use_rcpp = TRUE) {
   # Remove missing values from data
   data <- as.numeric(stats::na.omit(data))
   # Put thresholds in ascending order and remove any repeated values.
