@@ -35,6 +35,9 @@
 #' @param plot_prof A logical scalar.  Only relevant if \code{prof = TRUE}.
 #'   If \code{plot_prof = TRUE} then the profile log-likelihood is plotted
 #'   for each threshold.  If \code{FALSE} then nothing is plotted.
+#' @param ... Further (optional) arguments to be passed to the
+#'   \code{\link[stats]{optim}} function for the optimizations on which
+#'   the profile-likelihood for \eqn{xi} is based.
 #' @details
 #'   For each threshold in \code{u_vec} a GP model is fitted by maximum
 #'   likelihood estimation to the threshold excesses, i.e. the amounts
@@ -70,9 +73,11 @@
 #' gom_stab <- stability(data = gom, u_vec = u_vec)
 #' plot(gom_stab)
 #'
+#' \dontrun{
 #' # Profile-likelihood-based confidence intervals
 #' gom_stab <- stability(data = gom, u_vec = u_vec, prof = TRUE)
 #' plot(gom_stab)
+#' }
 #' @export
 stability <- function(data, u_vec, prof = FALSE, conf = 95, mult = 1:2,
                       plot_prof = FALSE, ...){
@@ -104,7 +109,7 @@ stability <- function(data, u_vec, prof = FALSE, conf = 95, mult = 1:2,
       xlow <- temp$ests[i] - z_level * mult[1] * temp$ses[i]
       xup <- temp$ests[i] + z_level * mult[2] * temp$ses[i]
       prof_res <- gp_profxi(z, xlow = xlow, xup = xup, conf = conf,
-                            plot_prof = plot_prof, thresh_number = i)
+                            plot_prof = plot_prof, thresh_number = i, ...)
       temp$upper[i] <- prof_res[1]
       temp$lower[i] <- prof_res[2]
     }
@@ -124,7 +129,7 @@ stability <- function(data, u_vec, prof = FALSE, conf = 95, mult = 1:2,
 # =========================== gp_profxi ===========================
 
 gp_profxi <- function (z, xlow, xup, conf = 0.95, nint = 100,
-                       plot_prof = FALSE, thresh_number = NULL){
+                       plot_prof = FALSE, thresh_number = NULL, ...){
   xdat <- z$data
   u <- z$threshold
   v1 <- numeric(nint)
@@ -149,14 +154,19 @@ gp_profxi <- function (z, xlow, xup, conf = 0.95, nint = 100,
     }
     l
   }
-  #
+  # Check whether or not the use has supplied method for optim().
+  user_dots <- list(...)
   ### Upper tail ...
   #
   x2 <- seq(z$mle[2], xup, length = nint)
   sol <- z$mle[1]
   for (i in 1:nint) {
     xi <- x2[i]
-    opt <- optim(sol, gpd_plikxi, method = "BFGS")
+    if (is.null(user_dots$method)) {
+      opt <- stats::optim(sol, gpd_plikxi, method = "BFGS", ...)
+    } else {
+      opt <- stats::optim(sol, gpd_plikxi, ...)
+    }
     sol <- opt$par
     v2[i] <- opt$value
   }
@@ -167,7 +177,11 @@ gp_profxi <- function (z, xlow, xup, conf = 0.95, nint = 100,
   sol <- z$mle[1]
   for (i in 1:nint) {
     xi <- x1[i]
-    opt <- optim(sol, gpd_plikxi, method = "BFGS")
+    if (is.null(user_dots$method)) {
+      opt <- stats::optim(sol, gpd_plikxi, method = "BFGS", ...)
+    } else {
+      opt <- stats::optim(sol, gpd_plikxi, ...)
+    }
     sol <- opt$par
     v1[i] <- opt$value
   }
@@ -175,18 +189,18 @@ gp_profxi <- function (z, xlow, xup, conf = 0.95, nint = 100,
   v <- c(rev(v1), v2)
   ma <- -z$nllh
   if (plot_prof) {
-    plot(x, -v, type = "l", xlab = expression(xi),
+    graphics::plot(x, -v, type = "l", xlab = expression(xi),
          ylab = "profile log-likelihood")
     if (!is.null(thresh_number)) {
-      title(main = paste("threshold number", thresh_number))
+      graphics::title(main = paste("threshold number", thresh_number))
     }
-    abline(h = ma, col = 4)
-    abline(h = ma - 0.5 * qchisq(conf, 1), col = 4)
-    u <- par("usr")								### extract plotting coords
+    graphics::abline(h = ma, col = 4)
+    graphics::abline(h = ma - 0.5 * stats::qchisq(conf, 1), col = 4)
+    u <- graphics::par("usr")								### extract plotting coords
   }
   yaxis <- -v
   xaxis <- x
-  conf_line <- ma - 0.5 * qchisq(conf, 1)
+  conf_line <- ma - 0.5 * stats::qchisq(conf, 1)
   temp <- diff(yaxis-conf_line > 0)			### to find where curve crosses CI line
   loc <- which(temp == -1)					### upper limit of CI
   if (length(loc) == 0) {
@@ -208,14 +222,14 @@ gp_profxi <- function (z, xlow, xup, conf = 0.95, nint = 100,
   low_lim <- x1 + (conf_line - y1) * (x2 - x1) / (y2 - y1)
   xi <- z$mle[3]
   if (plot_prof){
-    abline(v = up_lim, lty = 2)
-    text(up_lim, u[3] - 0.02 * (u[4] - u[3]), round(up_lim, 2), xpd = TRUE,
-         cex = 0.75)
-    abline(v = low_lim, lty = 2)
-    text(low_lim, u[3] - 0.02 * (u[4] - u[3]), round(low_lim, 2), xpd = TRUE,
-         cex = 0.75)
-    abline(v = xi, lty = 2)
-    text(xi, u[3] - 0.02 * (u[4] - u[3]), round(xi, 2), xpd = TRUE,
+    graphics::abline(v = up_lim, lty = 2)
+    graphics::text(up_lim, u[3] - 0.02 * (u[4] - u[3]), round(up_lim, 2),
+                   xpd = TRUE, cex = 0.75)
+    graphics::abline(v = low_lim, lty = 2)
+    graphics::text(low_lim, u[3] - 0.02 * (u[4] - u[3]), round(low_lim, 2),
+                   xpd = TRUE, cex = 0.75)
+    graphics::abline(v = xi, lty = 2)
+    graphics::text(xi, u[3] - 0.02 * (u[4] - u[3]), round(xi, 2), xpd = TRUE,
          cex = 0.75)
   }
   return(c(low_lim, up_lim))

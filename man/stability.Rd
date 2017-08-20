@@ -38,6 +38,10 @@ should be increased.}
 \item{plot_prof}{A logical scalar.  Only relevant if \code{prof = TRUE}.
 If \code{plot_prof = TRUE} then the profile log-likelihood is plotted
 for each threshold.  If \code{FALSE} then nothing is plotted.}
+
+\item{...}{Further (optional) arguments to be passed to the
+\code{\link[stats]{optim}} function for the optimizations on which
+the profile-likelihood for \eqn{xi} is based.}
 }
 \value{
 An object (list) of class "stability" with components:
@@ -79,9 +83,11 @@ u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_stab <- stability(data = gom, u_vec = u_vec)
 plot(gom_stab)
 
+\dontrun{
 # Profile-likelihood-based confidence intervals
 gom_stab <- stability(data = gom, u_vec = u_vec, prof = TRUE)
 plot(gom_stab)
+}
 }
 \references{
 Coles, S. G. (2001) \emph{An Introduction to Statistical
