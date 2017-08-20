@@ -12,7 +12,8 @@ Description: Provides functions for the selection of extreme value threshold.
 Imports: stats,
     graphics,
     methods,
-    revdbayes (>= 1.2.0)
+    revdbayes (>= 1.2.0),
+    rust (>= 1.2.2)
 License: GPL (>= 2)
 LazyData: TRUE
 Depends:
