@@ -70,13 +70,14 @@
 #'   In addition, the object contains \code{which_u} and \code{which_v}
 #'   and \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec}.
 #' @examples
+#' \dontrun{
 #' # Gulf of Mexico significant wave heights, default priors.
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' npy_gom <- length(gom)/105
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
 #' pjn <- predict(gom_cv, npy = npy_gom)
 #' plot(pjn)
-#'
+#' }
 #' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 #'   Cross-validatory extreme value threshold selection and uncertainty
 #'   with application to ocean storm severity.
@@ -138,7 +139,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   if (which_u == "best" || is.numeric(which_u)) {
     # Best threshold
     if (which_u == "best") {
-      which_u <- which.max(gom_cv$pred_perf[, which_v])
+      which_u <- which.max(object$pred_perf[, which_v])
     }
     # Create a list object of class "evpost" for revdbayes::predict.evpost().
     evpost_obj <- list()
@@ -150,9 +151,9 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
     evpost_obj$model <- "bingp"
     evpost_obj$thresh <- object$u_vec[which_u]
-    for_predict_evpost <- list(object = evpost_obj, n_years = n_years, npy = npy,
-                               type = type)
-    ret_obj <- do.call(predict, for_predict_evpost)
+    for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
+                               npy = npy, type = type)
+    ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
   }
   # Need to do this: type = "p" only, do for all thresholds
   # Calculate weights (u_prior and normalized pred_perf)
@@ -160,7 +161,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   # Create $x and $y as matrices: averaged column first
   if (which_u == "all") {
     # All thresholds
-    which_u <- which.max(gom_cv$pred_perf[, which_v])
+    which_u <- which.max(object$pred_perf[, which_v])
     # Create a list object of class "evpost" for revdbayes::predict.evpost().
     evpost_obj <- list()
     class(evpost_obj) <- "evpost"
@@ -173,7 +174,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     evpost_obj$thresh <- object$u_vec[which_u]
     for_predict_evpost <- list(object = evpost_obj, n_years = n_years, npy = npy,
                                type = type)
-    ret_obj <- do.call(predict, for_predict_evpost)
+    ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
   }
   ret_obj$which_u <- which_u
   ret_obj$u_vec <- object$u_vec
