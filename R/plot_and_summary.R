@@ -1,8 +1,10 @@
-# =========================== plot.thresh ===========================
+# =========================== plot.ithresh ===========================
 
-#' Plot diagnostics for a thresh
+#' Plot diagnostics an ithresh object
 #'
-#' \code{plot} method for class "ithresh".
+#' \code{plot} method for class "ithresh".  Produces an extreme value
+#' threshold diagnostic plot based on an analysis performed by
+#' \code{\link{ithresh}}.
 #'
 #' @param x an object of class "ithresh", a result of a call to
 #'   \code{\link{ithresh}}.

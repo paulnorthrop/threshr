@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_and_summary.R
 \name{plot.ithresh}
 \alias{plot.ithresh}
-\title{Plot diagnostics for a thresh}
+\title{Plot diagnostics an ithresh object}
 \usage{
 \method{plot}{ithresh}(x, y, which_val = NULL, prob = TRUE,
   top_scale = TRUE, add_legend = FALSE, legend_pos = "topleft", ...)
@@ -36,7 +36,9 @@ the argument \code{x} in \code{\link[graphics]{legend}}.}
 and/or \code{\link[graphics]{legend}} and/or \code{\link[graphics]{axis}}.}
 }
 \description{
-\code{plot} method for class "ithresh".
+\code{plot} method for class "ithresh".  Produces an extreme value
+threshold diagnostic plot based on an analysis performed by
+\code{\link{ithresh}}.
 }
 \details{
 Add some details.
