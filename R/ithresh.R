@@ -103,6 +103,8 @@
 #'   }
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
 #'   class \code{ithresh}.
+#' @seealso \code{\link{predict.ithresh}} for predictive inference for the
+#'   largest value observed in N years.
 #' @seealso \code{\link[revdbayes]{rpost}} in the
 #'   \code{\link[revdbayes]{revdbayes}} package for details of the arguments
 #'   that can be passed to
