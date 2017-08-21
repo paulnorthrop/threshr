@@ -27,6 +27,8 @@
 #'
 #' @seealso The packages \code{\link[revdbayes]{revdbayes}} and
 #'   \code{\link[rust]{rust}}.
+#' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
+#'   based on leave-one-out cross-validaton.
 #' @docType package
 #' @name threshr
 #' @import methods

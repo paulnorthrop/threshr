@@ -95,6 +95,9 @@ Coles, S. G. (2001) \emph{An Introduction to Statistical
   \url{http://dx.doi.org/10.1007/978-1-4471-3675-0_3}
 }
 \seealso{
+\code{\link{ithresh}} for threshold selection in the i.i.d. case
+  based on leave-one-out cross-validaton.
+
 \code{\link{plot.stability}} for the S3 \code{plot} method for
 # objects of class \code{stability}.
 

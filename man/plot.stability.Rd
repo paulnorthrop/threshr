@@ -4,14 +4,18 @@
 \alias{plot.stability}
 \title{Plot diagnostics for a stability object}
 \usage{
-\method{plot}{stability}(x, y, prob = TRUE, top_scale = c("none",
-  "excesses", "opposite"), vertical = TRUE, ...)
+\method{plot}{stability}(x, y, ..., prob = TRUE, top_scale = c("none",
+  "excesses", "opposite"), vertical = TRUE)
 }
 \arguments{
 \item{x}{an object of class "stability", a result of a call to
 \code{\link{stability}}.}
 
 \item{y}{Not used.}
+
+\item{...}{Additional arguments passed on to
+\code{\link[graphics]{matplot}}, \code{\link[graphics]{axis}}
+and/or \code{\link[graphics]{segments}}.}
 
 \item{prob}{A logical scalar.  If \code{TRUE} then the levels of thresholds
 on the lower horizontal axis are represented by the proportion of
@@ -29,10 +33,6 @@ If \code{top_scale = "opposite"} then the type of threshold level
 \item{vertical}{A logical scalar.  Should the confidence intervals be
 depicted using a vertical line for each threshold (\code{TRUE}) or by
 joining up confidence limits across thresholds (\code{FALSE})?}
-
-\item{...}{Additional arguments passed on to
-\code{\link[graphics]{matplot}}, \code{\link[graphics]{axis}}
-and/or \code{\link[graphics]{segments}}.}
 }
 \description{
 \code{plot} method for objects of class "stability" returned from

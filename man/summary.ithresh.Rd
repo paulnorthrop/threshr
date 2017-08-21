@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_and_summary.R
 \name{summary.ithresh}
 \alias{summary.ithresh}
-\title{Summarizing measures of thresholds' predictive performance}
+\title{Summarizing measures of threshold predictive performance}
 \usage{
 \method{summary}{ithresh}(object, ...)
 }
@@ -37,6 +37,9 @@ summary(gom_cv)
 }
 }
 \seealso{
-\code{\link{plot.ithresh}} for a threshold diagnostic plot or
-  to plot posterior samples for a chosen threshold.
+\code{\link{ithresh}} for threshold selection in the i.i.d. case
+  based on leave-one-out cross-validaton.
+
+\code{\link{plot.ithresh}} for the S3 plot method for objects of
+  class \code{ithresh}.
 }

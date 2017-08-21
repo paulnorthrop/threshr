@@ -4,14 +4,17 @@
 \alias{plot.ithresh}
 \title{Plot diagnostics an ithresh object}
 \usage{
-\method{plot}{ithresh}(x, y, which_val = NULL, prob = TRUE,
-  top_scale = TRUE, add_legend = FALSE, legend_pos = "topleft", ...)
+\method{plot}{ithresh}(x, y, ..., which_val = NULL, prob = TRUE,
+  top_scale = TRUE, add_legend = FALSE, legend_pos = "topleft")
 }
 \arguments{
 \item{x}{an object of class "ithresh", a result of a call to
 \code{\link{ithresh}}.}
 
 \item{y}{Not used.}
+
+\item{...}{Additional arguments passed on to \code{\link[graphics]{matplot}}
+and/or \code{\link[graphics]{legend}} and/or \code{\link[graphics]{axis}}.}
 
 \item{which_val}{A numeric vector specifying the validation thresholds, that
 is the indices of the argument \code{v_vec} to \code{\link{ithresh}}.}
@@ -31,9 +34,6 @@ levels of the validation thresholds.}
 
 \item{legend_pos}{The position of the legend (if required) specified using
 the argument \code{x} in \code{\link[graphics]{legend}}.}
-
-\item{...}{Additional arguments passed on to \code{\link[graphics]{matplot}}
-and/or \code{\link[graphics]{legend}} and/or \code{\link[graphics]{axis}}.}
 }
 \description{
 \code{plot} method for class "ithresh".  Produces an extreme value
@@ -41,7 +41,13 @@ threshold diagnostic plot based on an analysis performed by
 \code{\link{ithresh}}.
 }
 \details{
-Add some details.
+Produces plots of the \emph{threshold weights}, defined in
+ equation (14) of
+  \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)},
+  against training threshold.  A line is produced for each of the validation
+  thresholds chosen in \code{which_v}.  The result is a plot like those in
+  the top row of Figure 7 in
+  \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.
 }
 \examples{
 \dontrun{
@@ -50,4 +56,11 @@ gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
 plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
 mtext("significant wave height / m", side = 3, line = 2.5)
 }
+}
+\seealso{
+\code{\link{ithresh}} for threshold selection in the i.i.d. case
+  based on leave-one-out cross-validaton.
+
+\code{\link{summary.ithresh}} Summarizing measures of threshold
+  predictive performance.
 }
