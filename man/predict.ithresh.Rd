@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictive.R
 \name{predict.ithresh}
 \alias{predict.ithresh}
-\title{Predictive inference for largest value observed in N years.}
+\title{Predictive inference for the largest value observed in N years.}
 \usage{
 \method{predict}{ithresh}(object, npy = NULL, n_years = 100,
   which_u = c("best", "all"), which_v = 1L, u_prior = rep(1,

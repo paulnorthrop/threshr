@@ -1,6 +1,6 @@
 # ============================== predict.ithresh ==============================
 
-#' Predictive inference for largest value observed in N years.
+#' Predictive inference for the largest value observed in N years.
 #'
 #' \code{predict} method for class "ithresh".  Predictive inferences can
 #' either be based on a \emph{single training threshold} or using a weighted
