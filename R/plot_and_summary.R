@@ -25,7 +25,13 @@
 #'   the argument \code{x} in \code{\link[graphics]{legend}}.
 #' @param ... Additional arguments passed on to \code{\link[graphics]{matplot}}
 #'   and/or \code{\link[graphics]{legend}} and/or \code{\link[graphics]{axis}}.
-#' @details Add some details.
+#' @details Produces plots of the \emph{threshold weights}, defined in
+#'  equation (14) of
+#'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)},
+#'   against training threshold.  A line is produced for each of the validation
+#'   thresholds chosen in \code{which_v}.  The result is a plot like those in
+#'   the top row of Figure 7 in
+#'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.
 #' @examples
 #' \dontrun{
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
@@ -33,9 +39,13 @@
 #' plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
 #' mtext("significant wave height / m", side = 3, line = 2.5)
 #' }
+#' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
+#'   based on leave-one-out cross-validaton.
+#' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
+#'   predictive performance.
 #' @export
-plot.ithresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
-                        add_legend = FALSE, legend_pos = "topleft", ...) {
+plot.ithresh <- function(x, y, ..., which_val = NULL, prob = TRUE, top_scale = TRUE,
+                        add_legend = FALSE, legend_pos = "topleft") {
   if (!inherits(x, "ithresh")) {
     stop("use only with \"ithresh\" objects")
   }
@@ -178,9 +188,9 @@ plot.ithresh <- function(x, y, which_val = NULL, prob = TRUE, top_scale = TRUE,
 #' gom_stab <- stability(data = gom, u_vec = u_vec)
 #' plot(gom_stab)
 #' @export
-plot.stability <- function(x, y, prob = TRUE,
+plot.stability <- function(x, y, ..., prob = TRUE,
                            top_scale = c("none", "excesses", "opposite"),
-                           vertical = TRUE, ...) {
+                           vertical = TRUE) {
   if (!inherits(x, "stability")) {
     stop("use only with \"stability\" objects")
   }
@@ -276,7 +286,7 @@ plot.stability <- function(x, y, prob = TRUE,
 
 # ============================== summary.ithresh ==============================
 
-#' Summarizing measures of thresholds' predictive performance
+#' Summarizing measures of threshold predictive performance
 #'
 #' \code{summary} method for class "ithresh"
 #'
@@ -301,8 +311,10 @@ plot.stability <- function(x, y, prob = TRUE,
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
 #' summary(gom_cv)
 #' }
-#' @seealso \code{\link{plot.ithresh}} for a threshold diagnostic plot or
-#'   to plot posterior samples for a chosen threshold.
+#' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
+#'   based on leave-one-out cross-validaton.
+#' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
+#'   class \code{ithresh}.
 #' @export
 summary.ithresh <- function(object, ...) {
   if (!inherits(object, "ithresh")) {
@@ -317,3 +329,112 @@ summary.ithresh <- function(object, ...) {
   return(res)
 }
 
+# =========================== plot.ithreshpred ===========================
+
+#' Plot diagnostics an ithreshpred object
+#'
+#' \code{plot} method for class "ithreshpred".  Produces plots to summarise
+#' the predictive inferences made by \code{\link{predict.ithresh}}.
+#'
+#' @param x an object of class "ithreshpred", a result of a call to
+#'   \code{\link{ithresh}}.
+#' @param y Not used.
+#' @param ... Additional arguments passed on to
+#'   \code{\link[revdbayes]{plot.evpred}}.
+#' @param ave_only.  A logical scalar.  Only relevant if
+#'   \code{\link{predict.ithresh}} was called with \code{which_u = "all"}.
+#'   If \code{TRUE} then plot only
+#'   a curve for the weighted average over multiple training thresholds.
+#'   If \code{FALSE} then also plot a curve for each training threshold.
+#' @details \emph{Single threshold case}, where
+#'   \code{\link{predict.ithresh}} was called with numeric scalar
+#'   \code{which_u} or \code{which_u = "best"}.
+#'   \code{\link[revdbayes]{plot.evpred}} is called to produce the plot.
+#'
+#'   \emph{Multiple threshold} case, where
+#'   \code{\link{predict.ithresh}} was called with \code{which_u = "all"}.
+#'   Again, \code{\link[revdbayes]{plot.evpred}} is called but now the
+#'   estimated predictive distribution function (\code{type = "p"} used
+#'   in the call to \code{\link{predict.ithresh}}) or density function
+#'   (\code{type = "d"}) is plotted for each of the training thresholds
+#'   (grey lines) as is the result of the weighted average over the
+#'   different training thresholds.
+#'
+#' @examples
+#' \dontrun{
+#' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+#' npy_gom <- length(gom)/105
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
+#'
+#' ### Best training threshold based on the lowest validation threshold
+#'
+#' # Predictive distribution function
+#' best_p <- predict(gom_cv, npy = npy_gom, n_years = c(100, 1000))
+#' plot(best_p)
+#'
+#' # Predictive density function
+#' best_d <- predict(gom_cv, npy = npy_gom, type = "d", n_years = c(100, 1000))
+#' plot(best_d)
+#'
+#' ### All thresholds plus weighted average of inferences over all thresholds
+#'
+#' all_p <- predict(gom_cv, npy = npy_gom, which_u = "all")
+#' plot(all_p)
+#'
+#' # All thresholds plus weighted average of inferences over all thresholds
+#' all_d <- predict(gom_cv, npy = npy_gom, which_u = "all", type = "d")
+#' plot(all_d)
+#' }
+#' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
+#'   based on leave-one-out cross-validaton.
+#' @seealso \code{\link{predict.ithresh}} for predictive inference for the
+#'   largest value observed in N years.
+#' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
+#'   predictive performance.
+#' @export
+plot.ithreshpred <- function(x, y, ..., ave_only = FALSE) {
+  if (!inherits(x, "ithreshpred")) {
+    stop("use only with \"ithreshpred\" objects")
+  }
+  # Single threshold
+  if (x$which_u == "best" || is.numeric(x$which_u)) {
+    temp <- x
+    class(temp) <- "evpred"
+    revdbayes:::plot.evpred(temp, ...)
+  }
+  # Multiple thresholds
+  if (x$which_u == "all") {
+    temp <- x
+    class(temp) <- "evpred"
+    n_col_y <- ncol(temp$y)
+    # Create list of arguments for revdbayes' plot.evpred()
+    # Set lty, lwd and col only if they have not be supplied by the user
+    for_plot <- list(x = temp, ...)
+    if (is.null(for_plot$lty)) {
+      for_plot$lty <- 1
+    }
+    # If we only want one `averaged' line then make all the others disappear
+    if (ave_only) {
+      for_plot$lty <- c(1, rep(0, n_col_y - 1))
+    }
+    if (is.null(for_plot$lwd)) {
+      for_plot$lwd <- 2
+    }
+    if (is.null(for_plot$col)) {
+      my_col <- c(1, rep(grey(0.75), n_col_y - 1))
+      for_plot$col <- my_col
+    }
+    if (is.null(for_plot$leg_text)) {
+      if (ave_only) {
+        for_plot$leg_text <- c("averaged")
+      } else {
+        for_plot$leg_text <- c("averaged", "single")
+      }
+    }
+    do.call(revdbayes:::plot.evpred, for_plot)
+    # Replot the `average' line, so that it appears on top
+    for_lines <- list(x = temp$x, y = temp$y[, 1], lty = for_plot$lty[1],
+                      lwd = for_plot$lwd[1], col = for_plot$col[1])
+    do.call(graphics::lines, for_lines)
+  }
+}
