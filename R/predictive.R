@@ -1,20 +1,16 @@
-# plot.ithreshpred
-# summary.ithresh
-
-# which_u = numeric vector (of indices) or "best" or all"
-# which_v = number
-
-# If which_u = numeric vector then use u_vec(which_u) [check which_u suitable]
-# If which_u = "best" then use which_v to find single u
-# If which_u = "all" use all and use which_v to find weighted average.
-
-# Check which_u and which_v for admissibility.
-
 # ============================== predict.ithresh ==============================
 
-#' Predictive distribution function of the largest value observed in N years.
+#' Predictive inference for largest value observed in N years.
 #'
-#' \code{predict} method for class "ithresh".
+#' \code{predict} method for class "ithresh".  Predictive inferences can
+#' either be based on a \emph{single training threshold} or using a weighted
+#' average of inferences over \emph{multiple training thresholds}.  A single
+#' threshold may chosen to be the best performing threshold, as judged by the
+#' measure of predictive performance calculated by \code{\link{ithresh}} or
+#' chosen by the user.  The weights used in the latter case are based on the
+#' measures of predictive performance and prior probabilities assigned to the
+#' training thresholds.  By default all thresholds are given the same
+#' prior probability but the user can specify their own prior.
 #'
 #' @param object An object of class "ithresh", a result of a call to
 #'   \code{\link{ithresh}}.
@@ -27,22 +23,24 @@
 #' @param which_u Either a character scalar or a numeric scalar.
 #'
 #'   If \code{which_u} is a character scalar it must be either "best" or "all".
-#'   If \code{which_u = "best"} then the threshold achieving the largest
+#'   If \code{which_u = "best"} then the single threshold achieving the largest
 #'   measure of predictive performance in \code{object$pred_perf}, based
 #'   on the validation threshold selected using \code{which_v}, is used to
 #'   perform prediction.
+#'
 #'   If \code{which_u = "all"} then \emph{all} the thresholds are used to
 #'   perform prediction.  The inferences from each threshold are weighted
-#'   according to equation (15) in
+#'   according to the \emph{posterior threshold weights} given in
+#'   equation (15) of
 #'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
 #'   based on the prior probabilities of thresholds in \code{u_prior}
 #'   and column \code{which_v} of the measures of predictive performance in
 #'   \code{object$pred_perf}.
 #'
 #'   Otherwise, \code{which_u} is a numeric scalar that indicates which
-#'   element of \code{u_vec} the user wishes to select as a threshold on
-#'   which to base prediction, that is, \code{which_u} must be an integer
-#'   in {1, ..., \code{length(object$u_vec)}}.
+#'   element of \code{object$u_vec} the user wishes to select as a single
+#'   threshold on which to base prediction, that is, \code{which_u} must
+#'   be an integer in {1, ..., \code{length(object$u_vec)}}.
 #' @param which_v A numeric scalar. Indicates which element of
 #'   \code{object$v_vec} is used in selecting a single threshold
 #'   (if \code{which_u = "best"}) or weighting the inferences from
@@ -50,7 +48,7 @@
 #'   Note: the default, \code{which_v = 1} gives the \emph{lowest} of the
 #'   validation thresholds in \code{object$v_vec}.
 #' @param u_prior  A numeric vector.  Prior probabilities for the training
-#'   thresholds in \code{u_vec}.  Only used if \code{which_u = "all"}.
+#'   thresholds in \code{object$u_vec}.  Only used if \code{which_u = "all"}.
 #'
 #'   Only the first
 #'   \code{length(object$u_vec) - length(object$v_vec) + which_v}
@@ -63,8 +61,9 @@
 #'   are given equal prior probability.
 #'   \code{u_prior} is normalized to have sum equal to 1 inside
 #'   \code{predict.ithresh}.
-#' @param type A character vector.  Indicates which type of inference is
-#'   required:
+#' @param type A character vector.
+#'   Passed to \code{\link[revdbayes]{predict.evpost}}.
+#'   Indicates which type of inference is required:
 #' \itemize{
 #'   \item "p" for the predictive distribution function,
 #'   \item "d" for the predictive density function,
@@ -72,14 +71,23 @@
 #'   \item "i" for predictive intervals,
 #'   \item "r" for random generation from the predictive distribution.
 #' }
+#'   If \code{which_u = "all"} then only \code{type = "p"} or \code{type = "d"}
+#'   are allowed.
 #' @param x A numeric vector.  The argument \code{x} of
 #'   \code{\link[revdbayes]{predict.evpost}}.  In the current context this
 #'   must be a vector (not a matrix, as suggested by the documentation of
-#'   \code{\link[revdbayes]{predict.evpost}}).
+#'   \code{\link[revdbayes]{predict.evpost}}).  If \code{x} is not supplied
+#'   then a default value is set within
+#'   \code{\link[revdbayes]{predict.evpost}}.
 #' @param ... Additional optional arguments. At present no optional arguments
 #'   are used.
-#' @details Add details
-#' @return An object of class "ithreshpred" with a similar structure to
+#' @details The function \code{\link[revdbayes]{predict.evpost}} is used to
+#'   perform predictive based on the binomial-GP posterior sample generated
+#'   using a given training threshold.  For mathematical details of the
+#'   single threshold and multiple threshold cases see Sections 2.3 and 3 of
+#'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
+#'   respectively.
+#' @return An list object of class "ithreshpred" with a similar structure to
 #'   an object of class "evpred" returned from
 #'   \code{\link[revdbayes]{predict.evpost}}.
 #'   In addition, the object contains
@@ -87,15 +95,48 @@
 #'   \code{which_v} and the index \code{best_u} in
 #'   \code{u_vec = object$u_vec} of the best training threshold based on
 #'   the value of \code{which_v}.
+#'
+#'   If \code{which_u == "all"} then
+#' \itemize{
+#'   \item the list also contains the \emph{posterior threshold weights}
+#'     in component \code{post_thresh_wts}
+#'   \item the component \code{y} is a matrix with \code{length{x}} rows
+#'     and 1 + \code{length(object$u_vec) - length(object$v_vec) + which_v}
+#'     columns.  Column 1 contains the estimated predictive distribution
+#'     function (\code{type = "p"}) or density function (\code{type = "d"})
+#'     obtained using a weighted average of the inferences over different
+#'     training thresholds.  The other columns contain the estimated
+#'     functions for each of the training thresholds in \code{u_vec}.
+#' }
+#'
 #' @examples
 #' \dontrun{
 #' # Gulf of Mexico significant wave heights, default priors.
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' npy_gom <- length(gom)/105
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
-#' pjn <- predict(gom_cv, npy = npy_gom)
-#' plot(pjn)
+#'
+#' ### Best training threshold based on the lowest validation threshold
+#'
+#' # Predictive distribution function
+#' best_p <- predict(gom_cv, npy = npy_gom, n_years = c(100, 1000))
+#' plot(best_p)
+#'
+#' # Predictive density function
+#' best_d <- predict(gom_cv, npy = npy_gom, type = "d", n_years = c(100, 1000))
+#' plot(best_d)
+#'
+#' ### All thresholds plus weighted average of inferences over all thresholds
+#'
+#' all_p <- predict(gom_cv, npy = npy_gom, which_u = "all")
+#' plot(all_p)
+#'
+#' # All thresholds plus weighted average of inferences over all thresholds
+#' all_d <- predict(gom_cv, npy = npy_gom, which_u = "all", type = "d")
+#' plot(all_d)
 #' }
+#' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
+#'   based on leave-one-out cross-validaton.
 #' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 #'   Cross-validatory extreme value threshold selection and uncertainty
 #'   with application to ocean storm severity.
@@ -123,6 +164,9 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     }
   } else {
     stop("'which_u' must be ''best'' or ''all'' or a numeric scalar")
+  }
+  if (which_u == "all" & type != "p" & type != "d") {
+    stop("If 'which_u = ''all'' then 'type' must be ''p'' or ''d''")
   }
   if (!is.numeric(n_years)) {
     stop("'n_years' must be numeric")
@@ -154,6 +198,8 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     # Best threshold
     if (which_u == "best") {
       best_u <- which.max(object$pred_perf[, which_v])
+    } else {
+      best_u <- which_u
     }
     # Extract posterior sample for this threshold
     which_rows <- (1 + (best_u - 1) * n):(best_u * n)
@@ -164,10 +210,6 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
                                npy = npy, type = type, x = x)
     ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
   }
-  # Need to do this: type = "p" only, do for all thresholds
-  # Calculate weights (u_prior and normalized pred_perf)
-  # Calculate threshold-averaged
-  # Create $x and $y as matrices: averaged column first
   if (which_u == "all") {
     # All thresholds
     ptw <- post_thresh_weights(x = object, which_v = which_v,
@@ -205,10 +247,10 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
       temp <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
       y_val[, 1 + i] <- temp$y
     }
-    # Calculate the weighted mean of
+    # Row-wise mean weighted by the posterior threshold weights
     y_val[, 1] <- apply(y_val[, -1], 1, stats::weighted.mean, w = ptw)
     ret_obj$y <- y_val
-    return(ret_obj)
+    ret_obj$post_thresh_wts <- ptw
   }
   ret_obj$which_u <- which_u
   ret_obj$u_vec <- object$u_vec
