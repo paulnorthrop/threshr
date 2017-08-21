@@ -23,8 +23,8 @@ The main function in the threshr package is \code{\link{ithresh}},
   overview of the package.
 }
 \references{
-Northrop, P. J. (2016). revdbayes: Ratio-of-Uniforms Sampling
-  for Bayesian Extreme Value Analysis. R package version 1.2.0.
+Northrop, P. J. (2017). revdbayes: Ratio-of-Uniforms Sampling
+  for Bayesian Extreme Value Analysis. R package version 1.2.1.
   \url{https://cran.r-project.org/package=revdbayes}.
 
 Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
