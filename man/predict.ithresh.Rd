@@ -21,12 +21,13 @@ data.}
 then \code{n_years} must have length one.}
 
 \item{which_u}{Either a character scalar or a numeric scalar.
-
   If \code{which_u} is a character scalar it must be either "best" or "all".
+
   If \code{which_u = "best"} then the single threshold achieving the largest
   measure of predictive performance in \code{object$pred_perf}, based
   on the validation threshold selected using \code{which_v}, is used to
-  perform prediction.
+  perform prediction.  See \code{\link{summary.ithresh}} to print the
+  best thresholds for each validation threshold.
 
   If \code{which_u = "all"} then \emph{all} the thresholds are used to
   perform prediction.  The inferences from each threshold are weighted
