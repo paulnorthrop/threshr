@@ -16,7 +16,11 @@
 #' for details.
 #'
 #' @param data  A numeric vector of observations.  Any missing values will
-#'   be removed.
+#'   be removed.  The argument \code{npy} (see below) may be supplied
+#'   as an attribute of \code{data} using \code{attr(data, "npy") <- value},
+#'   where \code{value} is the value of \code{npy} (see \code{\link{attr}}).
+#'   If \code{npy} is supplied twice, as both \code{attr(data, "npy")})
+#'   and using the \code{npy} argument, then the former is used.
 #' @param u_vec A numeric vector. A vector of \emph{training} thresholds
 #'   at which inferences are made from the GP model.  Any duplicated values
 #'   will be removed. These could be set at sample quantiles of \code{data}
@@ -28,13 +32,14 @@
 #' @param npy A numeric scalar. The mean number of observations per year
 #'   of data, after excluding any missing values, i.e. the number of
 #'   non-missing observations divided by total number of years of non-missing
-#'   data.
+#'   data.  May be supplied using as an attribute \code{attr(data, "npy")}
+#'   of \code{data} instead.
 #'
 #'   The value of \code{npy} does not affect any calculation in
 #'   \code{ithresh}, it only affects subsequent extreme value inferences using
 #'   \code{predict.ithresh}.  However, setting \code{npy} in the call to
-#'   \code{rpost} avoids the need to supply \code{npy} when calling
-#'   \code{predict.ithresh}.
+#'   \code{rpost}, or as an attribute of \code{data} avoids the need to
+#'   supply \code{npy} when calling \code{predict.ithresh}.
 #' @param use_rcpp A logical scalar.  If TRUE (the default) use the
 #'   revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
 #'   simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.
@@ -103,6 +108,8 @@
 #'   }
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
 #'   class \code{ithresh}.
+#' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
+#'   predictive performance.
 #' @seealso \code{\link{predict.ithresh}} for predictive inference for the
 #'   largest value observed in N years.
 #' @seealso \code{\link[revdbayes]{rpost}} in the
@@ -117,6 +124,8 @@
 #' @seealso \code{\link[stats]{quantile}}.
 #' @examples
 #' \dontrun{
+#' # [Smoother plots result from making n larger than the default n = 1000.]
+#'
 #' # Gulf of Mexico significant wave heights, default priors.
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
@@ -143,6 +152,19 @@
 #'   \url{http://dx.doi.org/10.1111/rssc.12159}
 #' @export
 ithresh <- function(data, u_vec, ..., n_v = 1, npy = NULL, use_rcpp = TRUE) {
+  # Store npy (if it has been supplied)
+  if (!is.null(attr(data, "npy"))) {
+    return_npy <- attr(data, "npy")
+  }
+  if (!is.null(npy) & !is.null(attr(data, "npy"))) {
+    warning(paste("Two values of npy supplied.  attr(data, ''npy'') = ",
+                  return_npy, " will be returned.", sep=""),
+            immediate. = TRUE)
+  } else if (!is.null(npy)) {
+    return_npy <- npy
+  } else if (is.null(attr(data, "npy"))) {
+    return_npy <- NULL
+  }
   # Remove missing values from data
   data <- as.numeric(stats::na.omit(data))
   # Put thresholds in ascending order and remove any repeated values.
@@ -171,7 +193,9 @@ ithresh <- function(data, u_vec, ..., n_v = 1, npy = NULL, use_rcpp = TRUE) {
     temp$v_ps <- as.numeric(substr(names(v_vec), 1, nchar(names(v_vec),
                                                      type = "c") - 1))
   }
-  temp$npy <- npy
+  if (!is.null(return_npy)) {
+    temp$npy <- return_npy
+  }
   temp$data <- data
   class(temp) <- "ithresh"
   return(temp)

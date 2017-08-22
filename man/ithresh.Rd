@@ -8,7 +8,11 @@ ithresh(data, u_vec, ..., n_v = 1, npy = NULL, use_rcpp = TRUE)
 }
 \arguments{
 \item{data}{A numeric vector of observations.  Any missing values will
-be removed.}
+be removed.  The argument \code{npy} (see below) may be supplied
+as an attribute of \code{data} using \code{attr(data, "npy") <- value},
+where \code{value} is the value of \code{npy} (see \code{\link{attr}}).
+If \code{npy} is supplied twice, as both \code{attr(data, "npy")})
+and using the \code{npy} argument, then the former is used.}
 
 \item{u_vec}{A numeric vector. A vector of \emph{training} thresholds
 at which inferences are made from the GP model.  Any duplicated values
@@ -43,13 +47,14 @@ GP models fitted at the thresholds in \code{u_vec}.}
 \item{npy}{A numeric scalar. The mean number of observations per year
   of data, after excluding any missing values, i.e. the number of
   non-missing observations divided by total number of years of non-missing
-  data.
+  data.  May be supplied using as an attribute \code{attr(data, "npy")}
+  of \code{data} instead.
 
   The value of \code{npy} does not affect any calculation in
   \code{ithresh}, it only affects subsequent extreme value inferences using
   \code{predict.ithresh}.  However, setting \code{npy} in the call to
-  \code{rpost} avoids the need to supply \code{npy} when calling
-  \code{predict.ithresh}.}
+  \code{rpost}, or as an attribute of \code{data} avoids the need to
+  supply \code{npy} when calling \code{predict.ithresh}.}
 
 \item{use_rcpp}{A logical scalar.  If TRUE (the default) use the
 revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
@@ -119,6 +124,8 @@ For a given threshold in \code{u_vec}:
 }
 \examples{
 \dontrun{
+# [Smoother plots result from making n larger than the default n = 1000.]
+
 # Gulf of Mexico significant wave heights, default priors.
 u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
@@ -150,6 +157,9 @@ Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 \seealso{
 \code{\link{plot.ithresh}} for the S3 plot method for objects of
   class \code{ithresh}.
+
+\code{\link{summary.ithresh}} Summarizing measures of threshold
+  predictive performance.
 
 \code{\link{predict.ithresh}} for predictive inference for the
   largest value observed in N years.

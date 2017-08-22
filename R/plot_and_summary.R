@@ -34,6 +34,8 @@
 #'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.
 #' @examples
 #' \dontrun{
+#' # [Smoother plots result from making n larger than the default n = 1000.]
+#'
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
 #' plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
@@ -294,15 +296,19 @@ plot.stability <- function(x, y, ..., prob = TRUE,
 #'   \code{ithresh}.
 #' @param ... Additional optional arguments. At present no optional
 #'   arguments are used.
-#' @return Returns a numeric matrix with 3 columns and \code{n_v} rows,
+#' @return Returns a numeric matrix with 5 columns and \code{n_v} rows,
 #'   where \code{n_v} is an argument to \code{\link{ithresh}} that
 #'   determines how many of the largest training thresholds are used
 #'   a validation thresholds.  The columns contain:
 #' \itemize{
 #'   \item {column 1:} {the validation threshold v}
-#'   \item {column 2:} {the best training threshold u judged using the
+#'   \item {column 2:} {the sample quantile to which the validation threshold
+#'     corresponds}
+#'   \item {column 3:} {the best training threshold u judged using the
 #'     validation threshold v}
-#'   \item {column 3:} {the index of the vector \code{u_vec} of training
+#'   \item {column 4:} {the sample quantile to which the best training
+#'     threshold corresponds}
+#'   \item {column 5:} {the index of the vector \code{u_vec} of training
 #'     thresholds to which the threshold in column2 corresponds}
 #' }
 #' @examples
@@ -323,9 +329,10 @@ summary.ithresh <- function(object, ...) {
   # Find the best training threshold for each validation threshold
   which_best <- apply(object$pred_perf, 2, which.max)
   u_best <- object$u_vec[which_best]
-  res <- cbind(object$v_vec, u_best, which_best)
-  rownames(res) <- 1:4
-  colnames(res) <- c("v", "best u", "index of u_vec")
+  res <- cbind(object$v_vec, object$v_ps, u_best, object$u_ps[which_best],
+               which_best)
+  rownames(res) <- 1:length(object$v_vec)
+  colnames(res) <- c("v", "v quantile", "best u", "best u quantile", "index of u_vec")
   return(res)
 }
 
@@ -363,32 +370,40 @@ summary.ithresh <- function(object, ...) {
 #' @examples
 #' \dontrun{
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-#' npy_gom <- length(gom)/105
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
+#'
+#' # Note: gom_cv$npy contains the correct value of npy (it was set in the
+#' #       call to ithresh, via attr(gom, "npy").
+#' #       If object$npy doesn't exist then the argument npu must be supplied
+#' #       in the call to predict().
 #'
 #' ### Best training threshold based on the lowest validation threshold
 #'
 #' # Predictive distribution function
-#' best_p <- predict(gom_cv, npy = npy_gom, n_years = c(100, 1000))
+#' npy_gom <- length(gom)/105
+#' best_p <- predict(gom_cv, n_years = c(100, 1000))
 #' plot(best_p)
 #'
 #' # Predictive density function
-#' best_d <- predict(gom_cv, npy = npy_gom, type = "d", n_years = c(100, 1000))
+#' best_d <- predict(gom_cv, type = "d", n_years = c(100, 1000))
 #' plot(best_d)
 #'
 #' ### All thresholds plus weighted average of inferences over all thresholds
 #'
-#' all_p <- predict(gom_cv, npy = npy_gom, which_u = "all")
+#' # Predictive distribution function
+#' all_p <- predict(gom_cv, which_u = "all")
 #' plot(all_p)
 #'
-#' # All thresholds plus weighted average of inferences over all thresholds
-#' all_d <- predict(gom_cv, npy = npy_gom, which_u = "all", type = "d")
+#' # Predictive density function
+#' all_d <- predict(gom_cv, which_u = "all", type = "d")
 #' plot(all_d)
 #' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   based on leave-one-out cross-validaton.
 #' @seealso \code{\link{predict.ithresh}} for predictive inference for the
 #'   largest value observed in N years.
+#' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
+#'   class \code{ithresh}.
 #' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
 #'   predictive performance.
 #' @export

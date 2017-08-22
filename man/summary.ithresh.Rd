@@ -14,15 +14,19 @@
 arguments are used.}
 }
 \value{
-Returns a numeric matrix with 3 columns and \code{n_v} rows,
+Returns a numeric matrix with 5 columns and \code{n_v} rows,
   where \code{n_v} is an argument to \code{\link{ithresh}} that
   determines how many of the largest training thresholds are used
   a validation thresholds.  The columns contain:
 \itemize{
   \item {column 1:} {the validation threshold v}
-  \item {column 2:} {the best training threshold u judged using the
+  \item {column 2:} {the sample quantile to which the validation threshold
+    corresponds}
+  \item {column 3:} {the best training threshold u judged using the
     validation threshold v}
-  \item {column 3:} {the index of the vector \code{u_vec} of training
+  \item {column 4:} {the sample quantile to which the best training
+    threshold corresponds}
+  \item {column 5:} {the index of the vector \code{u_vec} of training
     thresholds to which the threshold in column2 corresponds}
 }
 }
