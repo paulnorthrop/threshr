@@ -9,8 +9,9 @@
 #' @param x an object of class "ithresh", a result of a call to
 #'   \code{\link{ithresh}}.
 #' @param y Not used.
-#' @param which_val A numeric vector specifying the validation thresholds, that
-#'   is the indices of the argument \code{v_vec} to \code{\link{ithresh}}.
+#' @param which_v A numeric vector specifying the validation thresholds, that
+#'   is the indices of the argument \code{v_vec} to \code{\link{ithresh}},
+#'   to include in the plot.
 #' @param prob A logical scalar.  If \code{TRUE} then the levels of thresholds
 #'   are represented by the proportion of observations that lie below a
 #'   threshold.  If \code{prob = FALSE} then the values of the thresholds are
@@ -46,16 +47,17 @@
 #' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
 #'   predictive performance.
 #' @export
-plot.ithresh <- function(x, y, ..., which_val = NULL, prob = TRUE, top_scale = TRUE,
-                        add_legend = FALSE, legend_pos = "topleft") {
+plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
+                         top_scale = TRUE, add_legend = FALSE,
+                         legend_pos = "topleft") {
   if (!inherits(x, "ithresh")) {
     stop("use only with \"ithresh\" objects")
   }
-  # Use only the validation thresholds in columns which_val.
-  if (!is.null(which_val)) {
-    x$pred_perf <- x$pred_perf[, which_val, drop = FALSE]
-    x$v_ps <- x$v_ps[which_val]
-    x$v_vec <- x$v_vec[which_val]
+  # Use only the validation thresholds in columns which_v.
+  if (!is.null(which_v)) {
+    x$pred_perf <- x$pred_perf[, which_v, drop = FALSE]
+    x$v_ps <- x$v_ps[which_v]
+    x$v_vec <- x$v_vec[which_v]
   }
   # Calculate threshold weights.  Shift to avoid underflow.
   n_u <- length(x$u_vec)

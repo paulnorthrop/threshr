@@ -4,7 +4,7 @@
 \alias{plot.ithresh}
 \title{Plot diagnostics an ithresh object}
 \usage{
-\method{plot}{ithresh}(x, y, ..., which_val = NULL, prob = TRUE,
+\method{plot}{ithresh}(x, y, ..., which_v = NULL, prob = TRUE,
   top_scale = TRUE, add_legend = FALSE, legend_pos = "topleft")
 }
 \arguments{
@@ -16,8 +16,9 @@
 \item{...}{Additional arguments passed on to \code{\link[graphics]{matplot}}
 and/or \code{\link[graphics]{legend}} and/or \code{\link[graphics]{axis}}.}
 
-\item{which_val}{A numeric vector specifying the validation thresholds, that
-is the indices of the argument \code{v_vec} to \code{\link{ithresh}}.}
+\item{which_v}{A numeric vector specifying the validation thresholds, that
+is the indices of the argument \code{v_vec} to \code{\link{ithresh}},
+to include in the plot.}
 
 \item{prob}{A logical scalar.  If \code{TRUE} then the levels of thresholds
 are represented by the proportion of observations that lie below a
