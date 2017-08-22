@@ -274,7 +274,8 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
     # Simulate from (full) bin-GP posterior.
     temp <- do.call(gp_postsim, c(for_post, list(data = data, thresh = u)))
     # Simulate from the bin-GP posterior after removal of the maximum value.
-    temp_rm <- do.call(gp_postsim, c(for_post, list(data = data_rm, thresh = u)))
+    temp_rm <- do.call(gp_postsim, c(for_post, list(data = data_rm,
+                                                    thresh = u)))
     # Combine binomial and GP posterior simulated values.
     theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
     theta_rm <- cbind(temp_rm$bin_sim_vals, temp_rm$sim_vals)
