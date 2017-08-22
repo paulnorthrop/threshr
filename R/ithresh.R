@@ -291,7 +291,7 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
     sim_vals[which_rows, ] <- cbind(theta, i)
   }
   temp <- list(pred_perf = pred_perf, u_vec = u_vec, v_vec = v_vec,
-               sim_vals = sim_vals, n = n)
+               sim_vals = sim_vals, n = n, for_post = for_post)
   return(temp)
 
 }
