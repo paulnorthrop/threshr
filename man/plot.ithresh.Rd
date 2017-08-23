@@ -98,7 +98,9 @@ mtext("significant wave height / m", side = 3, line = 2.5)
 
 # Plot of Generalized Pareto posterior sample at the best threshold
 # (based on the lowest validation threshold)
-plot(gom_cv, which_u = "best", points_par = list(pch = 20, col = "grey"))
+plot(gom_cv, which_u = "best")
+# See which threshold was used
+summary(gom_cv)
 
 # Plot of Generalized Pareto posterior sample at the highest threshold
 n_u <- length(u_vec)
