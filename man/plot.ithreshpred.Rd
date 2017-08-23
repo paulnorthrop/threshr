@@ -15,7 +15,7 @@
 \item{...}{Additional arguments passed on to
 \code{\link[revdbayes]{plot.evpred}}.}
 
-\item{ave_only.}{A logical scalar.  Only relevant if
+\item{ave_only}{A logical scalar.  Only relevant if
 \code{\link{predict.ithresh}} was called with \code{which_u = "all"}.
 If \code{TRUE} then plot only
 a curve for the weighted average over multiple training thresholds.

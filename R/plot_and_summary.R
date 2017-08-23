@@ -427,7 +427,7 @@ summary.ithresh <- function(object, ...) {
 #' @param y Not used.
 #' @param ... Additional arguments passed on to
 #'   \code{\link[revdbayes]{plot.evpred}}.
-#' @param ave_only.  A logical scalar.  Only relevant if
+#' @param ave_only  A logical scalar.  Only relevant if
 #'   \code{\link{predict.ithresh}} was called with \code{which_u = "all"}.
 #'   If \code{TRUE} then plot only
 #'   a curve for the weighted average over multiple training thresholds.
@@ -515,7 +515,7 @@ plot.ithreshpred <- function(x, y, ..., ave_only = FALSE) {
       for_plot$lwd <- 2
     }
     if (is.null(for_plot$col)) {
-      my_col <- c(1, rep(grey(0.75), n_col_y - 1))
+      my_col <- c(1, rep("grey", n_col_y - 1))
       for_plot$col <- my_col
     }
     if (is.null(for_plot$leg_text)) {
