@@ -8,11 +8,11 @@ sudo: false
 warnings_are_errors: true
 
 os:
-#  - linux
-  - osx
+  - linux
+#  - osx
 
 r:
   - release
-#  - devel
+  - devel
 #  - oldrel
 
