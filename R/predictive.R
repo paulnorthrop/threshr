@@ -156,7 +156,7 @@
 predict.ithresh <- function(object, npy = NULL, n_years = 100,
                             which_u = c("best", "all"), which_v = 1L,
                             u_prior = rep(1, length(object$u_vec)),
-                            type = c("p", "d", "q", "i", "r"), x = NULL) {
+                            type = c("p", "d", "q", "i", "r"), x = NULL, ...) {
   if (!inherits(object, "ithresh")) {
     stop("object must be of class ''ithresh'', produced by ithresh()")
   }
