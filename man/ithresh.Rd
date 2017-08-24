@@ -26,14 +26,16 @@ using \code{\link[stats]{quantile}}.}
 \itemize{
   \item {\code{n}} {The size of the posterior sample used to perform
     predictive inference.  Default: \code{n = 1000}.}
-  \item {\code{prior}} {A prior for the GP parameters, set using
+  \item {\code{prior}} {A prior for the GP parameters, set using the
+    \strong{revdbayes} function
     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}
     with \code{min_xi = -1}.  See \code{\link[revdbayes]{set_prior}}
     for details.}
   \item {\code{h_prior}} {A list of further arguments (hyperparameters)
     for the GP prior specified in \code{prior}.}
   \item {\code{bin_prior}} {A prior for the threshold exceedance
-    probability \eqn{p}, set using \code{\link[revdbayes]{set_bin_prior}}.
+    probability \eqn{p}, set using the \strong{revdbayes} function
+    \code{\link[revdbayes]{set_bin_prior}}.
     Default: \code{prior = "jeffreys"}}, i.e. Beta(1/2, 1/2).
   \item {\code{h_bin_prior}} {A list of further arguments (hyperparameters)
     for the binomial prior specified in \code{bin_prior}.}

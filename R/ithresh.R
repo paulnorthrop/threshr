@@ -50,14 +50,16 @@
 #' \itemize{
 #'   \item {\code{n}} {The size of the posterior sample used to perform
 #'     predictive inference.  Default: \code{n = 1000}.}
-#'   \item {\code{prior}} {A prior for the GP parameters, set using
+#'   \item {\code{prior}} {A prior for the GP parameters, set using the
+#'     \strong{revdbayes} function
 #'     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}
 #'     with \code{min_xi = -1}.  See \code{\link[revdbayes]{set_prior}}
 #'     for details.}
 #'   \item {\code{h_prior}} {A list of further arguments (hyperparameters)
 #'     for the GP prior specified in \code{prior}.}
 #'   \item {\code{bin_prior}} {A prior for the threshold exceedance
-#'     probability \eqn{p}, set using \code{\link[revdbayes]{set_bin_prior}}.
+#'     probability \eqn{p}, set using the \strong{revdbayes} function
+#'     \code{\link[revdbayes]{set_bin_prior}}.
 #'     Default: \code{prior = "jeffreys"}}, i.e. Beta(1/2, 1/2).
 #'   \item {\code{h_bin_prior}} {A list of further arguments (hyperparameters)
 #'     for the binomial prior specified in \code{bin_prior}.}
@@ -208,10 +210,13 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
   # GP prior.
   cv_control <- list(...)
   if (is.null(cv_control$prior)) {
-    cv_control$prior <- "flat"
+    cv_control$prior <- "mdi"
   }
   if (is.null(cv_control$h_prior$min_xi)) {
     cv_control$h_prior$min_xi <- -1
+  }
+  if (is.null(cv_control$h_prior$a)) {
+    cv_control$h_prior$a <- 0.6
   }
   for_set_prior <- c(list(prior = cv_control$prior, model = "gp"),
                      cv_control$h_prior)
