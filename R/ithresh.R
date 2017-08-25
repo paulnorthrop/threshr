@@ -50,11 +50,12 @@
 #' \itemize{
 #'   \item {\code{n}} {The size of the posterior sample used to perform
 #'     predictive inference.  Default: \code{n = 1000}.}
-#'   \item {\code{prior}} {A prior for the GP parameters, set using the
+#'   \item {\code{prior}} {A prior for GP parameters, set using the
 #'     \strong{revdbayes} function
-#'     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "flat"}
-#'     with \code{min_xi = -1}.  See \code{\link[revdbayes]{set_prior}}
-#'     for details.}
+#'     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "mdi"}
+#'     with \code{a = 0.6} and \code{min_xi = -1}.
+#'     This particular prior is studied in
+#'     \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}}.
 #'   \item {\code{h_prior}} {A list of further arguments (hyperparameters)
 #'     for the GP prior specified in \code{prior}.}
 #'   \item {\code{bin_prior}} {A prior for the threshold exceedance
@@ -130,19 +131,26 @@
 #' \dontrun{
 #' # [Smoother plots result from making n larger than the default n = 1000.]
 #'
-#' # Gulf of Mexico significant wave heights, default priors.
+#' ## North Sea significant wave heights, default prior.
+#' # A plot akin to the top left of Figure 7 in Northrop et al. (2017)
+#'
+#' u_vec <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
+#' ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 3)
+#' plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
+#' mtext("significant wave height / m", side = 3, line = 2.5)
+#'
+#' ## Gulf of Mexico significant wave heights, default prior.
+#' # A plot akin to the top right of Figure 7 in Northrop et al. (2017)
+#'
 #' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
 #' plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
 #' mtext("significant wave height / m", side = 3, line = 2.5)
 #'
-#' # North Sea significant wave heights,
-#' # GP prior: pi(sigma_u, xi) = sigma_u^{-1} exp(-0.6 xi), xi >= -1.
-#' u_vec <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
-#' ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 3,
-#'                  prior = "mdi", h_prior = list(a = 0.6))
-#' plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
-#' mtext("significant wave height / m", side = 3, line = 2.5)
+#' # Setting a prior using its name and parameter value(s)
+#' # This example gives the same prior as the default
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4, prior = "mdi",
+#'                   h_prior = list(a = 0.6))
 #' }
 #' @references Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
 #'   Bayesian extreme value analyses using reference priors
