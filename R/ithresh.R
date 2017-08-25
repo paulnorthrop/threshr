@@ -22,13 +22,13 @@
 #'   If \code{npy} is supplied twice, as both \code{attr(data, "npy")})
 #'   and using the \code{npy} argument, then the former is used.
 #' @param u_vec A numeric vector. A vector of \emph{training} thresholds
-#'   at which inferences are made from the GP model.  Any duplicated values
-#'   will be removed. These could be set at sample quantiles of \code{data}
-#'   using \code{\link[stats]{quantile}}.
+#'   at which inferences are made from a binomial-GP model.  These could be
+#'   set at sample quantiles of  \code{data} using
+#'   \code{\link[stats]{quantile}}.  Any duplicated values will be removed.
 #' @param n_v A numeric scalar.
-#'   The \code{n_v} largest values in \code{u_vec} will be used as
-#'   validation thresholds to quantify the predictive performance of the
-#'   GP models fitted at the thresholds in \code{u_vec}.
+#'   Each of the \code{n_v} largest values in \code{u_vec} will be used
+#'   (separately) as a validation threshold for the training thresholds
+#'   in \code{u_vec} that lie at or below that validation threshold.
 #' @param npy A numeric scalar. The mean number of observations per year
 #'   of data, after excluding any missing values, i.e. the number of
 #'   non-missing observations divided by total number of years of non-missing
@@ -75,10 +75,10 @@
 #'     excesses and a binomial model for the probability of threshold
 #'     exceedance;}
 #'   \item {the ability of this binomial-GP model to predict data
-#'     thresholded at the threshold(s) specified by \code{n_v} is
+#'     thresholded at the validation threshold(s) specified by \code{n_v} is
 #'     assessed using leave-one-out cross-validation (the measure of
 #'     this is given in equation (7) of
-#'     \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.}
+#'     \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}).}
 #' }
 #'   See \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
 #'   and the introductory threshr vignette for further details and examples.
@@ -87,7 +87,9 @@
 #'   \itemize{
 #'     \item{\code{pred_perf}:} A numeric matrix with \code{length(u_vec)}
 #'     rows and \code{n_v} columns.  Each column contains the values of
-#'     the measure of predictive performance.
+#'     the measure of predictive performance.  Entries corresponding
+#'     to cases where the training threshold is above the validation
+#'     threshold will be \code{NA}.
 #'     \item{\code{u_vec}:} The argument \code{u_vec} to \code{ithresh}.
 #'     \item{\code{v_vec}:} A numeric vector.  The validation thresholds
 #'       implied by the argument \code{n_v} to \code{ithresh}.
