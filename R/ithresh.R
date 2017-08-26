@@ -25,9 +25,58 @@
 #'   at which inferences are made from a binomial-GP model.  These could be
 #'   set at sample quantiles of  \code{data} using
 #'   \code{\link[stats]{quantile}}.  Any duplicated values will be removed.
+#' @param ... Further (optional) arguments to be passed to the
+#'   \code{\link[revdbayes]{revdbayes}} function
+#'   \code{\link[revdbayes]{rpost_rcpp}} (or \code{\link[revdbayes]{rpost}}),
+#'   which use the generalised ratio-of-uniforms method to simulate from
+#'   extreme value posterior distributions.
+#'   In particular:
+#' \itemize{
+#'   \item {\code{n}} {The size of the posterior sample used to perform
+#'     predictive inference.  Default: \code{n = 1000}.}
+#'   \item {\code{prior}} {A prior for GP parameters to be passed to the
+#'     \strong{revdbayes} function \code{\link[revdbayes]{set_prior}}.
+#'     Can be either a character scalar that chooses an in-built prior,
+#'     or a user-supplied R function or pointer to a compiled C++ function.
+#'     See the \code{\link[revdbayes]{set_prior}} documentation for details
+#'     of the in-built priors.
+#'     See the \strong{revdbayes} vignette
+#'     \href{https://cran.r-project.org/package=revdbayes}{Faster simulation
+#'     using revdbayes} for information about creating
+#'     a pointer to a C++ function. See also the \strong{Examples} section.
+#'
+#'     If the user supplies and R function then \code{\link{rpost}} will be
+#'     used for posterior simulation, rather than (the faster)
+#'     \code{\link{rpost_rcpp}}, regardless of the input value of
+#'     \code{use_rcpp}.
+#'
+#'     Default: \code{prior = "mdi"} with \code{a = 0.6} and \code{min_xi = -1}.
+#'     This particular prior is studied in
+#'     \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}}.
+#'   \item {\code{h_prior}} {A \emph{list} of further arguments
+#'     (hyperparameters) for the GP prior specified in \code{prior}.}
+#'   \item {\code{bin_prior}} {A character scalar that chooses an in-built
+#'     prior for the threshold exceedance probability \eqn{p}, to be passed to
+#'     the \strong{revdbayes} function \code{\link[revdbayes]{set_bin_prior}}.
+#'     only relevant if \code{prior == "beta"}.
+#'
+#'     Default: \code{prior = "jeffreys"}, i.e. Beta(1/2, 1/2).}
+#'   \item {\code{h_bin_prior}} {A \emph{list} of further arguments
+#'     (hyperparameters) for the binomial prior specified in \code{bin_prior}.
+#'     See the \code{\link[revdbayes]{set_bin_prior}} documentation for details
+#'     of the in-built priors.}
+#'   \item {\code{trans}} {A character scalar: either \code{"none"} or
+#'     \code{"BC"}.  See \code{\link{rpost_rcpp}} for details.
+#'     The default is \code{"none"}, which is usually faster than \code{"BC"}.
+#'     However, if there are very few threshold excesses then using
+#'     \code{trans = "BC"} can make the optimizations involved in the
+#'     generalised ratio-of-uniforms algorithm more stable.  If using
+#'     \code{trans = "none"} produces an error for a particular posterior
+#'     simulation then \code{trans = "BC"} is used instead.}
+#' }
 #' @param n_v A numeric scalar.
 #'   Each of the \code{n_v} largest values in \code{u_vec} will be used
-#'   (separately) as a validation threshold for the training thresholds
+#'   (separately) as a \emph{validation} threshold for the training thresholds
 #'   in \code{u_vec} that lie at or below that validation threshold.
 #' @param npy A numeric scalar. The mean number of observations per year
 #'   of data, after excluding any missing values, i.e. the number of
@@ -40,31 +89,11 @@
 #'   \code{predict.ithresh}.  However, setting \code{npy} in the call to
 #'   \code{rpost}, or as an attribute of \code{data} avoids the need to
 #'   supply \code{npy} when calling \code{predict.ithresh}.
-#' @param use_rcpp A logical scalar.  If TRUE (the default) use the
-#'   revdbayes function \code{\link[revdbayes]{rpost_rcpp}} for posterior
-#'   simulation.  Otherwise, we use \code{\link[revdbayes]{rpost}}.
-#' @param ... Further (optional) arguments to be passed to the
-#'   \code{\link[revdbayes]{revdbayes}} function
-#'   \code{\link[revdbayes]{rpost_rcpp}} (or \code{\link[revdbayes]{rpost}}).
-#'   In particular:
-#' \itemize{
-#'   \item {\code{n}} {The size of the posterior sample used to perform
-#'     predictive inference.  Default: \code{n = 1000}.}
-#'   \item {\code{prior}} {A prior for GP parameters, set using the
-#'     \strong{revdbayes} function
-#'     \code{\link[revdbayes]{set_prior}}.  Default: \code{prior = "mdi"}
-#'     with \code{a = 0.6} and \code{min_xi = -1}.
-#'     This particular prior is studied in
-#'     \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}}.
-#'   \item {\code{h_prior}} {A list of further arguments (hyperparameters)
-#'     for the GP prior specified in \code{prior}.}
-#'   \item {\code{bin_prior}} {A prior for the threshold exceedance
-#'     probability \eqn{p}, set using the \strong{revdbayes} function
-#'     \code{\link[revdbayes]{set_bin_prior}}.
-#'     Default: \code{prior = "jeffreys"}}, i.e. Beta(1/2, 1/2).
-#'   \item {\code{h_bin_prior}} {A list of further arguments (hyperparameters)
-#'     for the binomial prior specified in \code{bin_prior}.}
-#' }
+#' @param use_rcpp A logical scalar.  If \code{TRUE} (the default) the
+#'   revdbayes function \code{\link[revdbayes]{rpost_rcpp}} is used for
+#'   posterior simulation.  If \code{FALSE}, or if the user supplies an R
+#'   function to set the prior for GP parameters,
+#'   the (slower) function \code{\link[revdbayes]{rpost}} is used.
 #' @details For a given threshold in \code{u_vec}:
 #' \itemize{
 #'   \item {the number of values in \code{data} that exceed the threshold,
@@ -131,27 +160,51 @@
 #' \dontrun{
 #' # [Smoother plots result from making n larger than the default n = 1000.]
 #'
-#' ## North Sea significant wave heights, default prior.
-#' # A plot akin to the top left of Figure 7 in Northrop et al. (2017)
+#' ## North Sea significant wave heights, default prior -----------------------
+#' #' # A plot akin to the top left of Figure 7 in Northrop et al. (2017)
 #'
-#' u_vec <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
-#' ns_cv <- ithresh(data = ns, u_vec = u_vec, n_v = 3)
+#' u_vec_ns <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
+#' ns_cv <- ithresh(data = ns, u_vec = u_vec_ns, n_v = 3)
 #' plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
 #' mtext("significant wave height / m", side = 3, line = 2.5)
 #'
-#' ## Gulf of Mexico significant wave heights, default prior.
+#' ## Gulf of Mexico significant wave heights, default prior ------------------
 #' # A plot akin to the top right of Figure 7 in Northrop et al. (2017)
 #'
-#' u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-#' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
+#' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
 #' plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
 #' mtext("significant wave height / m", side = 3, line = 2.5)
 #'
-#' # Setting a prior using its name and parameter value(s)
+#' # Setting a prior using its name and parameter value(s) --------------------
 #' # This example gives the same prior as the default
-#' gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4, prior = "mdi",
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = "mdi",
 #'                   h_prior = list(a = 0.6))
+#'
+#' ## Setting a user-defined (log-)prior R function ---------------------------
+#' # This example also gives the same prior as the default
+#' # (It will take longer to run than the example above because ithresh detects
+#' #  that the prior is an R function and sets use_rcpp to FALSE.)
+#'
+#' user_prior <- function(pars, a, min_xi = -1) {
+#'   if (pars[1] <= 0 | pars[2] < min_xi) {
+#'     return(-Inf)
+#'   }
+#'   return(-log(pars[1]) - a * pars[2])
 #' }
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = user_prior,
+#'                   h_prior = list(a = 0.6))
+#'
+#' ## Setting a user-defined (log-)prior (pointer to a) C++ function ----------
+#' # We make use of a C++ function and function create_prior_xptr() to create
+#' # the required pointer from the revdbayes package
+#'
+#' prior_ptr <- revdbayes:::create_prior_xptr("gp_flat")
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = prior_ptr,
+#'                   h_prior = list(min_xi = -1))
+#' }
+#'
+#'
 #' @references Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
 #'   Bayesian extreme value analyses using reference priors
 #'   \emph{Statistica Sinica}, \strong{26}(2), 721--743
@@ -219,14 +272,20 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
   # Extract arguments for passing to revdbayes function rpost -----------------
   # GP prior.
   cv_control <- list(...)
+  # If prior is a (user-supplied) R function then set use_rcpp = FALSE
+  if (is.function(cv_control$prior)) {
+    use_rcpp <- FALSE
+  }
   if (is.null(cv_control$prior)) {
     cv_control$prior <- "mdi"
   }
   if (is.null(cv_control$h_prior$min_xi)) {
     cv_control$h_prior$min_xi <- -1
   }
-  if (is.null(cv_control$h_prior$a)) {
-    cv_control$h_prior$a <- 0.6
+  if (is.character(cv_control$prior)) {
+    if (cv_control$prior == "mdi" & is.null(cv_control$h_prior$a)) {
+      cv_control$h_prior$a <- 0.6
+    }
   }
   for_set_prior <- c(list(prior = cv_control$prior, model = "gp"),
                      cv_control$h_prior)
@@ -286,11 +345,29 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
   # Loop over the training thresholds -------------------------------------
   for (i in 1:n_u){
     u <- u_vec[i]
+    # Simulation from posterior distributions.
+    #
+    # If an error occurs (this can sometimes happen if there are few excesses)
+    # then try trans = "BC".  This tends to be slower but the Box-Cox
+    # transformation towards normality can improve stability of the
+    # ratio-of-uniforms boxing optimizations.
+    #
     # Simulate from (full) bin-GP posterior.
-    temp <- do.call(gp_postsim, c(for_post, list(data = data, thresh = u)))
+    temp <- tryCatch(
+      do.call(gp_postsim, c(for_post, list(data = data, thresh = u))),
+      error = function(e) {
+        new_for_post <- c(for_post, trans = "BC")
+        do.call(gp_postsim, c(new_for_post, list(data = data, thresh = u)))
+      }
+    )
     # Simulate from the bin-GP posterior after removal of the maximum value.
-    temp_rm <- do.call(gp_postsim, c(for_post, list(data = data_rm,
-                                                    thresh = u)))
+    temp_rm <- tryCatch(
+      do.call(gp_postsim, c(for_post, list(data = data_rm, thresh = u))),
+      error = function(e) {
+        new_for_post <- c(for_post, trans = "BC")
+        do.call(gp_postsim, c(new_for_post, list(data = data_rm, thresh = u)))
+      }
+    )
     # Combine binomial and GP posterior simulated values.
     theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
     theta_rm <- cbind(temp_rm$bin_sim_vals, temp_rm$sim_vals)
