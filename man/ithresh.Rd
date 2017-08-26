@@ -120,6 +120,14 @@ An object (list) of class \code{"ithresh"}, containing the
     \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
     \item{\code{data}:} The argument \code{data} to \code{ithresh}
       detailed above, with any missing values removed.
+    \item{\code{use_rcpp}:} A logical scalar indicating whether
+      \code{\link[revdbayes]{rpost_rcpp}} (\code{use_rcpp = TRUE}) or
+      \code{\link[revdbayes]{rpost}} (\code{use_rcpp = FALSE})
+      was used for posterior simulation.
+    \item{\code{for_post}:} A list containing arguments with which
+      \code{\link[revdbayes]{rpost_rcpp}}
+      (or \code{\link[revdbayes]{rpost}}) was called, including
+      any user-supplied arguments to these functions.
   }
 }
 \description{
