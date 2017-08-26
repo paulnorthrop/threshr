@@ -119,7 +119,21 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
     for_post <- c(x$for_post, list(data = x$data, thresh = x$u_vec[which_u]))
     # Set n = 1 because we're not going to use the new sample
     for_post$n <- 1
-    temp <- do.call(revdbayes::rpost_rcpp, for_post)
+    # Select the correct posterior simulation function
+    if (x$use_rcpp) {
+      gp_postsim <- revdbayes::rpost_rcpp
+    } else {
+      gp_postsim <- revdbayes::rpost
+    }
+    # I can use trans = "none" because I only want to
+    # If trans = "none" returns an error try trans = "BC"
+    temp <- tryCatch(
+      do.call(gp_postsim, for_post),
+      error = function(e) {
+        new_for_post <- c(for_post, trans = "BC")
+        do.call(gp_postsim, new_for_post)
+      }
+    )
     # Get the posterior sample for threshold x$u_vec[which_u] given by ithresh
     which_rows <- (1 + (which_u - 1) * x$n):(which_u * x$n)
     temp$bin_sim_vals <- x$sim_vals[which_rows, 1, drop = FALSE]
@@ -127,8 +141,15 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
     # Add names for labelling the axes
     colnames(temp$bin_sim_vals) <- "p[u]"
     colnames(temp$sim_vals) <- c("sigma[u]", "xi")
-    # Produce the plot
-    revdbayes:::plot.evpost(temp, ...)
+    # Produce the plot.  Create a list for sending to revdbayes:::plot.evpost()
+    for_plot_evpost <- list(x = temp, ...)
+    # If the user has tried to use ru_scale = TRUE then remove it
+    # because no simulated values have been stored on the ru scale
+    if (!is.null(for_plot_evpost$ru_scale)) {
+      for_plot_evpost$ru_scale <- NULL
+    }
+    print(for_plot_evpost)
+    do.call(revdbayes:::plot.evpost, for_plot_evpost)
     return(invisible(temp))
   }
   # Use only the validation thresholds in columns which_v.
