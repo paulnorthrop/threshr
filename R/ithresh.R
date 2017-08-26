@@ -139,6 +139,14 @@
 #'     \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
 #'     \item{\code{data}:} The argument \code{data} to \code{ithresh}
 #'       detailed above, with any missing values removed.
+#'     \item{\code{use_rcpp}:} A logical scalar indicating whether
+#'       \code{\link[revdbayes]{rpost_rcpp}} (\code{use_rcpp = TRUE}) or
+#'       \code{\link[revdbayes]{rpost}} (\code{use_rcpp = FALSE})
+#'       was used for posterior simulation.
+#'     \item{\code{for_post}:} A list containing arguments with which
+#'       \code{\link[revdbayes]{rpost_rcpp}}
+#'       (or \code{\link[revdbayes]{rpost}}) was called, including
+#'       any user-supplied arguments to these functions.
 #'   }
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
 #'   class \code{ithresh}.
@@ -339,7 +347,7 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
   }
   #
   for_post <- c(list(n = n, model = "bingp", prior = gp_prior,
-                   bin_prior = bin_prior), cv_control)
+                     bin_prior = bin_prior), cv_control)
   # A matrix to store the posterior samples for each threshold
   sim_vals <- matrix(NA, ncol = 4, nrow = n * n_u)
   # Loop over the training thresholds -------------------------------------
@@ -350,13 +358,20 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
     # If an error occurs (this can sometimes happen if there are few excesses)
     # then try trans = "BC".  This tends to be slower but the Box-Cox
     # transformation towards normality can improve stability of the
-    # ratio-of-uniforms boxing optimizations.
+    # ratio-of-uniforms boxing optimizations.  If trans = "BC" was used already
+    # then try trans = "none".
     #
     # Simulate from (full) bin-GP posterior.
     temp <- tryCatch(
       do.call(gp_postsim, c(for_post, list(data = data, thresh = u))),
       error = function(e) {
-        new_for_post <- c(for_post, trans = "BC")
+        if (is.null(cv_control$trans) || cv_control == "none") {
+          try_other_trans <- "BC"
+        } else {
+          try_other_trans <- "none"
+        }
+        try_other_trans <- ifelse(cv_control$trans == "BC", "none", "BC")
+        new_for_post <- c(for_post, trans = try_other_trans)
         do.call(gp_postsim, c(new_for_post, list(data = data, thresh = u)))
       }
     )
@@ -364,7 +379,12 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
     temp_rm <- tryCatch(
       do.call(gp_postsim, c(for_post, list(data = data_rm, thresh = u))),
       error = function(e) {
-        new_for_post <- c(for_post, trans = "BC")
+        if (is.null(cv_control$trans) || cv_control == "none") {
+          try_other_trans <- "BC"
+        } else {
+          try_other_trans <- "none"
+        }
+        new_for_post <- c(for_post, trans = try_other_trans)
         do.call(gp_postsim, c(new_for_post, list(data = data_rm, thresh = u)))
       }
     )
@@ -383,7 +403,8 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
     sim_vals[which_rows, ] <- cbind(theta, i)
   }
   temp <- list(pred_perf = pred_perf, u_vec = u_vec, v_vec = v_vec,
-               sim_vals = sim_vals, n = n, for_post = for_post)
+               sim_vals = sim_vals, n = n, for_post = for_post,
+               use_rcpp = use_rcpp)
   return(temp)
 
 }
