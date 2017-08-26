@@ -35,8 +35,8 @@ Returns a numeric matrix with 5 columns and \code{n_v} rows,
 }
 \examples{
 \dontrun{
-u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
+u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
 summary(gom_cv)
 }
 }

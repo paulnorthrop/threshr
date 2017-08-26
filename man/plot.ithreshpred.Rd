@@ -42,8 +42,8 @@ the predictive inferences made by \code{\link{predict.ithresh}}.
 }
 \examples{
 \dontrun{
-u_vec <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-gom_cv <- ithresh(data = gom, u_vec = u_vec, n_v = 4)
+u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
 
 # Note: gom_cv$npy contains the correct value of npy (it was set in the
 #       call to ithresh, via attr(gom, "npy").
