@@ -1,0 +1,19 @@
+context("stability")
+
+# We check that the results from ithresh produced using use_rcpp = TRUE and
+# use_rcpp = FALSE are identical.
+
+# Set a tolerance for the comparison of the simulated values
+
+my_tol <- 1e-5
+
+n <- 500
+seed <- 29082017
+
+test_data <- revdbayes::rgp(500)
+u_vec <- quantile(test_data, probs = seq(0, 0.95, by = 0.05))
+
+res1 <- stability(data = test_data, u_vec = u_vec)
+res2 <- stability(data = test_data, u_vec = u_vec, prof = TRUE)
+
+testthat::expect_equal(res1$ests, res2$ests, tolerance = my_tol)
