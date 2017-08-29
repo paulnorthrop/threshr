@@ -376,8 +376,6 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
         }
         try_other_trans <- ifelse(cv_control$trans == "BC", "none", "BC")
         new_for_post <- c(for_post, trans = try_other_trans)
-        print("full")
-        print(i)
         do.call(gp_postsim, c(new_for_post, list(data = data, thresh = u)))
       }
     )
@@ -391,8 +389,6 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
           try_other_trans <- "none"
         }
         new_for_post <- c(for_post, trans = try_other_trans)
-        print("rm")
-        print(i)
         do.call(gp_postsim, c(new_for_post, list(data = data_rm, thresh = u)))
       }
     )
