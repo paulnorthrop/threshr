@@ -65,7 +65,7 @@
 #'   Modeling of Extreme Values}, Springer-Verlag, London.
 #'   \url{http://dx.doi.org/10.1007/978-1-4471-3675-0_3}
 #' @seealso \code{\link{plot.stability}} for the S3 \code{plot} method for
-#' # objects of class \code{stability}.
+#'   objects of class \code{stability}.
 #' @seealso \code{\link[stats]{quantile}}.
 #' @examples
 #' # Set a vector of thresholds
@@ -91,11 +91,14 @@ stability <- function(data, u_vec, prof = FALSE, conf = 95, mult = 1:2,
   # Numbers of excesses of each threshold
   temp$nexc <- unlist(lapply(u_vec, function(x) sum(data > x)))
   temp$u_vec <- u_vec
-  cat(paste("Fitting GP model at", n_u, "thresholds"), fill = TRUE)
-  cat(paste("Fitting at threshold ..."), fill = TRUE)
+  if (prof) {
+    cat(paste("Fitting at threshold number ..."), fill = TRUE)
+  }
   conf <- conf / 100
   for (i in 1:n_u) {
-    cat(paste(i, ""))
+    if (prof) {
+      cat(paste(i, ""))
+    }
     z_u <- data[data > u_vec[i]] - u_vec[i]
     z <- gp_mle(gp_data = z_u)
     z$data <- data[data > u_vec[i]]
