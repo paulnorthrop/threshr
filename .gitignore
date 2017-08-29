@@ -3,4 +3,3 @@ inst/doc
 .Rhistory
 .Rdata
 R/highest_threshold.R
-R/misc.R
