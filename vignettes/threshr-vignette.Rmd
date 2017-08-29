@@ -2,7 +2,9 @@
 title: "Introducing threshr: Threshold Selection and Uncertainty for Extreme Value Analysis"
 author: "Paul J. Northrop"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Introducing threshr: Threshold Selection and Uncertainty for Extreme Value Analysis}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,17 +20,17 @@ The *threshr* package deals primarily with the selection of thresholds for use i
 
 At the moment only the simplest case, where the data can be treated as independent identically distributed observations, is considered.  In this case the model used is a combination of a binomial distribution for the number of *exceedances* of a given threshold and a generalized Pareto (GP) distribution for the amounts, the *threshold excesses* by which exceedances lie above a threshold.  We refer to this as a binomial-GP model. Future releases will tackle more general situations.  
 
-We use the function `ithresh` to compare the predictive performances of each of a set of user-supplied thresholds.  We also perform predictive inferences for future extreme valus, using the `predict` method for objects returned from `ithresh`.  These inferences can be based either on a single threshold or on a weighted average of inferences from multiple thresholds.  The weighting reflects an estimated measure of the predictive performance of the threshold and can also incorporate use-supplied prior probabilities for eac threshold.  
+We use the function `ithresh` to compare the predictive performances of each of a set of user-supplied thresholds.  We also perform predictive inferences for future extreme valus, using the `predict` method for objects returned from `ithresh`.  These inferences can be based either on a single threshold or on a weighted average of inferences from multiple thresholds.  The weighting reflects an estimated measure of the predictive performance of the threshold and can also incorporate use-supplied prior probabilities for each threshold.  
 
 A traditional simple graphical method to inform threshold selection is to plot estimates of, and confidence intervals for, the GP shape parameter $\xi$ over a range of thresholds. This plot is used to choose a threshold above which the underlying GP shape parameter may be approximately constant. See Chapter 4 of see @Coles2001 for details. Identifying a single threshold using this method is usually unrealistic but the plot can point to a range of thresholds that merit more sophisticated analysis. The **threshr** function `stability` produces this type of plot.
 
 ## Cross-validatory predictive performance for i.i.d. data using `ithresh`
 
-We provide a brief outline of the methodology underlying `ithresh`.  For full details see @NAJ2017. We set a vector of *training thresholds* $u_1, \ldots, u_k$. A *validation threshold* $v = u_k$ defines validation data: indicators of whether or not an observation exceeds $v$ and, if it does, the amount by which $v$ is exceeded.  For a given training threshold leave-one-out cross-validation estimates the quality of predictive inference for the individual omitted samples based on Bayesian inferences from a binomial-GP model. Importance sampling is used to reduce computation time: only two posterior samples are required for each training threshold.  Simulation from the posterior distributions of the binomial-GP parameters is performed using the **revdbayes** package [@revdbayes].
+We provide a brief outline of the methodology underlying `ithresh`.  For full details see @NAJ2017. Consider a set of *training thresholds* $u_1, \ldots, u_k$. The *validation threshold* $v = u_k$ defines validation data: indicators of whether or not an observation exceeds $v$ and, if it does, the amount by which $v$ is exceeded.  For a given training threshold leave-one-out cross-validation estimates the quality of predictive inference for each of the individual omitted samples based on Bayesian inferences from a binomial-GP model. Importance sampling is used to reduce computation time: only two posterior samples are required for each training threshold.  Simulation from the posterior distributions of the binomial-GP parameters is performed using the **revdbayes** package [@revdbayes].
 
-In the first release the binomial probability is assumed to be independent of the parameters of the GP distribution *a priori*.  This will be relaxed in a later release.  The user can choose from a selection of in-built prior distributions and may specify their own prior for GP models parameters.  By default the Beta(1/2, 1/2) Jeffreys' prior is used for the threshold exceedance probability of the binomial distribution and a prior related to the Maximal Data Information (MDI) prior is used for the GP parameters.  See @NAJ2017 for details of the latter.
+In the first release of **threshr** the binomial probability is assumed to be independent of the parameters of the GP distribution *a priori*.  This will be relaxed in a later release.  The user can choose from a selection of in-built prior distributions and may specify their own prior for GP models parameters.  By default the Beta(1/2, 1/2) Jeffreys' prior is used for the threshold exceedance probability of the binomial distribution and a generalization of the Maximal Data Information (MDI) prior is used for the GP parameters.  See @NAJ2017 for details of the latter.
 
-We use the datasets `gom` and `ns` to illustrate the code.  These are the same datasets analysed in @NAJ2017.
+We use the storm peak significant wave heights datasets analysed in @NAJ2017 from the Gulf of Mexico (`gom`, with 315 observations) and the northern North Sea (`ns`, with 628 observations) to illustrate the code.  There should be enough exceedances of the validation threshold $v = u_k$ to enable the predictive performances of the training thresholds to be compared. @JE2013 recommend that when making inferences about a GP distribution there should be no fewer than 50 exceedances.  We bear this in mind when setting the vectors of training thresholds below. 
 
 ```{r, include = FALSE}
 set.seed(22082017)
@@ -37,59 +39,55 @@ set.seed(22082017)
 ```{r, fig.show='hold', fig.height=5, fig.width=7, fig.align='center'}
 library(threshr)
 # Set the size of the posterior sample simulated at each threshold
-n <- 1000
-# North Sea significant wave heights
-ns_u_vec <- quantile(ns, probs = seq(0, 0.85, by = 0.05))
-ns_cv <- ithresh(data = ns, u_vec = ns_u_vec, n = n)
+n <- 10000
+
+## North Sea significant wave heights
+
+# Set a vector of training thresholds
+u_vec_ns <- quantile(ns, probs = seq(0, 0.85, by = 0.05))
+# Compare the predictive performances of the training thresholds
+ns_cv <- ithresh(data = ns, u_vec = u_vec_ns, n = n)
+
+## Gulf of Mexico significant wave heights
+
+# Set a vector of training thresholds
+u_vec_gom <- quantile(gom, probs = seq(0, 0.8, by = 0.05))
+# Compare the predictive performances of the training thresholds
+gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n = n)
 ```
 
-```{r, include = FALSE}
-set.seed(2208217)
-```
-
-```{r}
-# Gulf of Mexico significant wave heights
-gom_u_vec <- quantile(gom, probs = seq(0, 0.8, by = 0.05))
-gom_cv <- ithresh(data = gom, u_vec = gom_u_vec, n = n)
-```
-
-```{r}
-sum_ns <- summary(ns_cv)
-sum_ns
-u_ns <- sum_ns[1, 5]
-u_ns
-
-sum_gom <- summary(gom_cv)
-sum_gom
-u_gom <- sum_gom[1, 5]
-u_gom
-```
-
-We produce plots like those in the top row of Figure 7 in @NAJ2017.
+The default plot method for objects returned by `ithresh` is of the estimated measures of predictive performance, normalized to sum to 1, against training threshold.  See equations (7) and (14) of @NAJ2017.
 
 ```{r, fig.show='hold', fig.height=5, fig.width=7, fig.align='center'}
 plot(ns_cv, lwd = 2, cex.axis = 0.8)
-mtext("significant wave height / m", side = 3, line = 2.5)
+mtext("North Sea : significant wave height / m", side = 3, line = 2.5)
 
 plot(gom_cv, lwd = 2, cex.axis = 0.8)
-mtext("significant wave height / m", side = 3, line = 2.5)
+mtext("Gulf of Mexico: significant wave height / m", side = 3, line = 2.5)
 ```
+
+The summary method identifies which training threshold is estimated to perform best. 
+
+```{r}
+summary(ns_cv)
+summary(gom_cv)
+```
+
+The plot method can also produce a plot of the posterior sample of the GP parameters generated using a training threshold chosen by the user, e.g. the argument `which_u = 5` specifies the 5th element of the vector of training thresholds, or using the best threshold, as below.
 
 ```{r, fig.height=5, fig.width=5, fig.align='center'}
 # Plot of Generalized Pareto posterior sample at the best threshold
 # (based on the lowest validation threshold)
 plot(gom_cv, which_u = "best")
-# See which threshold was used
-summary(gom_cv)
 ```
 
 ## Predictive inference for future extremes using `predict`
 
-Let $M_N$ denote the largest value to be observed in a time period of length $N$ years.
+Let $M_N$ denote the largest value to be observed in a time period of length $N$ years.  The predict method for objects returned from `ithresh` performs predictive inference for $M_N$ based either on a single training threshold or on a weighted average of inferences from multiple thresholds.
 
 ### Single training threshold
 
-Default: best. Use can pick their own.
+By default the threshold that is estimated to perform best is used.  A different threshold can be selected using the argument `which_u`.  Using `type = "d"` produces the predictive density function.
 
 ```{r, fig.show='hold', fig.height=5, fig.width=7, fig.align='center'}
 # Predictive distribution function
@@ -99,7 +97,7 @@ plot(best_p)
 
 ### Inferences averaged over multiple thresholds
 
-User can specify a prior probability for each threshold.  The default is that all thresholds receive equal prior probability.  In this case the weights applied to individual thresholds are those displayed in the threshold diagnostic plot above.
+This option is selected using `which_u = "all"`.  The user can specify a prior probability for each threshold using `u_prior`.  The default is that all thresholds receive equal prior probability, in which case the weights applied to individual thresholds are those displayed in the threshold diagnostic plot above.  The default, `type = "p"` produces the predictive distribution function.
 
 ```{r, fig.show='hold', fig.height=5, fig.width=7, fig.align='center'}
 ### All thresholds plus weighted average of inferences over all thresholds
