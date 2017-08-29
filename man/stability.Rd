@@ -99,7 +99,7 @@ Coles, S. G. (2001) \emph{An Introduction to Statistical
   based on leave-one-out cross-validaton.
 
 \code{\link{plot.stability}} for the S3 \code{plot} method for
-# objects of class \code{stability}.
+  objects of class \code{stability}.
 
 \code{\link[stats]{quantile}}.
 }
