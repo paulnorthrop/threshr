@@ -19,3 +19,16 @@ res2 <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2, use_rcpp = FALSE)
 
 testthat::expect_equal(res1$pred_perf, res2$pred_perf, tolerance = my_tol)
 testthat::expect_equal(res1$sim_vals, res2$sim_vals, tolerance = my_tol)
+
+# MDI (0.5)
+
+# use_rcpp = TRUE
+set.seed(seed)
+res1 <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2,
+                h_prior = list(a = 0.5))
+# use_rcpp = TRUE
+set.seed(seed)
+res2 <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2,
+                h_prior = list(a = 0.5), use_rcpp = FALSE)
+
+testthat::expect_equal(res1$sim_vals, res2$sim_vals, tolerance = my_tol)
