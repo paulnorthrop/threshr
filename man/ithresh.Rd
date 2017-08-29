@@ -72,7 +72,13 @@ set at sample quantiles of  \code{data} using
 \item{n_v}{A numeric scalar.
 Each of the \code{n_v} largest values in \code{u_vec} will be used
 (separately) as a \emph{validation} threshold for the training thresholds
-in \code{u_vec} that lie at or below that validation threshold.}
+in \code{u_vec} that lie at or below that validation threshold.
+If \code{n_v = 1} then all the training thresholds are used with
+validation performed using the threshold \code{u_vec[length(u_vec)]}.
+If \code{n_v = 2} then, in addition, the assessment is performed using
+\code{u_vec[1], ..., u_vec[length(u_vec) - 1]} with
+validation threshold \code{u_vec[length(u_vec) - 1]},
+and so on.}
 
 \item{npy}{A numeric scalar. The mean number of observations per year
   of data, after excluding any missing values, i.e. the number of
@@ -211,8 +217,6 @@ prior_ptr <- revdbayes:::create_prior_xptr("gp_flat")
 gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = prior_ptr,
                   h_prior = list(min_xi = -1))
 }
-
-
 }
 \references{
 Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
