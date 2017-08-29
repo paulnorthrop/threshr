@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis-CI Build Status](https://travis-ci.org/paulnorthrop/threshr.svg?branch=master)](https://travis-ci.org/paulnorthrop/threshr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/paulnorthrop/threshr?branch=master&svg=true)](https://ci.appveyor.com/project/paulnorthrop/threshr)
+[![Travis-CI Build Status](https://travis-ci.org/paulnorthrop/threshr.svg?branch=master)](https://travis-ci.org/paulnorthrop/threshr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/paulnorthrop/threshr?branch=master&svg=true)](https://ci.appveyor.com/project/paulnorthrop/threshr) [![Coverage Status](https://codecov.io/github/paulnorthrop/threshr/coverage.svg?branch=master)](https://codecov.io/github/paulnorthrop/threshr?branch=master)
 
 threshr: Threshold Selection and Uncertainty for Extreme Value Analysis
 -----------------------------------------------------------------------
