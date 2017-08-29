@@ -148,7 +148,6 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
     if (!is.null(for_plot_evpost$ru_scale)) {
       for_plot_evpost$ru_scale <- NULL
     }
-    print(for_plot_evpost)
     do.call(revdbayes:::plot.evpost, for_plot_evpost)
     return(invisible(temp))
   }
