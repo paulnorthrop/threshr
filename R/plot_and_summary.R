@@ -389,6 +389,8 @@ plot.stability <- function(x, y, ..., prob = TRUE,
     }
     do.call(graphics::axis, axis_args)
   }
+  return(invisible(list(matplot_args = matplot_args, axis_args = axis_args,
+              segments_args = segments_args)))
 }
 
 

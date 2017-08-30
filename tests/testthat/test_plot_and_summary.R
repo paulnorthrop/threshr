@@ -29,3 +29,28 @@ testthat::expect_equal(colSums(check_plot$y, na.rm = TRUE), rep(1, n_v),
                        tolerance = my_tol)
 testthat::expect_equal(colSums(check_plot$y), c(rep(NA, n_v - 1), 1),
                        tolerance = my_tol)
+
+# 3. Check that key graphical parameters that the user may supply to
+#    plot.stability() to be passed to matplot and/or axis are used.
+
+u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+gom_stab <- stability(data = gom, u_vec = u_vec_gom)
+
+
+my_pch <- 1
+my_lwd <- 2
+my_xlab <- "horizontal"
+my_ylab <- "vertical"
+my_col <- 2
+check_pars <- plot(gom_stab, pch = my_pch, lwd = my_lwd, xlab = my_xlab,
+                   ylab = my_ylab, col = my_col)
+testthat::expect_equal(check_pars$matplot_args$pch, my_pch, tolerance = my_tol)
+testthat::expect_equal(check_pars$matplot_args$lwd, my_lwd, tolerance = my_tol)
+testthat::expect_equal(check_pars$matplot_args$xlab, my_xlab,
+                       tolerance = my_tol)
+testthat::expect_equal(check_pars$matplot_args$ylab, my_ylab,
+                       tolerance = my_tol)
+testthat::expect_equal(check_pars$matplot_args$col, my_col, tolerance = my_tol)
+
+
+

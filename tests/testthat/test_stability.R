@@ -1,7 +1,7 @@
 context("stability")
 
-# We check that the results from ithresh produced using use_rcpp = TRUE and
-# use_rcpp = FALSE are identical.
+# We check that the results from stability using prof = FALSE and prof = TRUE
+# are identical.
 
 # Set a tolerance for the comparison of the simulated values
 
