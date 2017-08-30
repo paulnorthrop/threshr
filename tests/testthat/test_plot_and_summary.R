@@ -11,7 +11,7 @@ seed <- 27082017
 set.seed(seed)
 n_v <- 4
 u_vec_gom <- quantile(gom, probs = seq(0, 0.9, len = n_v))
-gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
+gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = n_v)
 check_summary <- summary(gom_cv)
 
 testthat::expect_type(check_summary, "double")
@@ -23,7 +23,9 @@ testthat::expect_equal(ncol(check_summary), 5)
 #    which_u is not supplied) sum to 1 if na.rm = TRUE and c(NA, ..., NA, 1)
 #    if na.rm = FALSE.
 
-testthat::expect_equal(colSums(pjn$y, na.rm = TRUE), rep(1, n_v),
+check_plot <- plot(gom_cv)
+
+testthat::expect_equal(colSums(check_plot$y, na.rm = TRUE), rep(1, n_v),
                        tolerance = my_tol)
-testthat::expect_equal(colSums(pjn$y), c(rep(NA, n_v - 1), 1),
+testthat::expect_equal(colSums(check_plot$y), c(rep(NA, n_v - 1), 1),
                        tolerance = my_tol)
