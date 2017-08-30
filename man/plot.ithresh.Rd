@@ -66,9 +66,15 @@ the argument \code{x} in \code{\link[graphics]{legend}}.}
   be an integer in {1, ..., \code{length(x$u_vec)}}.}
 }
 \value{
-Nothing is returned unless \code{which_u} is supplied, when
-  the object with which \code{\link[revdbayes]{plot.evpost}} was called is
-  returned (invisibly).
+If \code{which_u} is supplied then the object with which
+  \code{\link[revdbayes]{plot.evpost}} was called is returned (invisibly).
+  Otherwise, a list is returned with two components. \code{x} is a vector
+  containing the coordinates plotted on the (lower) horizontal axis.
+  \code{y} is an \code{length(u_vec)} by \code{n_v} matrix of
+  \emph{threshold weights} obtained by normalising the columns of the
+  matrix \code{pred_perf} returned by \code{\link{ithresh}}.
+  See equation (14) of
+  \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.
 }
 \description{
 \code{plot} method for class "ithresh".  Produces an extreme value
