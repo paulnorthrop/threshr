@@ -3,7 +3,6 @@ context("ithresh")
 # Set a tolerance for the comparison of the simulated values
 
 my_tol <- 1e-5
-n <- 1000
 seed <- 27082017
 
 # 1. We check that the results from ithresh produced using use_rcpp = TRUE and
