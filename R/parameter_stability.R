@@ -41,8 +41,13 @@
 #' @details
 #'   For each threshold in \code{u_vec} a GP model is fitted by maximum
 #'   likelihood estimation to the threshold excesses, i.e. the amounts
-#'   by which the data exceed that threshold.
-#'   See Chapter 4 of Coles (2001).
+#'   by which the data exceed that threshold.  The MLEs of the GP shape
+#'   parameter $\eqn{\xi}$ and approximate \code{conf}\% confidence intervals
+#'   for \eqn{\xi} are stored for plotting (by \code{\link{plot.stability}})
+#'   to produce a simple graphical diagnostic to inform threshold selection.
+#'   This plot is used to choose a threshold above which the underlying GP
+#'   shape parameter may be approximately constant. See Chapter 4 of
+#'   Coles (2001).  See also the vignette "Introducing threshr".
 #' @return
 #'   An object (list) of class "stability" with components:
 #'     \item{ests}{MLEs of the GP shape parameter \eqn{\xi}.}

@@ -290,6 +290,18 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
 #' @param ... Additional arguments passed on to
 #'   \code{\link[graphics]{matplot}}, \code{\link[graphics]{axis}}
 #'   and/or \code{\link[graphics]{segments}}.
+#' @details Produces a simple threshold diagnostic plot based on the object
+#'   returned from \code{\link{stability}}.
+#'   The MLEs of the GP shape parameter $\eqn{\xi}$ and
+#'   approximate \code{conf}\% confidence intervals
+#'   for \eqn{\xi} are plotted against the threshold used to fit the GP model.
+#'   This plot is used to choose a threshold above which the underlying GP
+#'   shape parameter may be approximately constant. See Chapter 4 of
+#'   Coles (2001).  See also the vignette "Introducing threshr".
+#'   as described in .
+#'   See also the vignette "Introducing threshr".
+#' @return In addition to producing the plot a list of the arguments used
+#'   by \code{\link{matplot}}, \code{link{axis}} is returned.
 #' @seealso \code{\link{stability}}.
 #' @examples
 #' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
@@ -389,8 +401,7 @@ plot.stability <- function(x, y, ..., prob = TRUE,
     }
     do.call(graphics::axis, axis_args)
   }
-  return(invisible(list(matplot_args = matplot_args, axis_args = axis_args,
-              segments_args = segments_args)))
+  return(invisible(list(matplot_args = matplot_args, axis_args = axis_args)))
 }
 
 

@@ -34,9 +34,25 @@ If \code{top_scale = "opposite"} then the type of threshold level
 depicted using a vertical line for each threshold (\code{TRUE}) or by
 joining up confidence limits across thresholds (\code{FALSE})?}
 }
+\value{
+In addition to producing the plot a list of the arguments used
+  by \code{\link{matplot}}, \code{link{axis}} is returned.
+}
 \description{
 \code{plot} method for objects of class "stability" returned from
 \code{\link{stability}}
+}
+\details{
+Produces a simple threshold diagnostic plot based on the object
+  returned from \code{\link{stability}}.
+  The MLEs of the GP shape parameter $\eqn{\xi}$ and
+  approximate \code{conf}\% confidence intervals
+  for \eqn{\xi} are plotted against the threshold used to fit the GP model.
+  This plot is used to choose a threshold above which the underlying GP
+  shape parameter may be approximately constant. See Chapter 4 of
+  Coles (2001).  See also the vignette "Introducing threshr".
+  as described in .
+  See also the vignette "Introducing threshr".
 }
 \examples{
 u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
