@@ -11,9 +11,11 @@ n <- 500
 seed <- 29082017
 
 test_data <- revdbayes::rgp(n)
-u_vec <- quantile(test_data, probs = seq(0, 0.95, by = 0.05))
+u_vec <- quantile(test_data, probs = seq(0.05, 0.95, by = 0.1))
 
 res1 <- stability(data = test_data, u_vec = u_vec)
 res2 <- stability(data = test_data, u_vec = u_vec, prof = TRUE)
 
-testthat::expect_equal(res1$ests, res2$ests, tolerance = my_tol)
+test_that("MLEs equal regardless of prof", {
+  testthat::expect_equal(res1$ests, res2$ests, tolerance = my_tol)
+})

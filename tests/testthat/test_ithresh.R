@@ -16,8 +16,13 @@ res1 <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2)
 set.seed(seed)
 res2 <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2, use_rcpp = FALSE)
 
-testthat::expect_equal(res1$pred_perf, res2$pred_perf, tolerance = my_tol)
-testthat::expect_equal(res1$sim_vals, res2$sim_vals, tolerance = my_tol)
+test_that("ithresh, pred_perf: rcpp, no rcppf", {
+  testthat::expect_equal(res1$pred_perf, res2$pred_perf, tolerance = my_tol)
+})
+test_that("ithresh, sim_vals: rcpp, no rcppf", {
+  testthat::expect_equal(res1$sim_vals, res2$sim_vals, tolerance = my_tol)
+})
+
 
 # 2. Repeat for trans = "BC".
 
@@ -29,5 +34,9 @@ set.seed(seed)
 res2 <- ithresh(data = gom, u_vec = u_vec_gom, trans = "BC", n_v = 2,
                 use_rcpp = FALSE)
 
-testthat::expect_equal(res1$pred_perf, res2$pred_perf, tolerance = my_tol)
-testthat::expect_equal(res1$sim_vals, res2$sim_vals, tolerance = my_tol)
+test_that("ithresh, pred_perf: rcpp, no rcpp, trans = BC", {
+  testthat::expect_equal(res1$pred_perf, res2$pred_perf, tolerance = my_tol)
+})
+test_that("ithresh, sim_vals: rcpp, no rcpp, trans = BC", {
+  testthat::expect_equal(res1$sim_vals, res2$sim_vals, tolerance = my_tol)
+})

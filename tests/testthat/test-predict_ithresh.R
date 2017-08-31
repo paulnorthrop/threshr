@@ -18,7 +18,9 @@ qs <- predict(gom_cv, type = "q", n_years = c(100, 1000))$y
 ps <- predict(gom_cv, type = "p", x = qs, n_years = c(100, 1000))$y
 check_ps <- matrix(c(0.025, 0.25, 0.5, 0.75, 0.975), 5, 2)
 
-testthat::expect_equal(ps, check_ps, tolerance = my_tol)
+test_that("predict.ithresh: type = p and typ2 = q agree", {
+  testthat::expect_equal(ps, check_ps, tolerance = my_tol)
+})
 
 # 2. Check that the threshold-averaged distribution function lies in the
 #    envelope of the individual thresholds.
@@ -30,8 +32,13 @@ check_upper <- apply(ps[, -1], 1, max)
 check_lower <- apply(ps[, -1], 1, min)
 
 for (j in 1:length(check_upper)) {
-  testthat::expect_lt(ave_ps[j], check_upper[j])
+  test_that(paste("predict.ithresh: average less than max", j), {
+    testthat::expect_lt(ave_ps[j], check_upper[j])
+  })
 }
 for (j in 1:length(check_lower)) {
-  testthat::expect_gt(ave_ps[j], check_lower[j])
+  test_that(paste("predict.ithresh: average greater than min", j), {
+    testthat::expect_gt(ave_ps[j], check_lower[j])
+  })
 }
+
