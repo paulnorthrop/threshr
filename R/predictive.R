@@ -118,7 +118,7 @@
 #'
 #' # Note: gom_cv$npy contains the correct value of npy (it was set in the
 #' #       call to ithresh, via attr(gom, "npy").
-#' #       If object$npy doesn't exist then the argument npu must be supplied
+#' #       If object$npy doesn't exist then the argument npy must be supplied
 #' #       in the call to predict().
 #'
 #' ### Best training threshold based on the lowest validation threshold
