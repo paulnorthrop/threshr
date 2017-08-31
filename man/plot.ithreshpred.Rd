@@ -21,6 +21,10 @@ If \code{TRUE} then plot only
 a curve for the weighted average over multiple training thresholds.
 If \code{FALSE} then also plot a curve for each training threshold.}
 }
+\value{
+A list containing the graphical parameters using in producing the
+  plot including any arguments supplied via ...
+}
 \description{
 \code{plot} method for class "ithreshpred".  Produces plots to summarise
 the predictive inferences made by \code{\link{predict.ithresh}}.

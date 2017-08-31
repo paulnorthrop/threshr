@@ -47,7 +47,7 @@ testthat::expect_equal(dim(check_plot$bin_sim_vals), c(n, 1),
                        tolerance = my_tol)
 
 # 4. Check that key graphical parameters that the user may supply to
-#    plot.stability() to be passed to matplot and/or axis are used.
+#    plot.stability() to be passed to matplot are used.
 
 u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_stab <- stability(data = gom, u_vec = u_vec_gom)
@@ -67,5 +67,38 @@ testthat::expect_equal(check_pars$matplot_args$ylab, my_ylab,
                        tolerance = my_tol)
 testthat::expect_equal(check_pars$matplot_args$col, my_col, tolerance = my_tol)
 
+# 5. Check that key graphical parameters that the user may supply to
+#    plot.ithreshpred() to be passed to matplot are used.
+
+u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.3))
+gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2)
+
+my_pch <- 1
+my_lwd <- 2
+my_xlab <- "horizontal"
+my_ylab <- "vertical"
+my_col <- 2
+
+# (a) which_all = "best" (default)
+
+best_p <- predict(gom_cv, n_years = c(100, 1000))
+check_pars <- plot(best_p, pch = my_pch, lwd = my_lwd, xlab = my_xlab,
+                   ylab = my_ylab, col = my_col)
+testthat::expect_equal(check_pars$pch, my_pch, tolerance = my_tol)
+testthat::expect_equal(check_pars$lwd, my_lwd, tolerance = my_tol)
+testthat::expect_equal(check_pars$xlab, my_xlab, tolerance = my_tol)
+testthat::expect_equal(check_pars$ylab, my_ylab, tolerance = my_tol)
+testthat::expect_equal(check_pars$col, my_col, tolerance = my_tol)
+
+# (b) which_all = "all" (default)
+
+all_p <- predict(gom_cv, which_u = "all")
+check_pars <- plot(all_p, pch = my_pch, lwd = my_lwd, xlab = my_xlab,
+                   ylab = my_ylab, col = my_col)
+testthat::expect_equal(check_pars$pch, my_pch, tolerance = my_tol)
+testthat::expect_equal(check_pars$lwd, my_lwd, tolerance = my_tol)
+testthat::expect_equal(check_pars$xlab, my_xlab, tolerance = my_tol)
+testthat::expect_equal(check_pars$ylab, my_ylab, tolerance = my_tol)
+testthat::expect_equal(check_pars$col, my_col, tolerance = my_tol)
 
 

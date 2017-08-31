@@ -301,7 +301,8 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
 #'   as described in .
 #'   See also the vignette "Introducing threshr".
 #' @return In addition to producing the plot a list of the arguments used
-#'   by \code{\link{matplot}}, \code{link{axis}} is returned.
+#'   by \code{\link[graphics]{matplot}}, \code{\link[graphics]{axis}} is
+#'   returned.
 #' @seealso \code{\link{stability}}.
 #' @examples
 #' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
@@ -485,7 +486,8 @@ summary.ithresh <- function(object, ...) {
 #'   (\code{type = "d"}) is plotted for each of the training thresholds
 #'   (grey lines) as is the result of the weighted average over the
 #'   different training thresholds.
-#'
+#' @return A list containing the graphical parameters using in producing the
+#'   plot including any arguments supplied via ...
 #' @examples
 #' \dontrun{
 #' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
@@ -535,6 +537,8 @@ plot.ithreshpred <- function(x, y, ..., ave_only = FALSE) {
     temp <- x
     class(temp) <- "evpred"
     revdbayes:::plot.evpred(temp, ...)
+    for_plot <- list(...)
+    return(invisible(for_plot))
   }
   # Multiple thresholds
   if (x$which_u == "all") {
@@ -571,4 +575,5 @@ plot.ithreshpred <- function(x, y, ..., ave_only = FALSE) {
                       lwd = for_plot$lwd[1], col = for_plot$col[1])
     do.call(graphics::lines, for_lines)
   }
+  return(invisible(for_plot))
 }

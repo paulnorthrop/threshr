@@ -257,7 +257,8 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
       y_val[, 1 + i] <- temp$y
     }
     # Row-wise mean weighted by the posterior threshold weights
-    y_val[, 1] <- apply(y_val[, -1], 1, stats::weighted.mean, w = ptw)
+    y_val[, 1] <- apply(y_val[, -1, drop = FALSE], 1, stats::weighted.mean,
+                        w = ptw)
     ret_obj$y <- y_val
     ret_obj$post_thresh_wts <- ptw
   }
