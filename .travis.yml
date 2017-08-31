@@ -13,8 +13,8 @@ os:
 
 r:
   - release
-#  - devel
-  - oldrel
+  - devel
+#  - oldrel
 
 r_packages:
   - covr
