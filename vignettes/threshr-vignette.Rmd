@@ -74,11 +74,12 @@ summary(ns_cv)
 summary(gom_cv)
 ```
 
-The plot method can also produce a plot of the posterior sample of the GP parameters generated using a training threshold chosen by the user, e.g. the argument `which_u = 5` specifies the 5fifth element of the vector of training thresholds, or using the best threshold, as below.
+The plot method can also produce a plot of the posterior sample of the GP parameters generated using a training threshold chosen by the user, e.g. the argument `which_u = 5` specifies the fifth element of the vector of training thresholds, or using the best threshold, as below.
 
-```{r, fig.height=5, fig.width=5, fig.align='center'}
+```{r, fig.show='hold', fig.width=3.45, fig.height=3.45}
 # Plot of Generalized Pareto posterior sample at the best threshold
 # (based on the lowest validation threshold)
+plot(ns_cv, which_u = "best")
 plot(gom_cv, which_u = "best")
 ```
 
@@ -88,7 +89,7 @@ Let $M_N$ denote the largest value to be observed in a time period of length $N$
 
 ### Single training threshold
 
-By default the threshold that is estimated to perform best is used.  A different threshold can be selected using the argument `which_u`.  Using `type = "d"` produces the predictive density function.
+By default the threshold that is estimated to perform best is used.  A different threshold can be selected using the argument `which_u`.  Using `type = "d"` produces the predictive density function.  The values of $N$ can be set using `n_years`.  The default is $N = 100$.
 
 ```{r, fig.show='hold', fig.height=5, fig.width=7, fig.align='center'}
 # Predictive distribution function
@@ -98,7 +99,7 @@ plot(best_p)
 
 ### Inferences averaged over multiple thresholds
 
-This option is selected using `which_u = "all"`.  The user can specify a prior probability for each threshold using `u_prior`.  The default is that all thresholds receive equal prior probability, in which case the weights applied to individual training thresholds are those displayed in the threshold diagnostic plot above.  The default, `type = "p"` produces the predictive distribution function.
+This option is selected using `which_u = "all"`.  The user can specify a prior probability for each threshold using `u_prior`.  The default is that all thresholds receive equal prior probability, in which case the weights applied to individual training thresholds are those displayed in the threshold diagnostic plot above.  The default, `type = "p"` produces the predictive distribution function.  If `which_u = "all"` then `n_years` must have length one. The default is $N = 100$.
 
 ```{r, fig.show='hold', fig.height=5, fig.width=7, fig.align='center'}
 ### All thresholds plus weighted average of inferences over all thresholds
