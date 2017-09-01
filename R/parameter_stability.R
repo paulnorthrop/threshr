@@ -173,7 +173,7 @@ gp_profxi <- function (z, xlow, xup, conf = 0.95, nint = 100,
   for (i in 1:nint) {
     xi <- x2[i]
     if (is.null(user_dots$method)) {
-      opt <- stats::optim(sol, gpd_plikxi, method = "BFGS", ...)
+      opt <- stats::optim(sol, gpd_plikxi, ..., method = "BFGS")
     } else {
       opt <- stats::optim(sol, gpd_plikxi, ...)
     }
@@ -188,7 +188,7 @@ gp_profxi <- function (z, xlow, xup, conf = 0.95, nint = 100,
   for (i in 1:nint) {
     xi <- x1[i]
     if (is.null(user_dots$method)) {
-      opt <- stats::optim(sol, gpd_plikxi, method = "BFGS", ...)
+      opt <- stats::optim(sol, gpd_plikxi, ..., method = "BFGS")
     } else {
       opt <- stats::optim(sol, gpd_plikxi, ...)
     }
