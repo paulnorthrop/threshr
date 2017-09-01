@@ -37,7 +37,7 @@ joining up confidence limits across thresholds (\code{FALSE})?}
 \value{
 In addition to producing the plot a list of the arguments used
   by \code{\link[graphics]{matplot}}, \code{\link[graphics]{axis}} is
-  returned.
+  returned (invisibly).
 }
 \description{
 \code{plot} method for objects of class "stability" returned from

@@ -64,8 +64,9 @@
 #'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.
 #' @return If \code{which_u} is supplied then the object with which
 #'   \code{\link[revdbayes]{plot.evpost}} was called is returned (invisibly).
-#'   Otherwise, a list is returned with two components. \code{x} is a vector
-#'   containing the coordinates plotted on the (lower) horizontal axis.
+#'   Otherwise, a list is returned (again invisibly) with two components.
+#'   \code{x} is a vector containing the coordinates plotted on the
+#'   (lower) horizontal axis.
 #'   \code{y} is an \code{length(u_vec)} by \code{n_v} matrix of
 #'   \emph{threshold weights} obtained by normalising the columns of the
 #'   matrix \code{pred_perf} returned by \code{\link{ithresh}}.
@@ -260,7 +261,7 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
       do.call(graphics::legend, legend_args)
     }
   }
-  return(xy_args)
+  return(invisible(xy_args))
 }
 
 # =========================== plot.stability ===========================
@@ -302,7 +303,7 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
 #'   See also the vignette "Introducing threshr".
 #' @return In addition to producing the plot a list of the arguments used
 #'   by \code{\link[graphics]{matplot}}, \code{\link[graphics]{axis}} is
-#'   returned.
+#'   returned (invisibly).
 #' @seealso \code{\link{stability}}.
 #' @examples
 #' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
@@ -487,7 +488,7 @@ summary.ithresh <- function(object, ...) {
 #'   (grey lines) as is the result of the weighted average over the
 #'   different training thresholds.
 #' @return A list containing the graphical parameters using in producing the
-#'   plot including any arguments supplied via ...
+#'   plot including any arguments supplied via ... is returned (invisibly).
 #' @examples
 #' \dontrun{
 #' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))

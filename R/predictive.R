@@ -90,7 +90,7 @@
 #'   respectively.
 #' @return An list object of class "ithreshpred" with a similar structure to
 #'   an object of class "evpred" returned from
-#'   \code{\link[revdbayes]{predict.evpost}}.
+#'   \code{\link[revdbayes]{predict.evpost}} is returned \emph{invisibly}.
 #'   In addition, the object contains
 #'   \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec},
 #'   \code{which_v} and the index \code{best_u} in
@@ -267,7 +267,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   ret_obj$which_v <- which_v
   ret_obj$v_vec <- object$v_vec
   class(ret_obj) <- "ithreshpred"
-  return(ret_obj)
+  return(invisible(ret_obj))
 }
 
 post_thresh_weights <- function(x, which_v = 1, u_prior = NULL) {

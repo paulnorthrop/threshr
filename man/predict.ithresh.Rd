@@ -91,7 +91,7 @@ are used.}
 \value{
 An list object of class "ithreshpred" with a similar structure to
   an object of class "evpred" returned from
-  \code{\link[revdbayes]{predict.evpost}}.
+  \code{\link[revdbayes]{predict.evpost}} is returned \emph{invisibly}.
   In addition, the object contains
   \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec},
   \code{which_v} and the index \code{best_u} in
