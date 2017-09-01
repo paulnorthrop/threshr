@@ -9,11 +9,11 @@ Authors@R: c(
     )
 Description: Provides functions for the selection of extreme value threshold.
   See the 'threshr' website for more information, documentation and examples.
-Imports: stats,
-    graphics,
+Imports: graphics,
     methods,
     revdbayes (>= 1.2.0),
-    rust (>= 1.2.2)
+    rust (>= 1.2.2),
+    stats
 License: GPL (>= 2)
 LazyData: TRUE
 Depends:
