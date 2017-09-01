@@ -132,6 +132,11 @@ The function \code{\link[revdbayes]{predict.evpost}} is used to
 }
 \examples{
 \dontrun{
+# Note:
+#'  In the examples below validation thresholds rather higher than is
+#   advisable have been used, with far fewer excesses than the minimum of
+#   50 suggested by Jonathan and Ewans (2013).
+
 # Gulf of Mexico significant wave heights, default priors.
 u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)

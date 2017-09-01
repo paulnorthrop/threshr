@@ -172,7 +172,11 @@
 #' @seealso \code{\link[stats]{quantile}}.
 #' @examples
 #' \dontrun{
-#' # [Smoother plots result from making n larger than the default n = 1000.]
+#' # Note:
+#' # 1. Smoother plots result from making n larger than the default n = 1000.
+#' # 2. In the examples below validation thresholds rather higher than is
+#' #    advisable have been used, with far fewer excesses than the minimum of
+#' #    50 suggested by Jonathan and Ewans (2013).
 #'
 #' ## North Sea significant wave heights, default prior -----------------------
 #' #' # A plot akin to the top left of Figure 7 in Northrop et al. (2017)
@@ -227,6 +231,10 @@
 #'   \emph{Journal of the Royal Statistical Society Series C: Applied
 #'   Statistics}, \strong{66}(1), 93-120.
 #'   \url{http://dx.doi.org/10.1111/rssc.12159}
+#' @references Jonathan, P. and Ewans, K. (2013) Statistical modelling
+#'   of extreme ocean environments for marine design : a review.
+#'   \emph{Ocean Engineering}, \strong{62}, 91-109.
+#'   \url{http://dx.doi.org/10.1016/j.oceaneng.2013.01.004}
 #' @export
 ithresh <- function(data, u_vec, ..., n_v = 1, npy = NULL, use_rcpp = TRUE) {
   # Store npy (if it has been supplied)
