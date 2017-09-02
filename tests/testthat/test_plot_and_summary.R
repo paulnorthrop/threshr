@@ -28,7 +28,6 @@ test_that("summary.ithresh: 5-col matrix", {
   testthat::expect_equal(ncol(check_summary), 5)
 })
 
-
 # 2. Check that the columns of the object returned by plot.ithresh (when
 #    which_u is not supplied) sum to 1 if na.rm = TRUE and c(NA, ..., NA, 1)
 #    if na.rm = FALSE.
@@ -142,6 +141,7 @@ test_that("plot.ithreshpred: correct col", {
 # (b) which_all = "all" (default)
 
 all_p <- predict(gom_cv, which_u = "all")
+n_col_y <- ncol(all_p$y)
 check_pars <- plot(all_p, pch = my_pch, lwd = my_lwd, xlab = my_xlab,
                    ylab = my_ylab, col = my_col)
 test_that("plot.ithreshpred: correct pch", {
@@ -149,7 +149,7 @@ test_that("plot.ithreshpred: correct pch", {
                          tolerance = my_tol)
 })
 test_that("plot.ithreshpred: correct lwd", {
-  testthat::expect_equal(check_pars$lwd, my_lwd,
+  testthat::expect_equal(check_pars$lwd, rep(my_lwd, n_col_y),
                          tolerance = my_tol)
 })
 test_that("plot.ithreshpred: correct xlab", {
@@ -161,7 +161,7 @@ test_that("plot.ithreshpred: correct ylab", {
                          tolerance = my_tol)
 })
 test_that("plot.ithreshpred: correct col", {
-  testthat::expect_equal(check_pars$col, my_col,
+  testthat::expect_equal(check_pars$col, rep(my_col, n_col_y),
                          tolerance = my_tol)
 })
 
