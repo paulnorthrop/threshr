@@ -8,13 +8,13 @@ sudo: false
 warnings_are_errors: true
 
 os:
-#  - linux
-  - osx
+  - linux
+#  - osx
 
 r:
   - release
-#  - devel
-  - oldrel
+  - devel
+#  - oldrel
 
 r_packages:
   - covr
