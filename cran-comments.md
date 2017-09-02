@@ -11,4 +11,4 @@
 
 ## Downstream dependencies
 
-revdbayes has no downstream dependencies.
+This is a new submission.
