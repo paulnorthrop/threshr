@@ -610,7 +610,7 @@ plot.ithreshpred <- function(x, y, ..., ave_only = FALSE, add_best = FALSE) {
     for_lines <- list(x = temp$x, y = temp$y[, 1], lty = for_plot$lty[1],
                       lwd = for_plot$lwd[1], col = for_plot$col[1])
     do.call(graphics::lines, for_lines)
-    # Replot the `average' line, so that it appears on top
+    # Replot the `best' line, so that it appears on top
     if (add_best) {
       for_lines <- list(x = temp$x, y = temp$y[, best], lty = for_plot$lty[2],
                         lwd = for_plot$lwd[2], col = for_plot$col[2])
