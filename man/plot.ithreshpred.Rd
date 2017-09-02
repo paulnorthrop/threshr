@@ -92,7 +92,7 @@ plot(all_d, add_best = TRUE)
 }
 \seealso{
 \code{\link{ithresh}} for threshold selection in the i.i.d. case
-  based on leave-one-out cross-validaton.
+  based on leave-one-out cross-validation.
 
 \code{\link{predict.ithresh}} for predictive inference for the
   largest value observed in N years.

@@ -93,7 +93,7 @@
 #' plot(gom_cv, which_u = n_u, points_par = list(pch = 20, col = "grey"))
 #' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
-#'   based on leave-one-out cross-validaton.
+#'   based on leave-one-out cross-validation.
 #' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
 #'   predictive performance.
 #' @seealso \code{\link{predict.ithresh}} for predictive inference for the
@@ -441,7 +441,7 @@ plot.stability <- function(x, y, ..., prob = TRUE,
 #' summary(gom_cv)
 #' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
-#'   based on leave-one-out cross-validaton.
+#'   based on leave-one-out cross-validation.
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
 #'   class \code{ithresh}.
 #' @export
@@ -536,7 +536,7 @@ summary.ithresh <- function(object, ...) {
 #' plot(all_d, add_best = TRUE)
 #' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
-#'   based on leave-one-out cross-validaton.
+#'   based on leave-one-out cross-validation.
 #' @seealso \code{\link{predict.ithresh}} for predictive inference for the
 #'   largest value observed in N years.
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of

@@ -8,7 +8,7 @@
 #' and examples.
 #'
 #' @details The main function in the threshr package is \code{\link{ithresh}},
-#'   which uses leave-one-out cross-validation in a Bayesian seup to compare
+#'   which uses leave-one-out cross-validation in a Bayesian setup to compare
 #'   the predictive ability resulting from the use of each of a user-supplied
 #'   set of thresholds.
 #'
@@ -28,7 +28,7 @@
 #' @seealso The packages \code{\link[revdbayes]{revdbayes}} and
 #'   \code{\link[rust]{rust}}.
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
-#'   based on leave-one-out cross-validaton.
+#'   based on leave-one-out cross-validation.
 #' @docType package
 #' @name threshr
 #' @import methods

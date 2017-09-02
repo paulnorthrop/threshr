@@ -1,14 +1,14 @@
 # =========================== stability ===========================
 #
-#' Generalised Pareto parameter estimate stability
+#' Generalized Pareto parameter estimate stability
 #'
-#' Uses maximum likelihood estimation to fit a Generalised Pareto (GP)
+#' Uses maximum likelihood estimation to fit a Generalized Pareto (GP)
 #' model to threshold excesses over a range of thresholds.
 #' The threshold excesses are treated as independent and identically
 #' distributed (i.i.d.) observations.
 #' The resulting estimates and confidence intervals can be plotted,
 #' using \code{\link{plot.stability}},
-#' to produde a crude graphical diagnostic for threshold choice.
+#' to produce a crude graphical diagnostic for threshold choice.
 #'
 #' @param data  A numeric vector of observations.
 #' @param u_vec A numeric vector of thresholds to be applied to the data.
@@ -65,7 +65,7 @@
 #'   Each of these components is a numeric vector of length
 #' \code{length(u_vec)}.
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
-#'   based on leave-one-out cross-validaton.
+#'   based on leave-one-out cross-validation.
 #' @references Coles, S. G. (2001) \emph{An Introduction to Statistical
 #'   Modeling of Extreme Values}, Springer-Verlag, London.
 #'   \url{http://dx.doi.org/10.1007/978-1-4471-3675-0_3}

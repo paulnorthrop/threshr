@@ -116,7 +116,7 @@ plot(gom_cv, which_u = n_u, points_par = list(pch = 20, col = "grey"))
 }
 \seealso{
 \code{\link{ithresh}} for threshold selection in the i.i.d. case
-  based on leave-one-out cross-validaton.
+  based on leave-one-out cross-validation.
 
 \code{\link{summary.ithresh}} Summarizing measures of threshold
   predictive performance.

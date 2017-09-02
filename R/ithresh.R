@@ -28,7 +28,7 @@
 #' @param ... Further (optional) arguments to be passed to the
 #'   \code{\link[revdbayes]{revdbayes}} function
 #'   \code{\link[revdbayes]{rpost_rcpp}} (or \code{\link[revdbayes]{rpost}}),
-#'   which use the generalised ratio-of-uniforms method to simulate from
+#'   which use the generalized ratio-of-uniforms method to simulate from
 #'   extreme value posterior distributions.
 #'   In particular:
 #' \itemize{
@@ -70,7 +70,7 @@
 #'     The default is \code{"none"}, which is usually faster than \code{"BC"}.
 #'     However, if there are very few threshold excesses then using
 #'     \code{trans = "BC"} can make the optimizations involved in the
-#'     generalised ratio-of-uniforms algorithm more stable.  If using
+#'     generalized ratio-of-uniforms algorithm more stable.  If using
 #'     \code{trans = "none"} produces an error for a particular posterior
 #'     simulation then \code{trans = "BC"} is used instead.}
 #' }

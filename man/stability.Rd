@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameter_stability.R
 \name{stability}
 \alias{stability}
-\title{Generalised Pareto parameter estimate stability}
+\title{Generalized Pareto parameter estimate stability}
 \usage{
 stability(data, u_vec, prof = FALSE, conf = 95, mult = 1:2,
   plot_prof = FALSE, ...)
@@ -61,13 +61,13 @@ An object (list) of class "stability" with components:
 \code{length(u_vec)}.
 }
 \description{
-Uses maximum likelihood estimation to fit a Generalised Pareto (GP)
+Uses maximum likelihood estimation to fit a Generalized Pareto (GP)
 model to threshold excesses over a range of thresholds.
 The threshold excesses are treated as independent and identically
 distributed (i.i.d.) observations.
 The resulting estimates and confidence intervals can be plotted,
 using \code{\link{plot.stability}},
-to produde a crude graphical diagnostic for threshold choice.
+to produce a crude graphical diagnostic for threshold choice.
 }
 \details{
 For each threshold in \code{u_vec} a GP model is fitted by maximum
@@ -101,7 +101,7 @@ Coles, S. G. (2001) \emph{An Introduction to Statistical
 }
 \seealso{
 \code{\link{ithresh}} for threshold selection in the i.i.d. case
-  based on leave-one-out cross-validaton.
+  based on leave-one-out cross-validation.
 
 \code{\link{plot.stability}} for the S3 \code{plot} method for
   objects of class \code{stability}.

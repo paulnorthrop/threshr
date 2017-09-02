@@ -180,7 +180,7 @@ Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 }
 \seealso{
 \code{\link{ithresh}} for threshold selection in the i.i.d. case
-  based on leave-one-out cross-validaton.
+  based on leave-one-out cross-validation.
 
 \code{\link{plot.ithreshpred}} for the S3 plot method for objects
   of class \code{ithreshpred}.
