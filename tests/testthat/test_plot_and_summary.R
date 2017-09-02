@@ -143,7 +143,7 @@ test_that("plot.ithreshpred: correct col", {
 all_p <- predict(gom_cv, which_u = "all")
 n_col_y <- ncol(all_p$y)
 check_pars <- plot(all_p, pch = my_pch, lwd = my_lwd, xlab = my_xlab,
-                   ylab = my_ylab, col = my_col)
+                   ylab = my_ylab, col = my_col, add_best = TRUE)
 test_that("plot.ithreshpred: correct pch", {
   testthat::expect_equal(check_pars$pch, my_pch,
                          tolerance = my_tol)
