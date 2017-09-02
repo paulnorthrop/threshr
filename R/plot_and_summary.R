@@ -96,6 +96,8 @@
 #'   based on leave-one-out cross-validaton.
 #' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
 #'   predictive performance.
+#' @seealso \code{\link{predict.ithresh}} for predictive inference for the
+#'   largest value observed in N years.
 #' @export
 plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
                          top_scale = TRUE, add_legend = FALSE,

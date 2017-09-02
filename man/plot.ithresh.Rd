@@ -120,4 +120,7 @@ plot(gom_cv, which_u = n_u, points_par = list(pch = 20, col = "grey"))
 
 \code{\link{summary.ithresh}} Summarizing measures of threshold
   predictive performance.
+
+\code{\link{predict.ithresh}} for predictive inference for the
+  largest value observed in N years.
 }
