@@ -13,7 +13,7 @@ os:
 
 r:
   - release
-  - devel
+#  - devel
 #  - oldrel
 
 r_packages:
