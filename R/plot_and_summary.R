@@ -486,7 +486,11 @@ summary.ithresh <- function(object, ...) {
 #'   in the call to \code{\link{predict.ithresh}}) or density function
 #'   (\code{type = "d"}) is plotted for each of the training thresholds
 #'   (grey lines) as is the result of the weighted average over the
-#'   different training thresholds.
+#'   different training thresholds (black line).
+#'   If graphical parameters, such as \code{lty}, \code{lwd} or \code{col}
+#'   are passed via \code{...} then the first element relates to the
+#'   weighted average and the remaining \code{length(x$u_vec)} elements to
+#'   the respective training thresholds in \code{u_vec}.
 #' @return A list containing the graphical parameters using in producing the
 #'   plot including any arguments supplied via ... is returned (invisibly).
 #' @examples
