@@ -151,6 +151,8 @@
 #' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   based on leave-one-out cross-validaton.
+#' @seealso \code{\link{plot.ithreshpred}} for the S3 plot method for objects
+#'   of class \code{ithreshpred}.
 #' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 #'   Cross-validatory extreme value threshold selection and uncertainty
 #'   with application to ocean storm severity.
@@ -202,6 +204,8 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   if (!is.numeric(npy)) {
     stop("'npy' must be numeric")
   }
+  # Store best use so that we can return it later
+  return_best_u <- which.max(object$pred_perf[, which_v])
   # Select the user's option based on which_u -----------
   if (which_u == "best" || is.numeric(which_u)) {
     # Create a list object of class "evpost" for revdbayes::predict.evpost().
@@ -271,6 +275,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   ret_obj$u_vec <- object$u_vec
   ret_obj$which_v <- which_v
   ret_obj$v_vec <- object$v_vec
+  ret_obj$best_u <- return_best_u
   class(ret_obj) <- "ithreshpred"
   return(invisible(ret_obj))
 }
