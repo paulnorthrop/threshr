@@ -476,6 +476,10 @@ summary.ithresh <- function(object, ...) {
 #'   If \code{TRUE} then plot only
 #'   a curve for the weighted average over multiple training thresholds.
 #'   If \code{FALSE} then also plot a curve for each training threshold.
+#' @param add_best A logical scalar.  If \code{TRUE} then the best
+#'   threshold, as judged using the validation threshold selected using the
+#'   argument \code{which_v} supplied to \code{\link{predict.ithresh}}, is
+#'   highlighted by plotting it with a different line style.
 #' @details \emph{Single threshold case}, where
 #'   \code{\link{predict.ithresh}} was called with numeric scalar
 #'   \code{which_u} or \code{which_u = "best"}.
@@ -525,6 +529,11 @@ summary.ithresh <- function(object, ...) {
 #' # Predictive density function
 #' all_d <- predict(gom_cv, which_u = "all", type = "d")
 #' plot(all_d)
+#'
+#' ### ... and highlight the best threshold
+#'
+#' plot(all_p, add_best = TRUE)
+#' plot(all_d, add_best = TRUE)
 #' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   based on leave-one-out cross-validaton.
@@ -535,7 +544,7 @@ summary.ithresh <- function(object, ...) {
 #' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
 #'   predictive performance.
 #' @export
-plot.ithreshpred <- function(x, y, ..., ave_only = FALSE) {
+plot.ithreshpred <- function(x, y, ..., ave_only = FALSE, add_best = FALSE) {
   if (!inherits(x, "ithreshpred")) {
     stop("use only with \"ithreshpred\" objects")
   }
@@ -547,31 +556,51 @@ plot.ithreshpred <- function(x, y, ..., ave_only = FALSE) {
     for_plot <- list(...)
     return(invisible(for_plot))
   }
+  best <- 1 + x$best_u
   # Multiple thresholds
   if (x$which_u == "all") {
     temp <- x
     class(temp) <- "evpred"
     n_col_y <- ncol(temp$y)
     # Create list of arguments for revdbayes' plot.evpred()
-    # Set lty, lwd and col only if they have not be supplied by the user
+    # Set lty, lwd and col if they have not be supplied by the user
+    # If they have been supplie dthen make them the correct length
     for_plot <- list(x = temp, ...)
     if (is.null(for_plot$lty)) {
-      for_plot$lty <- 1
+      for_plot$lty <- rep(1, n_col_y)
+      if (add_best) {
+        for_plot$lty[best] <- 2
+      }
+    } else {
+      for_plot$lty <- rep_len(for_plot$lty, n_col_y)
     }
     # If we only want one `averaged' line then make all the others disappear
     if (ave_only) {
       for_plot$lty <- c(1, rep(0, n_col_y - 1))
     }
     if (is.null(for_plot$lwd)) {
-      for_plot$lwd <- 2
+      for_plot$lwd <- rep(2, n_col_y)
+    } else {
+      for_plot$lwd <- rep_len(for_plot$lwd, n_col_y)
     }
     if (is.null(for_plot$col)) {
-      my_col <- c(1, rep("grey", n_col_y - 1))
-      for_plot$col <- my_col
+      for_plot$col <- c(1, rep("grey", n_col_y - 1))
+      if (add_best) {
+        for_plot$col[best] <- 1
+      }
+    } else {
+      for_plot$col <- rep_len(for_plot$col, n_col_y)
     }
     if (is.null(for_plot$leg_text)) {
       if (ave_only) {
         for_plot$leg_text <- c("averaged")
+      } else if (add_best) {
+        flip <- c(1, best, (1:n_col_y)[-c(1, best)])
+        for_plot$lty <- for_plot$lty[flip]
+        for_plot$lwd <- for_plot$lwd[flip]
+        for_plot$col <- for_plot$col[flip]
+        for_plot$leg_text <- c("averaged", "best single", "single")
+        for_plot$x$y <- for_plot$x$y[, flip]
       } else {
         for_plot$leg_text <- c("averaged", "single")
       }
@@ -581,6 +610,12 @@ plot.ithreshpred <- function(x, y, ..., ave_only = FALSE) {
     for_lines <- list(x = temp$x, y = temp$y[, 1], lty = for_plot$lty[1],
                       lwd = for_plot$lwd[1], col = for_plot$col[1])
     do.call(graphics::lines, for_lines)
+    # Replot the `average' line, so that it appears on top
+    if (add_best) {
+      for_lines <- list(x = temp$x, y = temp$y[, best], lty = for_plot$lty[2],
+                        lwd = for_plot$lwd[2], col = for_plot$col[2])
+      do.call(graphics::lines, for_lines)
+    }
   }
   return(invisible(for_plot))
 }

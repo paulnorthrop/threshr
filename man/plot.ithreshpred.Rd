@@ -4,7 +4,7 @@
 \alias{plot.ithreshpred}
 \title{Plot diagnostics an ithreshpred object}
 \usage{
-\method{plot}{ithreshpred}(x, y, ..., ave_only = FALSE)
+\method{plot}{ithreshpred}(x, y, ..., ave_only = FALSE, add_best = FALSE)
 }
 \arguments{
 \item{x}{an object of class "ithreshpred", a result of a call to
@@ -20,6 +20,11 @@
 If \code{TRUE} then plot only
 a curve for the weighted average over multiple training thresholds.
 If \code{FALSE} then also plot a curve for each training threshold.}
+
+\item{add_best}{A logical scalar.  If \code{TRUE} then the best
+threshold, as judged using the validation threshold selected using the
+argument \code{which_v} supplied to \code{\link{predict.ithresh}}, is
+highlighted by plotting it with a different line style.}
 }
 \value{
 A list containing the graphical parameters using in producing the
@@ -78,6 +83,11 @@ plot(all_p)
 # Predictive density function
 all_d <- predict(gom_cv, which_u = "all", type = "d")
 plot(all_d)
+
+### ... and highlight the best threshold
+
+plot(all_p, add_best = TRUE)
+plot(all_d, add_best = TRUE)
 }
 }
 \seealso{
