@@ -188,7 +188,7 @@ mtext("significant wave height / m", side = 3, line = 2.5)
 
 ## Gulf of Mexico significant wave heights, default prior ------------------
 
-u_vec_gom <- quantile(gom, probs = seq(0.05, 0.95, by = 0.1))
+u_vec_gom <- quantile(gom, probs = seq(0.25, 0.95, by = 0.1))
 # Setting a prior using its name and parameter value(s) --------------------
 # This example gives the same prior as the default
 gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = "mdi",
