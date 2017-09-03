@@ -179,8 +179,9 @@
 #'
 #' ## North Sea significant wave heights, default prior -----------------------
 #' #' # A plot akin to the top left of Figure 7 in Northrop et al. (2017)
+#' #' # ... but with fewer training thresholds
 #'
-#' u_vec_ns <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
+#' u_vec_ns <- quantile(ns, probs = seq(0.05, 0.95, by = 0.1))
 #' ns_cv <- ithresh(data = ns, u_vec = u_vec_ns, n_v = 3)
 #' plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
 #' mtext("significant wave height / m", side = 3, line = 2.5)
@@ -380,19 +381,6 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
       temp <- do.call(gp_postsim, c(new_for_post, list(data = data,
                                                        thresh = u)))
     }
-#    temp <- tryCatch(
-#      do.call(gp_postsim, c(for_post, list(data = data, thresh = u))),
-#      error = function(e) {
-#        if (is.null(cv_control$trans) || cv_control == "none") {
-#          try_other_trans <- "BC"
-#        } else {
-#          try_other_trans <- "none"
-#        }
-#        try_other_trans <- ifelse(cv_control$trans == "BC", "none", "BC")
-#        new_for_post <- c(for_post, trans = try_other_trans)
-#        do.call(gp_postsim, c(new_for_post, list(data = data, thresh = u)))
-#      }
-#    )
     # Simulate from the bin-GP posterior after removal of the maximum value
     temp_rm <- try(do.call(gp_postsim, c(for_post, list(data = data_rm,
                                                         thresh = u))),
@@ -407,18 +395,6 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
       temp_rm <- do.call(gp_postsim, c(new_for_post, list(data = data_rm,
                                                           thresh = u)))
     }
-#    temp_rm <- tryCatch(
-#      do.call(gp_postsim, c(for_post, list(data = data_rm, thresh = u))),
-#      error = function(e) {
-#        if (is.null(cv_control$trans) || cv_control == "none") {
-#          try_other_trans <- "BC"
-#        } else {
-#          try_other_trans <- "none"
-#        }
-#        new_for_post <- c(for_post, trans = try_other_trans)
-#        do.call(gp_postsim, c(new_for_post, list(data = data_rm, thresh = u)))
-#      }
-#    )
     # Combine binomial and GP posterior simulated values.
     theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
     theta_rm <- cbind(temp_rm$bin_sim_vals, temp_rm$sim_vals)

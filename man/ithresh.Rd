@@ -179,8 +179,9 @@ For a given threshold in \code{u_vec}:
 
 ## North Sea significant wave heights, default prior -----------------------
 #' # A plot akin to the top left of Figure 7 in Northrop et al. (2017)
+#' # ... but with fewer training thresholds
 
-u_vec_ns <- quantile(ns, probs = seq(0, 0.95, by = 0.05))
+u_vec_ns <- quantile(ns, probs = seq(0.05, 0.95, by = 0.1))
 ns_cv <- ithresh(data = ns, u_vec = u_vec_ns, n_v = 3)
 plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
 mtext("significant wave height / m", side = 3, line = 2.5)
