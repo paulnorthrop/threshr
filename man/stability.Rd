@@ -88,11 +88,9 @@ u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_stab <- stability(data = gom, u_vec = u_vec_gom)
 plot(gom_stab)
 
-\dontrun{
 # Profile-likelihood-based confidence intervals
 gom_stab <- stability(data = gom, u_vec = u_vec_gom, prof = TRUE)
 plot(gom_stab)
-}
 }
 \references{
 Coles, S. G. (2001) \emph{An Introduction to Statistical

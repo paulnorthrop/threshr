@@ -1,14 +1,22 @@
 Package: threshr
 Title: Threshold Selection and Uncertainty for Extreme Value Analysis
 Version: 1.0.0
-Date: 2017-09-02
+Date: 2017-09-03
 Authors@R: c(
     person(c("Paul", "J."), "Northrop", email = "p.northrop@ucl.ac.uk", 
       role = c("aut", "cre", "cph")),
     person("Nicolas", "Attalides", role = "aut")
     )
-Description: Provides functions for the selection of extreme value threshold.
-  See the 'threshr' website for more information, documentation and examples.
+Description: Provides functions for the selection of thresholds for use in 
+    extreme value models, based mainly on the methodology in 
+    Northrop, Attalides and Jonathan (2017) <doi:10.1111/rssc.12159>.
+    It also performs predictive inferences about future extreme values, 
+    based either on a single threshold or on a weighted average of inferences 
+    from multiple thresholds, using the 'revdbayes' package 
+    <https://cran.r-project.org/package=revdbayes>.   
+    At the moment only the simplest case, where the data can be treated as 
+    independent identically distributed observations, is considered.
+    See the 'threshr' website for more information, documentation and examples.
 Imports: graphics,
     methods,
     revdbayes (>= 1.2.0),

@@ -131,7 +131,6 @@ The function \code{\link[revdbayes]{predict.evpost}} is used to
   respectively.
 }
 \examples{
-\dontrun{
 # Note:
 #'  In the examples below validation thresholds rather higher than is
 #   advisable have been used, with far fewer excesses than the minimum of
@@ -168,7 +167,6 @@ plot(all_p)
 # Predictive density function
 all_d <- predict(gom_cv, which_u = "all", type = "d")
 plot(all_d)
-}
 }
 \references{
 Northrop, P. J., Attalides, N. and Jonathan, P. (2017)

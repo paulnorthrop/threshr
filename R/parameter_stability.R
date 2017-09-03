@@ -80,11 +80,9 @@
 #' gom_stab <- stability(data = gom, u_vec = u_vec_gom)
 #' plot(gom_stab)
 #'
-#' \dontrun{
 #' # Profile-likelihood-based confidence intervals
 #' gom_stab <- stability(data = gom, u_vec = u_vec_gom, prof = TRUE)
 #' plot(gom_stab)
-#' }
 #' @export
 stability <- function(data, u_vec, prof = FALSE, conf = 95, mult = 1:2,
                       plot_prof = FALSE, ...){

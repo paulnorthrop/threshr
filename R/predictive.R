@@ -111,7 +111,6 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
 #' # Note:
 #' #'  In the examples below validation thresholds rather higher than is
 #' #   advisable have been used, with far fewer excesses than the minimum of
@@ -148,7 +147,6 @@
 #' # Predictive density function
 #' all_d <- predict(gom_cv, which_u = "all", type = "d")
 #' plot(all_d)
-#' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   based on leave-one-out cross-validation.
 #' @seealso \code{\link{plot.ithreshpred}} for the S3 plot method for objects

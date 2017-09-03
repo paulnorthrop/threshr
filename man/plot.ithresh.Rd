@@ -94,7 +94,6 @@ Produces plots of the \emph{threshold weights}, defined in
   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.
 }
 \examples{
-\dontrun{
 # [Smoother plots result from making n larger than the default n = 1000.]
 
 # Threshold diagnostic plot
@@ -112,7 +111,6 @@ summary(gom_cv)
 # Plot of Generalized Pareto posterior sample at the highest threshold
 n_u <- length(u_vec_gom)
 plot(gom_cv, which_u = n_u, points_par = list(pch = 20, col = "grey"))
-}
 }
 \seealso{
 \code{\link{ithresh}} for threshold selection in the i.i.d. case

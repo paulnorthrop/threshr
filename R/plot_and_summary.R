@@ -73,7 +73,6 @@
 #'   See equation (14) of
 #'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.
 #' @examples
-#' \dontrun{
 #' # [Smoother plots result from making n larger than the default n = 1000.]
 #'
 #' # Threshold diagnostic plot
@@ -91,7 +90,6 @@
 #' # Plot of Generalized Pareto posterior sample at the highest threshold
 #' n_u <- length(u_vec_gom)
 #' plot(gom_cv, which_u = n_u, points_par = list(pch = 20, col = "grey"))
-#' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   based on leave-one-out cross-validation.
 #' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
@@ -435,11 +433,9 @@ plot.stability <- function(x, y, ..., prob = TRUE,
 #'     thresholds to which the threshold in column2 corresponds}
 #' }
 #' @examples
-#' \dontrun{
 #' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
 #' summary(gom_cv)
-#' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   based on leave-one-out cross-validation.
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
@@ -500,7 +496,6 @@ summary.ithresh <- function(object, ...) {
 #' @return A list containing the graphical parameters using in producing the
 #'   plot including any arguments supplied via ... is returned (invisibly).
 #' @examples
-#' \dontrun{
 #' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
 #'
@@ -534,7 +529,6 @@ summary.ithresh <- function(object, ...) {
 #'
 #' plot(all_p, add_best = TRUE)
 #' plot(all_d, add_best = TRUE)
-#' }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   based on leave-one-out cross-validation.
 #' @seealso \code{\link{predict.ithresh}} for predictive inference for the

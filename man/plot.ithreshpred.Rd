@@ -54,7 +54,6 @@ the predictive inferences made by \code{\link{predict.ithresh}}.
   the respective training thresholds in \code{u_vec}.
 }
 \examples{
-\dontrun{
 u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
 
@@ -88,7 +87,6 @@ plot(all_d)
 
 plot(all_p, add_best = TRUE)
 plot(all_d, add_best = TRUE)
-}
 }
 \seealso{
 \code{\link{ithresh}} for threshold selection in the i.i.d. case

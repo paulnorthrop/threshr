@@ -34,11 +34,9 @@ Returns a numeric matrix with 5 columns and \code{n_v} rows,
 \code{summary} method for class "ithresh"
 }
 \examples{
-\dontrun{
 u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
 summary(gom_cv)
-}
 }
 \seealso{
 \code{\link{ithresh}} for threshold selection in the i.i.d. case
