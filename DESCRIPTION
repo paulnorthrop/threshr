@@ -14,8 +14,8 @@ Description: Provides functions for the selection of thresholds for use in
     based either on a single threshold or on a weighted average of inferences 
     from multiple thresholds, using the 'revdbayes' package 
     <https://cran.r-project.org/package=revdbayes>.   
-    At the moment only the simplest case, where the data can be treated as 
-    independent identically distributed observations, is considered.
+    At the moment only the case where the data can be treated as 
+    independent identically distributed observations is considered.
     See the 'threshr' website for more information, documentation and examples.
 Imports: graphics,
     methods,
