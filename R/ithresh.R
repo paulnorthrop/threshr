@@ -186,13 +186,8 @@
 #' mtext("significant wave height / m", side = 3, line = 2.5)
 #'
 #' ## Gulf of Mexico significant wave heights, default prior ------------------
-#' # A plot akin to the top right of Figure 7 in Northrop et al. (2017)
 #'
 #' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
-#' plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
-#' mtext("significant wave height / m", side = 3, line = 2.5)
-#'
 #' # Setting a prior using its name and parameter value(s) --------------------
 #' # This example gives the same prior as the default
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = "mdi",
@@ -372,32 +367,58 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
     # then try trans = "none".
     #
     # Simulate from (full) bin-GP posterior.
-    temp <- tryCatch(
-      do.call(gp_postsim, c(for_post, list(data = data, thresh = u))),
-      error = function(e) {
-        if (is.null(cv_control$trans) || cv_control == "none") {
-          try_other_trans <- "BC"
-        } else {
-          try_other_trans <- "none"
-        }
-        try_other_trans <- ifelse(cv_control$trans == "BC", "none", "BC")
-        new_for_post <- c(for_post, trans = try_other_trans)
-        do.call(gp_postsim, c(new_for_post, list(data = data, thresh = u)))
+    temp <- try(do.call(gp_postsim, c(for_post, list(data = data,
+                                                     thresh = u))),
+                silent = TRUE)
+    if (inherits(temp, "try-error")) {
+      if (is.null(cv_control$trans) || cv_control == "none") {
+        try_other_trans <- "BC"
+      } else {
+        try_other_trans <- "none"
       }
-    )
-    # Simulate from the bin-GP posterior after removal of the maximum value.
-    temp_rm <- tryCatch(
-      do.call(gp_postsim, c(for_post, list(data = data_rm, thresh = u))),
-      error = function(e) {
-        if (is.null(cv_control$trans) || cv_control == "none") {
-          try_other_trans <- "BC"
-        } else {
-          try_other_trans <- "none"
-        }
-        new_for_post <- c(for_post, trans = try_other_trans)
-        do.call(gp_postsim, c(new_for_post, list(data = data_rm, thresh = u)))
+      new_for_post <- c(for_post, trans = try_other_trans)
+      temp <- do.call(gp_postsim, c(new_for_post, list(data = data,
+                                                       thresh = u)))
+    }
+#    temp <- tryCatch(
+#      do.call(gp_postsim, c(for_post, list(data = data, thresh = u))),
+#      error = function(e) {
+#        if (is.null(cv_control$trans) || cv_control == "none") {
+#          try_other_trans <- "BC"
+#        } else {
+#          try_other_trans <- "none"
+#        }
+#        try_other_trans <- ifelse(cv_control$trans == "BC", "none", "BC")
+#        new_for_post <- c(for_post, trans = try_other_trans)
+#        do.call(gp_postsim, c(new_for_post, list(data = data, thresh = u)))
+#      }
+#    )
+    # Simulate from the bin-GP posterior after removal of the maximum value
+    temp_rm <- try(do.call(gp_postsim, c(for_post, list(data = data_rm,
+                                                        thresh = u))),
+                   silent = TRUE)
+    if (inherits(temp_rm, "try-error")) {
+      if (is.null(cv_control$trans) || cv_control == "none") {
+        try_other_trans <- "BC"
+      } else {
+        try_other_trans <- "none"
       }
-    )
+      new_for_post <- c(for_post, trans = try_other_trans)
+      temp_rm <- do.call(gp_postsim, c(new_for_post, list(data = data_rm,
+                                                          thresh = u)))
+    }
+#    temp_rm <- tryCatch(
+#      do.call(gp_postsim, c(for_post, list(data = data_rm, thresh = u))),
+#      error = function(e) {
+#        if (is.null(cv_control$trans) || cv_control == "none") {
+#          try_other_trans <- "BC"
+#        } else {
+#          try_other_trans <- "none"
+#        }
+#        new_for_post <- c(for_post, trans = try_other_trans)
+#        do.call(gp_postsim, c(new_for_post, list(data = data_rm, thresh = u)))
+#      }
+#    )
     # Combine binomial and GP posterior simulated values.
     theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
     theta_rm <- cbind(temp_rm$bin_sim_vals, temp_rm$sim_vals)

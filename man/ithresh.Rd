@@ -186,13 +186,8 @@ plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
 mtext("significant wave height / m", side = 3, line = 2.5)
 
 ## Gulf of Mexico significant wave heights, default prior ------------------
-# A plot akin to the top right of Figure 7 in Northrop et al. (2017)
 
 u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
-plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
-mtext("significant wave height / m", side = 3, line = 2.5)
-
 # Setting a prior using its name and parameter value(s) --------------------
 # This example gives the same prior as the default
 gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = "mdi",
