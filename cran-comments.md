@@ -1,9 +1,9 @@
 ## Resubmission
 This is a resubmission.  In this version I have 
 
-* Provided a better description of the package in the Description: field of the DESCRIPTION file.
+* Provided a better description of the package in the Description: field of the DESCRIPTION file. [I'm sorry for not doing this from the outset.]
 
-* Removed the \dontrun{} wrapping from all the examples, except the one that takes more than 5 seconds to execute, which is wrapped in \donttest{}.
+* Removed the \dontrun{} wrapping from all the examples, except the slowest one, which is wrapped in \donttest{}. 
 
 ## R CMD check results
 
