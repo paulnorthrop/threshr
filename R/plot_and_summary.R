@@ -214,7 +214,7 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
     matplot_args$lty <- 1:ncol(y_data)
     legend_args$lty <- 1:ncol(y_data)
   }
-  if (is.null(legend_args$type)) {
+  if (is.null(legend_args$title)) {
     legend_args$title <- "highest threshold"
   }
   legend_args$x <- legend_pos
