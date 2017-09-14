@@ -40,14 +40,14 @@ NULL
 #' heights, metres, from 1900 to 2005 at an unnamed location in the Gulf
 #' of Mexico.
 #'
-#'@format A vector containing 315 observations.
-#'@source Oceanweather Inc. (2005) GOMOS -- Gulf of Mexico hindcast study.
-#'@references Northrop, P. J., N. Attalides, and P. Jonathan. (2017).
-#'  Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
-#'  Application to Ocean Storm Severity. \emph{Journal of the Royal
-#'  Statistical Society: Series C (Applied Statistics)}, \strong{66}(1),
-#'  93-120.
-#'  doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
+#' @format A vector containing 315 observations.
+#' @source Oceanweather Inc. (2005) GOMOS -- Gulf of Mexico hindcast study.
+#' @references Northrop, P. J., N. Attalides, and P. Jonathan. (2017).
+#'   Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
+#'   Application to Ocean Storm Severity. \emph{Journal of the Royal
+#'   Statistical Society: Series C (Applied Statistics)}, \strong{66}(1),
+#'   93-120.
+#'   doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
 "gom"
 
 #' Storm peak significant wave heights from the North Sea
@@ -55,12 +55,12 @@ NULL
 #' A numeric vector containing 628 hindcasts of storm peak significant wave
 #' heights, metres, from 1964 to 1995 at an unnamed location in the North Sea.
 #'
-#'@format A vector containing 628 observations.
-#'@source Oceanweather Inc. (1995) NEXT -- North Sea hindcast study.
-#'@references Northrop, P. J., N. Attalides, and P. Jonathan. (2017).
-#'  Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
-#'  Application to Ocean Storm Severity. \emph{Journal of the Royal
-#'  Statistical Society: Series C (Applied Statistics)}, \strong{66}(1),
-#'  93-120.
-#'  doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
+#' @format A vector containing 628 observations.
+#' @source Oceanweather Inc. (1995) NEXT -- North Sea hindcast study.
+#' @references Northrop, P. J., N. Attalides, and P. Jonathan. (2017).
+#'   Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
+#'   Application to Ocean Storm Severity. \emph{Journal of the Royal
+#'   Statistical Society: Series C (Applied Statistics)}, \strong{66}(1),
+#'   93-120.
+#'   doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
 "ns"
