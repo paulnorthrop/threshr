@@ -30,7 +30,6 @@ The main function in the threshr package is `ithresh`.  It uses Bayesian leave-o
 u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
 gom_cv <- ithresh(data = gom, u_vec = u_vec_gom)
 plot(gom_cv)
-
 ```
 
 ### Installation
