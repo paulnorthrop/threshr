@@ -23,6 +23,7 @@ Imports: graphics,
     stats
 License: GPL (>= 2)
 LazyData: TRUE
+Encoding: UTF-8
 Depends:
     R (>= 3.3.0)
 RoxygenNote: 6.1.0
