@@ -55,8 +55,8 @@ the predictive inferences made by \code{\link{predict.ithresh}}.
   the respective training thresholds in \code{u_vec}.
 }
 \examples{
-u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
+u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
+gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 3)
 
 # Note: gom_cv$npy contains the correct value of npy (it was set in the
 #       call to ithresh, via attr(gom, "npy").

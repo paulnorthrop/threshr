@@ -34,8 +34,8 @@ Returns a numeric matrix with 5 columns and \code{n_v} rows,
 \code{summary} method for class "ithresh"
 }
 \examples{
-u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
+u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
+gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 3)
 summary(gom_cv)
 }
 \seealso{

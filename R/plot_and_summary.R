@@ -76,8 +76,8 @@
 #' # [Smoother plots result from making n larger than the default n = 1000.]
 #'
 #' # Threshold diagnostic plot
-#' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
+#' u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 3)
 #' plot(gom_cv, lwd = 2, add_legend = TRUE, legend_pos = "topleft")
 #' mtext("significant wave height / m", side = 3, line = 2.5)
 #'
@@ -306,7 +306,7 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
 #'   returned (invisibly).
 #' @seealso \code{\link{stability}}.
 #' @examples
-#' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+#' u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
 #' gom_stab <- stability(data = gom, u_vec = u_vec_gom)
 #' plot(gom_stab)
 #' @export
@@ -433,8 +433,8 @@ plot.stability <- function(x, y, ..., prob = TRUE,
 #'     thresholds to which the threshold in column2 corresponds}
 #' }
 #' @examples
-#' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
+#' u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 3)
 #' summary(gom_cv)
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   based on leave-one-out cross-validation.
@@ -496,8 +496,8 @@ summary.ithresh <- function(object, ...) {
 #' @return A list containing the graphical parameters using in producing the
 #'   plot including any arguments supplied via ... is returned (invisibly).
 #' @examples
-#' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
-#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4)
+#' u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 3)
 #'
 #' # Note: gom_cv$npy contains the correct value of npy (it was set in the
 #' #       call to ithresh, via attr(gom, "npy").

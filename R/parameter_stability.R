@@ -74,7 +74,7 @@
 #' @seealso \code{\link[stats]{quantile}}.
 #' @examples
 #' # Set a vector of thresholds
-#' u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+#' u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
 #'
 #' # Symmetric confidence intervals
 #' gom_stab <- stability(data = gom, u_vec = u_vec_gom)

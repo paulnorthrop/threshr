@@ -56,7 +56,7 @@ Produces a simple threshold diagnostic plot based on the object
   See also the vignette "Introducing threshr".
 }
 \examples{
-u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
 gom_stab <- stability(data = gom, u_vec = u_vec_gom)
 plot(gom_stab)
 }

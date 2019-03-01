@@ -69,7 +69,7 @@ test_that("plot.ithresh, 1: bin_sim_vals has dimensions n by 1", {
 # 4. Check that key graphical parameters that the user may supply to
 #    plot.stability() to be passed to matplot are used.
 
-u_vec_gom <- quantile(gom, probs = seq(0, 0.95, by = 0.05))
+u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
 gom_stab <- stability(data = gom, u_vec = u_vec_gom)
 
 my_pch <- 1
