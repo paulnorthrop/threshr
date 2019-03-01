@@ -8,7 +8,7 @@ seed <- 27082017
 # 1. We check that the results from ithresh produced using use_rcpp = TRUE and
 #    use_rcpp = FALSE are identical.
 
-u_vec_gom <- quantile(gom, probs = seq(0.05, 0.95, by = 0.45))
+u_vec_gom <- quantile(gom, probs = c(0.05, 0.5, 0.9))
 # use_rcpp = TRUE
 set.seed(seed)
 res1 <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2)
