@@ -4,7 +4,8 @@
 \alias{plot.ithreshpred}
 \title{Plot diagnostics an ithreshpred object}
 \usage{
-\method{plot}{ithreshpred}(x, y, ..., ave_only = FALSE, add_best = FALSE)
+\method{plot}{ithreshpred}(x, y, ..., ave_only = FALSE,
+  add_best = FALSE)
 }
 \arguments{
 \item{x}{an object of class "ithreshpred", a result of a call to
