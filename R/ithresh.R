@@ -182,16 +182,16 @@
 #' #' # ... but with fewer training thresholds
 #'
 #' u_vec_ns <- quantile(ns, probs = seq(0.05, 0.95, by = 0.1))
-#' ns_cv <- ithresh(data = ns, u_vec = u_vec_ns, n_v = 3)
+#' ns_cv <- ithresh(data = ns, u_vec = u_vec_ns, n_v = 2)
 #' plot(ns_cv, lwd = 2, add_legend = TRUE, legend_pos = "topright")
 #' mtext("significant wave height / m", side = 3, line = 2.5)
 #'
 #' ## Gulf of Mexico significant wave heights, default prior ------------------
 #'
-#' u_vec_gom <- quantile(gom, probs = seq(0.25, 0.95, by = 0.1))
+#' u_vec_gom <- quantile(gom, probs = seq(0.2, 0.9, by = 0.1))
 #' # Setting a prior using its name and parameter value(s) --------------------
 #' # This example gives the same prior as the default
-#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = "mdi",
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2, prior = "mdi",
 #'                   h_prior = list(a = 0.6))
 #'
 #' ## Setting a user-defined (log-)prior R function ---------------------------
@@ -205,7 +205,7 @@
 #'   }
 #'   return(-log(pars[1]) - a * pars[2])
 #' }
-#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = user_prior,
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2, prior = user_prior,
 #'                   h_prior = list(a = 0.6))
 #' }
 #' ## Setting a user-defined (log-)prior (pointer to a) C++ function ----------
@@ -213,7 +213,7 @@
 #' # the required pointer from the revdbayes package
 #'
 #' prior_ptr <- revdbayes:::create_prior_xptr("gp_flat")
-#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 4, prior = prior_ptr,
+#' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2, prior = prior_ptr,
 #'                   h_prior = list(min_xi = -1))
 #' @references Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
 #'   Bayesian extreme value analyses using reference priors
