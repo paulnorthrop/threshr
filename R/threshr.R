@@ -23,7 +23,7 @@
 #'   with application to ocean storm severity.
 #'   \emph{Journal of the Royal Statistical Society Series C: Applied
 #'   Statistics}, \strong{66}(1), 93-120.
-#'   \url{http://dx.doi.org/10.1111/rssc.12159}
+#'   \url{https://doi.org/10.1111/rssc.12159}
 #'
 #' @seealso The packages \code{\link[revdbayes]{revdbayes}} and
 #'   \code{\link[rust]{rust}}.

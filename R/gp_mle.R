@@ -9,7 +9,7 @@ gp_mle <- function(gp_data) {
   #
   # Grimshaw, S. D. (1993) Computing Maximum Likelihood Estimates
   #   for the Generalized Pareto Distribution.  Technometrics, 35(2), 185-191.
-  #   and Computing (1991) 1, 129-133. http://dx.doi.org/10.1007/BF01889987.
+  #   and Computing (1991) 1, 129-133. https://doi.org/10.1007/BF01889987.
   #
   # Args:
   #   gp_data : A numeric vector containing positive values, assumed to be a

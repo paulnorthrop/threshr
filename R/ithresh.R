@@ -218,17 +218,17 @@
 #' @references Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
 #'   Bayesian extreme value analyses using reference priors
 #'   \emph{Statistica Sinica}, \strong{26}(2), 721--743
-#'   \url{http://dx.doi.org/10.5705/ss.2014.034}.
+#'   \url{https://doi.org/10.5705/ss.2014.034}.
 #' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 #'   Cross-validatory extreme value threshold selection and uncertainty
 #'   with application to ocean storm severity.
 #'   \emph{Journal of the Royal Statistical Society Series C: Applied
 #'   Statistics}, \strong{66}(1), 93-120.
-#'   \url{http://dx.doi.org/10.1111/rssc.12159}
+#'   \url{https://doi.org/10.1111/rssc.12159}
 #' @references Jonathan, P. and Ewans, K. (2013) Statistical modelling
 #'   of extreme ocean environments for marine design : a review.
 #'   \emph{Ocean Engineering}, \strong{62}, 91-109.
-#'   \url{http://dx.doi.org/10.1016/j.oceaneng.2013.01.004}
+#'   \url{https://doi.org/10.1016/j.oceaneng.2013.01.004}
 #' @export
 ithresh <- function(data, u_vec, ..., n_v = 1, npy = NULL, use_rcpp = TRUE) {
   # Store npy (if it has been supplied)
