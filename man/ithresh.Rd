@@ -37,7 +37,7 @@ set at sample quantiles of  \code{data} using
     See the \strong{revdbayes} vignette
     \href{https://cran.r-project.org/package=revdbayes}{Faster simulation
     using revdbayes} for information about creating
-    a pointer to a C++ function. See also the \strong{Examples} section.
+    a pointer to a C++ function.  See also the \strong{Examples} section.
 
     If the user supplies and R function then \code{\link{rpost}} will be
     used for posterior simulation, rather than (the faster)
@@ -49,10 +49,11 @@ set at sample quantiles of  \code{data} using
     \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}}.
   \item {\code{h_prior}} {A \emph{list} of further arguments
     (hyperparameters) for the GP prior specified in \code{prior}.}
-  \item {\code{bin_prior}} {A character scalar that chooses an in-built
-    prior for the threshold exceedance probability \eqn{p}, to be passed to
-    the \strong{revdbayes} function \code{\link[revdbayes]{set_bin_prior}}.
-    only relevant if \code{prior == "beta"}.
+  \item {\code{bin_prior}} {A prior for the threshold exceedance probability
+    \eqn{p} to be passed to the \strong{revdbayes} function
+    \code{\link[revdbayes]{set_bin_prior}}.
+    Can either be a character scalar that chooses an in-built prior,
+    or a user_supplied R function.
 
     Default: \code{prior = "jeffreys"}, i.e. Beta(1/2, 1/2).}
   \item {\code{h_bin_prior}} {A \emph{list} of further arguments
@@ -205,8 +206,12 @@ user_prior <- function(pars, a, min_xi = -1) {
   }
   return(-log(pars[1]) - a * pars[2])
 }
+user_bin_prior <- function(p, ab) {
+  return(stats::dbeta(p, shape1 = ab[1], shape2 = ab[2], log = TRUE))
+}
 gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2, prior = user_prior,
-                  h_prior = list(a = 0.6))
+                  h_prior = list(a = 0.6), bin_prior = user_bin_prior,
+                  h_bin_prior = list(ab = c(1 / 2, 1 / 2)))
 }
 ## Setting a user-defined (log-)prior (pointer to a) C++ function ----------
 # We make use of a C++ function and function create_prior_xptr() to create
