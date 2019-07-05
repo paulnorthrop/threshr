@@ -7,5 +7,4 @@
 ^\.travis\.yml$
 ^R/highest_threshold\.R$
 ^appveyor\.yml$
-^misc\.R$
 ^create_logo$
