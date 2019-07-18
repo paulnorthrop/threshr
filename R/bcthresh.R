@@ -147,18 +147,11 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   store_pred_perf <- array(dim = c(n_u, n_v, n_lambda))
   for (i in 1:n_lambda) {
     # Transform the data and the thresholds
-#    bc_data <- bc_vec(raw_data, lambda = lambda[i])
-#    bc_u_vec <- bc_vec(u_vec, lambda = lambda[i])
-#    bc_v_vec <- bc_vec(v_vec, lambda = lambda[i])
     lngm <- mean(log(raw_data))
     lngm <- 0
     bc_data <- bc_gm(raw_data, lambda = lambda[i], lngm = lngm)
     bc_u_vec <- bc_gm(u_vec, lambda = lambda[i], lngm = lngm)
     bc_v_vec <- bc_gm(v_vec, lambda = lambda[i], lngm = lngm)
-#    print(summary(bc_data))
-#    print(bc_u_vec)
-#    print(bc_v_vec)
-#    stop()
     temp <- bccv_fn(data = bc_data, u_vec = bc_u_vec, v_vec = bc_v_vec,
                     n_u = n_u, n_v = n_v, use_rcpp = use_rcpp,
                     raw_data = raw_data, lambda = lambda[i], lngm = lngm, ...)
