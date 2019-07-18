@@ -123,7 +123,7 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   # Remove missing values from data
   data <- as.numeric(stats::na.omit(data))
   # Check that probs contains values in [0, 1)
-  if (any(probs < 0 || probs >= 1)) {
+  if (any(probs < 0 | probs >= 1)) {
     stop("''probs'' must contain values in [0, 1)")
   }
   # Set the thresholds on the untransformed data scale
