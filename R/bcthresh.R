@@ -258,16 +258,6 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
     gp_postsim <- revdbayes::rpost
   }
   #
-#  # If the "flatflat" prior is used then the posterior mode is equal to the
-#  # MLE.  This may cause a false positive convergence warning, because we
-#  # start too close to the mode.  To avoid this we calculate the MLE, perturb
-#  # it slightly and pass this to revdbayes::rpost() or revdbayes::rpost_rcpp()
-#  # as the initial estimate of the posterior mode.
-#  print(cv_control)
-#  if (gp_prior$prior = "flatflat" && is.null(cv_control$init_ests)) {
-#    cv_control$init_ests <- gp_mle(data - u)
-#  }
-#  print(cv_control)
   for_post <- c(list(n = n, model = "bingp", prior = gp_prior,
                      bin_prior = bin_prior), cv_control)
   # A matrix to store the posterior samples for each threshold
@@ -277,6 +267,17 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
     u <- u_vec[i]
     # Simulation from posterior distributions.
     #
+    # If the "flatflat" prior is used then the posterior mode is equal to the
+    # MLE.  This may cause a false positive convergence warning, because we
+    # start too close to the mode.  To avoid this we calculate the MLE, perturb
+    # it a bit and pass this to revdbayes::rpost() or revdbayes::rpost_rcpp()
+    # as the initial estimate of the posterior mode.
+    if (gp_prior$prior == "gp_flatflat") {
+      temp <- gp_mle(data[data > u] - u)
+      if (!inherits(temp, "try-error")) {
+        for_post$init_ests <- temp$mle * 0.95
+      }
+    }
     # If an error occurs (this can sometimes happen if there are few excesses)
     # then try trans = "BC".  This tends to be slower but the Box-Cox
     # transformation towards normality can improve stability of the
