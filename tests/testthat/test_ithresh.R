@@ -12,7 +12,7 @@ u_vec_gom <- quantile(gom, probs = c(0.05, 0.5, 0.9))
 # use_rcpp = TRUE
 set.seed(seed)
 res1 <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2)
-# use_rcpp = TRUE
+# use_rcpp = FALSE
 set.seed(seed)
 res2 <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2, use_rcpp = FALSE)
 
@@ -29,7 +29,7 @@ test_that("ithresh, sim_vals: rcpp, no rcppf", {
 # use_rcpp = TRUE
 set.seed(seed)
 res1 <- ithresh(data = gom, u_vec = u_vec_gom, trans = "BC", n_v = 2)
-# use_rcpp = TRUE
+# use_rcpp = FALSE
 set.seed(seed)
 res2 <- ithresh(data = gom, u_vec = u_vec_gom, trans = "BC", n_v = 2,
                 use_rcpp = FALSE)
