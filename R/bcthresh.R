@@ -16,7 +16,8 @@
 #'   \code{u_vec} of \emph{training} thresholds for use on the untransformed
 #'   (\eqn{\lambda = 1}) data scale.
 #' @param lambda A numeric vector containing values of the Box-Cox
-#'   transformation parameter \eqn{\lambda}.
+#'   transformation parameter \eqn{\lambda}.  See \strong{Details} for advice
+#'   on setting \code{lambda}.
 #' @details See \code{ithresh} and/or
 #'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
 #'   for details of the threshold selection algorithm that is applied
@@ -24,6 +25,8 @@
 #'   performance is calculated on the scale of the raw (\eqn{\lambda = 1})
 #'   data, in order that values resulting from different values of
 #'   \eqn{\lambda} can be compared.
+#'
+#'   \strong{Setting \code{lambda}}.
 #' @return An object (list) of class \code{"ithresh"}, containing the
 #'   components
 #'   \itemize{
@@ -83,20 +86,18 @@
 #' lambda <- seq(-1/2, 1, 0.5)
 #' y <- rexp(1000)
 #' x <- exp(y)
-#' pjn <- bcthresh(data = x, probs = probs, lambda = lambda,
+#' pjn <- bcthresh(data = x, probs = probs, lambda = lambda, trans = "BC",
 #'                 prior = "flatflat", bin_prior = "haldane")
 #'
-#' library(revdbayes)
 #' probs <- seq(0.1, 0.9, 0.4)
 #' lambda <- seq(1, 3, 0.5)
 #' gom_lambda <- bcthresh(data = gom, probs = probs, lambda = lambda,
 #'                        prior = "flatflat", bin_prior = "haldane")
 #'
-#' library(revdbayes)
 #' probs <- seq(0.1, 0.9, 0.4)
-#' lambda <- seq(0, 2, 0.5)
-#' ns_lambda <- bcthresh(data = ns, probs = probs, lambda = lambda,
-#'                       prior = "flatflat", bin_prior = "haldane", n_v = 2)
+#' lambda <- seq(-1/2, 2.5, 0.5)
+#' ns_lambda <- bcthresh(data = ns, probs = probs, lambda = lambda, trans = "BC",
+#'                       prior = "flatflat", bin_prior = "haldane")
 #' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 #'   Cross-validatory extreme value threshold selection and uncertainty
 #'   with application to ocean storm severity.
