@@ -146,7 +146,6 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   n_lambda <- length(lambda)
   store_pred_perf <- array(dim = c(n_u, n_v, n_lambda))
   for (i in 1:n_lambda) {
-    print(lambda[i])
     # Transform the data and the thresholds
 #    bc_data <- bc_vec(raw_data, lambda = lambda[i])
 #    bc_u_vec <- bc_vec(u_vec, lambda = lambda[i])
