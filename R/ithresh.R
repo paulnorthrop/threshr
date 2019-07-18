@@ -377,28 +377,25 @@ cv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, ...) {
                                                      thresh = u))),
                 silent = TRUE)
     if (inherits(temp, "try-error")) {
-      if (is.null(cv_control$trans) || cv_control == "none") {
-        try_other_trans <- "BC"
+      if (is.null(for_post$trans) || for_post$trans == "none") {
+        for_post$trans <- "BC"
       } else {
-        try_other_trans <- "none"
+        for_post$trans <- "none"
       }
-      new_for_post <- c(for_post, trans = try_other_trans)
-      temp <- do.call(gp_postsim, c(new_for_post, list(data = data,
-                                                       thresh = u)))
+      temp <- do.call(gp_postsim, c(for_post, list(data = data, thresh = u)))
     }
     # Simulate from the bin-GP posterior after removal of the maximum value
     temp_rm <- try(do.call(gp_postsim, c(for_post, list(data = data_rm,
                                                         thresh = u))),
                    silent = TRUE)
     if (inherits(temp_rm, "try-error")) {
-      if (is.null(cv_control$trans) || cv_control == "none") {
-        try_other_trans <- "BC"
+      if (is.null(for_post$trans) || for_post$trans == "none") {
+        for_post$trans <- "BC"
       } else {
-        try_other_trans <- "none"
+        for_post$trans <- "none"
       }
-      new_for_post <- c(for_post, trans = try_other_trans)
-      temp_rm <- do.call(gp_postsim, c(new_for_post, list(data = data_rm,
-                                                          thresh = u)))
+      temp_rm <- do.call(gp_postsim, c(for_post, list(data = data_rm,
+                                                      thresh = u)))
     }
     # Combine binomial and GP posterior simulated values.
     theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
