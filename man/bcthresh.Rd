@@ -172,6 +172,7 @@ See \code{ithresh} and/or
 library(revdbayes)
 probs <- seq(0.1, 0.9, 0.4)
 lambda <- seq(0, 1, 0.5)
+set.seed(49)
 y <- rexp(1000)
 x <- exp(y)
 pjn <- bcthresh(data = x, probs = probs, lambda = lambda, trans = "BC",
