@@ -176,31 +176,46 @@ See \code{\link{ithresh}} and/or
   \strong{Setting \code{lambda}}.
 }
 \examples{
-library(revdbayes)
+# Note:
+# 1. Smoother plots result from making n larger than the default n = 1000.
+# 2. In some examples below validation thresholds rather higher than is
+#    advisable have been used, with far fewer excesses than the minimum of
+#    50 suggested by Jonathan and Ewans (2013).
 
-# Set the prior: flat for GP parameters, Haldane for P(exceedance)
+# Set a prior: flat for GP parameters, Haldane for P(exceedance)
 prior_args <- list(prior = "flatflat", bin_prior = "haldane",
                    h_prior = list(min_xi = -Inf))
 
-probs <- seq(0.1, 0.9, 0.4)
-lambda <- seq(0, 1, 0.5)
-set.seed(49)
-y <- rexp(1000)
-x <- exp(y)
-exp_args <- list(data = x, probs = probs, lambda = lambda)
-log_exp <- do.call(bcthresh, c(exp_args, prior_args))
+## Gulf of Mexico significant wave heights ------------------
 
 probs <- seq(0.1, 0.9, 0.4)
 lambda <- seq(1, 3, 0.5)
 gom_args <- list(data = gom, probs = probs, lambda = lambda, n_v = 2)
 gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
 
+## North Sea significant wave heights -----------------------
+
 probs <- seq(0.1, 0.9, 0.4)
 lambda <- seq(-1/2, 2.5, 0.5)
 ns_args <- list(data = ns, probs = probs, lambda = lambda, trans = "BC")
 ns_lambda <- do.call(bcthresh, c(ns_args, prior_args))
+
+# Exponentiated exponential data ----------------------------
+
+probs <- seq(0, 0.9, 0.1)
+lambda <- seq(0, 1, 0.5)
+set.seed(49)
+y <- rexp(1000)
+x <- exp(y)
+exp_args <- list(data = x, probs = probs, lambda = lambda)
+log_exp <- do.call(bcthresh, c(exp_args, prior_args))
 }
 \references{
+Jonathan, P. and Ewans, K. (2013) Statistical modelling
+  of extreme ocean environments for marine design : a review.
+  \emph{Ocean Engineering}, \strong{62}, 91-109.
+  \url{http://dx.doi.org/10.1016/j.oceaneng.2013.01.004}
+
 Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
   Cross-validatory extreme value threshold selection and uncertainty
   with application to ocean storm severity.

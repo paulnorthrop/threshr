@@ -175,7 +175,7 @@
 #' @examples
 #' # Note:
 #' # 1. Smoother plots result from making n larger than the default n = 1000.
-#' # 2. In the examples below validation thresholds rather higher than is
+#' # 2. In some examples below validation thresholds rather higher than is
 #' #    advisable have been used, with far fewer excesses than the minimum of
 #' #    50 suggested by Jonathan and Ewans (2013).
 #'
