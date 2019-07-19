@@ -136,7 +136,7 @@ An object (list) of class \code{"ithresh"}, containing the
       column 4 the value of \eqn{j}.
     \item{\code{n}:} A numeric scalar.  The value of \code{n}.
     \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
-    \item{\code{data}:} The argument \code{data} to \code{ithresh}
+    \item{\code{data}:} The argument \code{data} to \code{bcthresh}
       detailed above, with any missing values removed.
     \item{\code{use_rcpp}:} A logical scalar indicating whether
       \code{\link[revdbayes]{rpost_rcpp}} (\code{use_rcpp = TRUE}) or
@@ -169,23 +169,28 @@ See \code{ithresh} and/or
 }
 \examples{
 library(revdbayes)
+
+# Set the prior: flat for GP parameters, Haldane for P(exceedance)
+prior_args <- list(prior = "flatflat", bin_prior = "haldane",
+                   h_prior = list(min_xi = -Inf))
+
 probs <- seq(0.1, 0.9, 0.4)
 lambda <- seq(0, 1, 0.5)
 set.seed(49)
 y <- rexp(1000)
 x <- exp(y)
-pjn <- bcthresh(data = x, probs = probs, lambda = lambda,
-                prior = "flatflat", bin_prior = "haldane")
+exp_args <- list(data = x, probs = probs, lambda = lambda)
+log_exp <- do.call(bcthresh, c(exp_args, prior_args))
 
 probs <- seq(0.1, 0.9, 0.4)
 lambda <- seq(1, 3, 0.5)
-gom_lambda <- bcthresh(data = gom, probs = probs, lambda = lambda,
-                       prior = "flatflat", bin_prior = "haldane")
+gom_args <- list(data = gom, probs = probs, lambda = lambda)
+gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
 
 probs <- seq(0.1, 0.9, 0.4)
 lambda <- seq(-1/2, 2.5, 0.5)
-ns_lambda <- bcthresh(data = ns, probs = probs, lambda = lambda, trans = "BC",
-                      prior = "flatflat", bin_prior = "haldane")
+ns_args <- list(data = ns, probs = probs, lambda = lambda, trans = "BC")
+ns_lambda <- do.call(bcthresh, c(ns_args, prior_args))
 }
 \references{
 Northrop, P. J., Attalides, N. and Jonathan, P. (2017)

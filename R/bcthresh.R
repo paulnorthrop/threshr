@@ -57,7 +57,7 @@
 #'       column 4 the value of \eqn{j}.
 #'     \item{\code{n}:} A numeric scalar.  The value of \code{n}.
 #'     \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
-#'     \item{\code{data}:} The argument \code{data} to \code{ithresh}
+#'     \item{\code{data}:} The argument \code{data} to \code{bcthresh}
 #'       detailed above, with any missing values removed.
 #'     \item{\code{use_rcpp}:} A logical scalar indicating whether
 #'       \code{\link[revdbayes]{rpost_rcpp}} (\code{use_rcpp = TRUE}) or
@@ -81,23 +81,28 @@
 #' @seealso \code{\link[stats]{quantile}}.
 #' @examples
 #' library(revdbayes)
+#'
+#' # Set the prior: flat for GP parameters, Haldane for P(exceedance)
+#' prior_args <- list(prior = "flatflat", bin_prior = "haldane",
+#'                    h_prior = list(min_xi = -Inf))
+#'
 #' probs <- seq(0.1, 0.9, 0.4)
 #' lambda <- seq(0, 1, 0.5)
 #' set.seed(49)
 #' y <- rexp(1000)
 #' x <- exp(y)
-#' pjn <- bcthresh(data = x, probs = probs, lambda = lambda,
-#'                 prior = "flatflat", bin_prior = "haldane")
+#' exp_args <- list(data = x, probs = probs, lambda = lambda)
+#' log_exp <- do.call(bcthresh, c(exp_args, prior_args))
 #'
 #' probs <- seq(0.1, 0.9, 0.4)
 #' lambda <- seq(1, 3, 0.5)
-#' gom_lambda <- bcthresh(data = gom, probs = probs, lambda = lambda,
-#'                        prior = "flatflat", bin_prior = "haldane")
+#' gom_args <- list(data = gom, probs = probs, lambda = lambda)
+#' gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
 #'
 #' probs <- seq(0.1, 0.9, 0.4)
 #' lambda <- seq(-1/2, 2.5, 0.5)
-#' ns_lambda <- bcthresh(data = ns, probs = probs, lambda = lambda, trans = "BC",
-#'                       prior = "flatflat", bin_prior = "haldane")
+#' ns_args <- list(data = ns, probs = probs, lambda = lambda, trans = "BC")
+#' ns_lambda <- do.call(bcthresh, c(ns_args, prior_args))
 #' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 #'   Cross-validatory extreme value threshold selection and uncertainty
 #'   with application to ocean storm severity.
@@ -268,7 +273,11 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
     if (gp_prior$prior == "gp_flatflat") {
       temp <- gp_mle(data[data > u] - u)
       if (!inherits(temp, "try-error")) {
-        for_post$init_ests <- temp$mle * 0.95
+        init <- temp$mle * 0.95
+      }
+      temp <- gp_mle(data_rm[data_rm > u] - u)
+      if (!inherits(temp, "try-error")) {
+        init_rm <- temp$mle * 0.95
       }
     }
     # If an error occurs (this can sometimes happen if there are few excesses)
@@ -278,8 +287,8 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
     # then try trans = "none".
     #
     # Simulate from (full) bin-GP posterior.
-    temp <- try(do.call(gp_postsim, c(for_post, list(data = data,
-                                                     thresh = u))),
+    temp <- try(do.call(gp_postsim, c(for_post, list(data = data, thresh = u,
+                                                     init_ests = init))),
                 silent = TRUE)
     if (inherits(temp, "try-error")) {
       if (is.null(for_post$trans) || for_post$trans == "none") {
@@ -287,11 +296,13 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
       } else {
         for_post$trans <- "none"
       }
-      temp <- do.call(gp_postsim, c(for_post, list(data = data, thresh = u)))
+      temp <- do.call(gp_postsim, c(for_post, list(data = data, thresh = u,
+                                                   init_ests = init)))
     }
     # Simulate from the bin-GP posterior after removal of the maximum value
     temp_rm <- try(do.call(gp_postsim, c(for_post, list(data = data_rm,
-                                                        thresh = u))),
+                                                        thresh = u,
+                                                        init_ests = init_rm))),
                    silent = TRUE)
     if (inherits(temp_rm, "try-error")) {
       if (is.null(for_post$trans) || for_post$trans == "none") {
@@ -300,7 +311,8 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
         for_post$trans <- "none"
       }
       temp_rm <- do.call(gp_postsim, c(for_post, list(data = data_rm,
-                                                      thresh = u)))
+                                                      thresh = u,
+                                                      init_ests = init_rm)))
     }
     # Combine binomial and GP posterior simulated values.
     theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
