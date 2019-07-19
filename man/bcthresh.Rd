@@ -188,26 +188,26 @@ prior_args <- list(prior = "flatflat", bin_prior = "haldane",
 
 ## Gulf of Mexico significant wave heights ------------------
 
-probs <- seq(0.1, 0.9, 0.4)
-lambda <- seq(1, 3, 0.5)
-gom_args <- list(data = gom, probs = probs, lambda = lambda, n_v = 2)
-gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
+gom_probs <- seq(0.1, 0.9, 0.1)
+gom_lambda <- seq(1, 3, 0.5)
+gom_args <- list(data = gom, probs = gom_probs, lambda = gom_lambda)
+gom_lambda <- do.call(bcthresh, c(gom_args, prior_args, n = 10000))
 
 ## North Sea significant wave heights -----------------------
 
-probs <- seq(0.1, 0.9, 0.4)
-lambda <- seq(-1/2, 2.5, 0.5)
-ns_args <- list(data = ns, probs = probs, lambda = lambda, trans = "BC")
+ns_probs <- seq(0.1, 0.9, 0.1)
+ns_lambda <- seq(-1/2, 2, 0.5)
+ns_args <- list(data = ns, probs = ns_probs, lambda = ns_lambda, trans = "BC")
 ns_lambda <- do.call(bcthresh, c(ns_args, prior_args))
 
 # Exponentiated exponential data ----------------------------
 
-probs <- seq(0, 0.9, 0.1)
-lambda <- seq(0, 1, 0.5)
+exp_probs <- seq(0, 0.9, 0.1)
+exp_lambda <- seq(0, 1, 0.5)
 set.seed(49)
 y <- rexp(1000)
 x <- exp(y)
-exp_args <- list(data = x, probs = probs, lambda = lambda)
+exp_args <- list(data = x, probs = exp_probs, lambda = exp_lambda)
 log_exp <- do.call(bcthresh, c(exp_args, prior_args))
 }
 \references{
