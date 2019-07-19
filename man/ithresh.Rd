@@ -121,8 +121,9 @@ An object (list) of class \code{"ithresh"}, containing the
       \code{n} x \code{length(u_vec)} rows.  The \eqn{j}th block of
       \code{n} rows contains in columns 1-3 the posterior samples of
       the threshold exceedance probability, the GP scale
-      parameter and the GP shape parameter respectively, and in
-      column 4 the value of \eqn{j}.
+      parameter and the GP shape parameter respectively,
+      based on training threshold \code{u_vec[i]},
+      and in column 4 the value of \eqn{j}.
     \item{\code{n}:} A numeric scalar.  The value of \code{n}.
     \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
     \item{\code{data}:} The argument \code{data} to \code{ithresh}
