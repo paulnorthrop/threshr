@@ -173,7 +173,8 @@ See \code{\link{ithresh}} and/or
   data, in order that values resulting from different values of
   \eqn{\lambda} can be compared.
 
-  \strong{Setting \code{lambda}}.
+  \strong{Setting \code{lambda}}.  The function \code{\link{choose_b}}
+    can be used to extract results for a chosen value of \eqn{\lambda}.
 }
 \examples{
 # Note:
@@ -224,7 +225,11 @@ Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
   \url{http://dx.doi.org/10.1111/rssc.12159}
 }
 \seealso{
-\code{\link{ithresh}} for threshold selection in the i.i.d. case.
+\code{\link{ithresh}} for threshold selection in the i.i.d. case
+  (using \eqn{\lambda = 1}).
+
+\code{\link{choose_lambda}} to extract results for a chosen value
+  of \eqn{\lambda}.
 
 \code{\link[revdbayes]{rpost}} in the
   \code{\link[revdbayes]{revdbayes}} package for details of the arguments

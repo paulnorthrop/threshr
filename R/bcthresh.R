@@ -26,7 +26,8 @@
 #'   data, in order that values resulting from different values of
 #'   \eqn{\lambda} can be compared.
 #'
-#'   \strong{Setting \code{lambda}}.
+#'   \strong{Setting \code{lambda}}.  The function \code{\link{choose_b}}
+#'     can be used to extract results for a chosen value of \eqn{\lambda}.
 #' @return An object (list) of class \code{"bcthresh"}, containing the
 #'   components
 #'   \itemize{
@@ -76,7 +77,10 @@
 #'       (or \code{\link[revdbayes]{rpost}}) was called, including
 #'       any user-supplied arguments to these functions.
 #'   }
-#' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case.
+#' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
+#'   (using \eqn{\lambda = 1}).
+#' @seealso \code{\link{choose_lambda}} to extract results for a chosen value
+#'   of \eqn{\lambda}.
 #' @seealso \code{\link[revdbayes]{rpost}} in the
 #'   \code{\link[revdbayes]{revdbayes}} package for details of the arguments
 #'   that can be passed to
