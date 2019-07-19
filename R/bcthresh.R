@@ -18,7 +18,7 @@
 #' @param lambda A numeric vector containing values of the Box-Cox
 #'   transformation parameter \eqn{\lambda}.  See \strong{Details} for advice
 #'   on setting \code{lambda}.
-#' @details See \code{ithresh} and/or
+#' @details See \code{\link{ithresh}} and/or
 #'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
 #'   for details of the threshold selection algorithm that is applied
 #'   for a given value of \eqn{\lambda}.  The measure of predictive
@@ -27,7 +27,7 @@
 #'   \eqn{\lambda} can be compared.
 #'
 #'   \strong{Setting \code{lambda}}.
-#' @return An object (list) of class \code{"ithresh"}, containing the
+#' @return An object (list) of class \code{"bcthresh"}, containing the
 #'   components
 #'   \itemize{
 #'     \item{\code{pred_perf}:} A numeric array with dimensions
@@ -41,9 +41,13 @@
 #'       \eqn{\lambda} = \code{lambda[i]}.
 #'       Entries corresponding to cases where the training threshold is above
 #'       the validation threshold will be \code{NA}.
-#'     \item{\code{u_vec}:} The argument \code{u_vec} to \code{ithresh}.
-#'     \item{\code{v_vec}:} A numeric vector.  The validation thresholds
-#'       implied by the argument \code{n_v} to \code{ithresh}.
+#'     \item{\code{lambda}:} The argument \code{lambda} to \code{bcthresh}.
+#'     \item{\code{lngm}:} The natural log of the geometric mean of the raw
+#'       data \code{data}.
+#'     \item{\code{u_vec}:} A numeric vector. The training thresholds (that
+#'       would be) used for the raw data, i.e. when \eqn{\lambda = 1}.
+#'     \item{\code{v_vec}:} A numeric vector. The validation thresholds (that
+#'       would be) used for the raw data, i.e. when \eqn{\lambda = 1}.
 #'     \item{\code{u_ps}:} A numeric vector. The approximate levels of the
 #'       sample quantiles to which the values in \code{u_vec} correspond,
 #'       i.e. the approximate percentage of the data the lie at or below
@@ -152,6 +156,8 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   # Loop over the values in lambda
   # Save the raw_data
   raw_data <- data
+  lngm <- mean(log(raw_data))
+#  lngm <- 0
   n_lambda <- length(lambda)
   store_pred_perf <- array(dim = c(n_u, n_v, n_lambda))
   nsim <- list(...)$n
@@ -161,8 +167,6 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   store_sim_vals <- array(dim = c(n_u * nsim, 4, n_lambda))
   for (i in 1:n_lambda) {
     # Transform the data and the thresholds
-    lngm <- mean(log(raw_data))
-    lngm <- 0
     bc_data <- bc_gm(raw_data, lambda = lambda[i], lngm = lngm)
     bc_u_vec <- bc_gm(u_vec, lambda = lambda[i], lngm = lngm)
     bc_v_vec <- bc_gm(v_vec, lambda = lambda[i], lngm = lngm)
@@ -190,7 +194,12 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   temp$data <- data
   temp$pred_perf <- store_pred_perf
   temp$sim_vals <- store_sim_vals
-  class(temp) <- "ithresh"
+  temp$lambda <- lambda
+  temp$lngm <- lngm
+  # The vectors of training and validation thresholds on the original scale
+  temp$u_vec <- u_vec
+  temp$v_vec <- v_vec
+  class(temp) <- "bcthresh"
   return(temp)
 }
 
@@ -342,7 +351,7 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
     which_rows <- (1 + (i - 1) * n):(i * n)
     sim_vals[which_rows, ] <- cbind(theta, i)
   }
-  temp <- list(pred_perf = pred_perf, u_vec = u_vec, v_vec = v_vec,
+  temp <- list(pred_perf = pred_perf, #u_vec = u_vec, v_vec = v_vec,
                sim_vals = sim_vals, n = n, for_post = for_post,
                use_rcpp = use_rcpp)
   return(temp)
@@ -407,18 +416,6 @@ bcbloocv <- function(z, theta, theta_rm, u1, u2_vec, z_max, z_rm, n,
       w3 <- which(z_gt_u1 > u2_vec[k])
       fr3 <- temp[, w3, drop = FALSE]
       t3 <- 1 / colMeans(1 / fr3)
-#      # Use the Box-Cox Jacobian to make all predictions on the raw data scale
-#      if (lambda == 0) {
-#        print(exp(-z_gt_u1[w3] / gm) * gm)
-#        print((raw_rm_gt_u1[w3] / gm) ^ (lambda - 1))
-#        stop()
-#        t3 <- t3 * (raw_rm_gt_u1[w3] / gm) ^ (lambda - 1)
-#        t3 <- t3 * exp(-z_gt_u1[w3] / gm) * gm
-#      }
-#      if (lambda != 0) {
-#        t3 <- t3 * (lambda * gm ^ (lambda - 1) * z_gt_u1[w3] + 1) ^
-#          (1 - 1 / lambda) / gm ^ (lambda - 1)
-#      }
       t3 <- t3 * (raw_rm_gt_u1[w3] / gm) ^ (lambda - 1)
     }
     #
@@ -444,14 +441,6 @@ bcbloocv <- function(z, theta, theta_rm, u1, u2_vec, z_max, z_rm, n,
                       lin_max ^ pow2),
                0)
   t4 <- mean(p1 * t4 / sigma_1)
-#  # Use the Box-Cox Jacobian to make all predictions on the raw data scale
-#  if (lambda==0) {
-#    t4 <- t4 * exp(-z_max / gm) * gm
-#  }
-#  if (lambda!=0) {
-#    t4 <- t4 * (lambda * gm ^ (lambda - 1) * z_max + 1) ^ (1 - 1 / lambda) /
-#      gm ^ (lambda - 1)
-#  }
   t4 <- t4 * raw_z_max ^ (lambda - 1)
   #
   return(t123 + n_max * log(t4))

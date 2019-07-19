@@ -106,7 +106,7 @@ function to set the prior for GP parameters,
 the (slower) function \code{\link[revdbayes]{rpost}} is used.}
 }
 \value{
-An object (list) of class \code{"ithresh"}, containing the
+An object (list) of class \code{"bcthresh"}, containing the
   components
   \itemize{
     \item{\code{pred_perf}:} A numeric array with dimensions
@@ -120,9 +120,13 @@ An object (list) of class \code{"ithresh"}, containing the
       \eqn{\lambda} = \code{lambda[i]}.
       Entries corresponding to cases where the training threshold is above
       the validation threshold will be \code{NA}.
-    \item{\code{u_vec}:} The argument \code{u_vec} to \code{ithresh}.
-    \item{\code{v_vec}:} A numeric vector.  The validation thresholds
-      implied by the argument \code{n_v} to \code{ithresh}.
+    \item{\code{lambda}:} The argument \code{lambda} to \code{bcthresh}.
+    \item{\code{lngm}:} The natural log of the geometric mean of the raw
+      data \code{data}.
+    \item{\code{u_vec}:} A numeric vector. The training thresholds (that
+      would be) used for the raw data, i.e. when \eqn{\lambda = 1}.
+    \item{\code{v_vec}:} A numeric vector. The validation thresholds (that
+      would be) used for the raw data, i.e. when \eqn{\lambda = 1}.
     \item{\code{u_ps}:} A numeric vector. The approximate levels of the
       sample quantiles to which the values in \code{u_vec} correspond,
       i.e. the approximate percentage of the data the lie at or below
@@ -161,7 +165,7 @@ that is, a threshold that has a larger number of threshold excesses than
 for other values of \eqn{\lambda}.  For
 }
 \details{
-See \code{ithresh} and/or
+See \code{\link{ithresh}} and/or
   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
   for details of the threshold selection algorithm that is applied
   for a given value of \eqn{\lambda}.  The measure of predictive
