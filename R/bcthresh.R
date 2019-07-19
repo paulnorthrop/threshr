@@ -331,6 +331,7 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
       }
       temp <- do.call(gp_postsim, c(for_post, list(data = data, thresh = u)))
     }
+    for_post$init_ests <- NULL
     # Simulate from the bin-GP posterior after removal of the maximum value
     if (gp_prior$prior == "gp_flatflat") {
       temp_rm <- gp_mle(data_rm[data_rm > u] - u)
