@@ -192,7 +192,7 @@ prior_args <- list(prior = "flatflat", bin_prior = "haldane",
 gom_probs <- seq(0.1, 0.9, 0.1)
 gom_lambda <- seq(1, 3, 0.5)
 gom_args <- list(data = gom, probs = gom_probs, lambda = gom_lambda)
-gom_lambda <- do.call(bcthresh, c(gom_args, prior_args, n = 10000))
+gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
 
 ## North Sea significant wave heights -----------------------
 
