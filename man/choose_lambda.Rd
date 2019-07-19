@@ -6,6 +6,12 @@
 \usage{
 choose_lambda(x, lambda = 1)
 }
+\arguments{
+\item{x}{An object of class \code{"bcthresh"} returned from
+\code{\link{bcthresh}}.}
+
+\item{lambda}{A numeric scalar.  Must be contained in \code{x$lambda}.}
+}
 \value{
 An object of class \code{"ithresh"}.  See \code{\link{ithresh}}.
 }

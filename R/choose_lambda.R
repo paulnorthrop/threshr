@@ -5,6 +5,9 @@
 #' posterior samples obtained after a Box-Cox transformation of the data
 #' using a particular value of \eqn{\lambda}.
 #'
+#' @param x An object of class \code{"bcthresh"} returned from
+#'   \code{\link{bcthresh}}.
+#' @param lambda A numeric scalar.  Must be contained in \code{x$lambda}.
 #' @details The function simply extracts the relevant objects from \code{x}
 #'   and recreates the transformed data, training and validation thresholds
 #'   using the values of \code{lambda} and the normalizing constant
