@@ -311,11 +311,7 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
     if (gp_prior$prior == "gp_flatflat") {
       temp <- gp_mle(data[data > u] - u)
       if (!inherits(temp, "try-error")) {
-        init <- temp$mle * 0.95
-      }
-      temp <- gp_mle(data_rm[data_rm > u] - u)
-      if (!inherits(temp, "try-error")) {
-        init_rm <- temp$mle * 0.95
+        for_post$init_ests <- temp$mle * 0.95
       }
     }
     # If an error occurs (this can sometimes happen if there are few excesses)
@@ -325,8 +321,7 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
     # then try trans = "none".
     #
     # Simulate from (full) bin-GP posterior.
-    temp <- try(do.call(gp_postsim, c(for_post, list(data = data, thresh = u,
-                                                     init_ests = init))),
+    temp <- try(do.call(gp_postsim, c(for_post, list(data = data, thresh = u))),
                 silent = TRUE)
     if (inherits(temp, "try-error")) {
       if (is.null(for_post$trans) || for_post$trans == "none") {
@@ -334,13 +329,17 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
       } else {
         for_post$trans <- "none"
       }
-      temp <- do.call(gp_postsim, c(for_post, list(data = data, thresh = u,
-                                                   init_ests = init)))
+      temp <- do.call(gp_postsim, c(for_post, list(data = data, thresh = u)))
     }
     # Simulate from the bin-GP posterior after removal of the maximum value
+    if (gp_prior$prior == "gp_flatflat") {
+      temp <- gp_mle(data_rm[data_rm > u] - u)
+      if (!inherits(temp, "try-error")) {
+        for_post$init_ests <- temp$mle * 0.95
+      }
+    }
     temp_rm <- try(do.call(gp_postsim, c(for_post, list(data = data_rm,
-                                                        thresh = u,
-                                                        init_ests = init_rm))),
+                                                        thresh = u))),
                    silent = TRUE)
     if (inherits(temp_rm, "try-error")) {
       if (is.null(for_post$trans) || for_post$trans == "none") {
@@ -349,9 +348,9 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
         for_post$trans <- "none"
       }
       temp_rm <- do.call(gp_postsim, c(for_post, list(data = data_rm,
-                                                      thresh = u,
-                                                      init_ests = init_rm)))
+                                                      thresh = u)))
     }
+    for_post$init_ests <- NULL
     # Combine binomial and GP posterior simulated values.
     theta <- cbind(temp$bin_sim_vals, temp$sim_vals)
     theta_rm <- cbind(temp_rm$bin_sim_vals, temp_rm$sim_vals)
