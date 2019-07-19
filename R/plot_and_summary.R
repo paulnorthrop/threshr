@@ -124,7 +124,8 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
     }
     # Construct list of arguments for revdbayes::rpost_rcpp
     for_post <- c(x$for_post, list(data = x$data, thresh = x$u_vec[which_u]))
-    # Set n = 1 because we're not going to use the new sample
+    # Set n = 1 because we're not going to use the new sample. We already have
+    # the simulated values: we only need an object of class "evpost".
     for_post$n <- 1
     # Select the correct posterior simulation function
     if (x$use_rcpp) {
@@ -132,12 +133,17 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
     } else {
       gp_postsim <- revdbayes::rpost
     }
-    # I can use trans = "none" because I only want to
-    # If trans = "none" returns an error try trans = "BC"
+    # I can use trans = "none" because I only want to generate an object
+    # that has the correct structure
+    # If we get an error then change trans and try again
     temp <- tryCatch(
       do.call(gp_postsim, for_post),
       error = function(e) {
-        new_for_post <- c(for_post, trans = "BC")
+        if (is.null(for_post$trans) || for_post$trans == "none") {
+          new_for_post <- c(for_post, trans = "BC")
+        } else {
+          new_for_post <- c(for_post, trans = "none")
+        }
         do.call(gp_postsim, new_for_post)
       }
     )
