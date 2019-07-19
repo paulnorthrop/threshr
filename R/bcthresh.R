@@ -26,7 +26,7 @@
 #'   data, in order that values resulting from different values of
 #'   \eqn{\lambda} can be compared.
 #'
-#'   \strong{Setting \code{lambda}}.  The function \code{\link{choose_b}}
+#'   \strong{Setting \code{lambda}}.  The function \code{\link{choose_lambda}}
 #'     can be used to extract results for a chosen value of \eqn{\lambda}.
 #' @return An object (list) of class \code{"bcthresh"}, containing the
 #'   components
