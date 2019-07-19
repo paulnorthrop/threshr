@@ -31,15 +31,16 @@
 #'   components
 #'   \itemize{
 #'     \item{\code{pred_perf}:} A numeric array with dimensions
-#'     \code{length(probs)} (the number of training thresholds),
-#'     \code{length(n_v)} (the number of validation thresholds)
-#'     and \code{length(lambda)} (the number of value of \eqn{lambda}),
-#'     containing values of the measures predictive performance.
-#'     \code{pred_perf[ , , k]} is an \code{length(probs)} by
-#'     \code{length(n_v)} matrix resulting from the analysis that uses
-#'     \eqn{\lambda} = \code{lambda[k]}.
-#'     Entries corresponding to cases where the training threshold is above
-#'     the validation threshold will be \code{NA}.
+#'       \code{length(probs)} (the number of training thresholds),
+#'       \code{length(n_v)} (the number of validation thresholds)
+#'       and \code{length(lambda)} (the number of values of \eqn{lambda}),
+#'       containing the respective values of the measures predictive
+#'       performance.
+#'       \code{as.matrix(pred_perf[ , , i])} is an \code{length(probs)} by
+#'       \code{length(n_v)} matrix resulting from the analysis that uses
+#'       \eqn{\lambda} = \code{lambda[i]}.
+#'       Entries corresponding to cases where the training threshold is above
+#'       the validation threshold will be \code{NA}.
 #'     \item{\code{u_vec}:} The argument \code{u_vec} to \code{ithresh}.
 #'     \item{\code{v_vec}:} A numeric vector.  The validation thresholds
 #'       implied by the argument \code{n_v} to \code{ithresh}.
@@ -49,12 +50,15 @@
 #'       each element in \code{u_vec}.
 #'     \item{\code{v_ps}:} A numeric vector.  The values in \code{u_ps}
 #'       that correspond to the validation thresholds.
-#'     \item{\code{sim_vals}:} A numeric matrix with 4 columns and
-#'       \code{n} x \code{length(u_vec)} rows.  The \eqn{j}th block of
-#'       \code{n} rows contains in columns 1-3 the posterior samples of
-#'       the threshold exceedance probability, the GP scale
-#'       parameter and the GP shape parameter respectively, and in
-#'       column 4 the value of \eqn{j}.
+#'     \item{\code{sim_vals}:} A numeric array with dimensions
+#'     \code{n} x \code{length(u_vec)}, 4
+#'     and \code{length(lambda)}.
+#'     \code{as.matrix(sim_vals[ , , i])} is matrix in which the \eqn{j}th
+#'       block of \code{n} rows contains in columns 1-3 the posterior samples
+#'       of the threshold exceedance probability, the GP scale
+#'       parameter and the GP shape parameter respectively,
+#'       based on training threshold \code{u_vec[i]},
+#'       and in column 4 the value of \eqn{j}.
 #'     \item{\code{n}:} A numeric scalar.  The value of \code{n}.
 #'     \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
 #'     \item{\code{data}:} The argument \code{data} to \code{bcthresh}
@@ -96,7 +100,7 @@
 #'
 #' probs <- seq(0.1, 0.9, 0.4)
 #' lambda <- seq(1, 3, 0.5)
-#' gom_args <- list(data = gom, probs = probs, lambda = lambda)
+#' gom_args <- list(data = gom, probs = probs, lambda = lambda, n_v = 2)
 #' gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
 #'
 #' probs <- seq(0.1, 0.9, 0.4)
@@ -111,7 +115,7 @@
 #'   \url{http://dx.doi.org/10.1111/rssc.12159}
 #' @export
 bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
-                      use_rcpp = TRUE) {
+                     use_rcpp = TRUE) {
   # Store npy (if it has been supplied)
   if (!is.null(attr(data, "npy"))) {
     return_npy <- attr(data, "npy")
@@ -150,6 +154,11 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   raw_data <- data
   n_lambda <- length(lambda)
   store_pred_perf <- array(dim = c(n_u, n_v, n_lambda))
+  nsim <- list(...)$n
+  if (is.null(nsim)) {
+    nsim <- 1000
+  }
+  store_sim_vals <- array(dim = c(n_u * nsim, 4, n_lambda))
   for (i in 1:n_lambda) {
     # Transform the data and the thresholds
     lngm <- mean(log(raw_data))
@@ -161,6 +170,7 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
                     n_u = n_u, n_v = n_v, use_rcpp = use_rcpp,
                     raw_data = raw_data, lambda = lambda[i], lngm = lngm, ...)
     store_pred_perf[ , , i] <- temp$pred_perf
+    store_sim_vals[ , , i] <- temp$sim_vals
   }
   if (is.null(names(u_vec))) {
     temp$u_ps <- round(100 * sapply(u_vec, function(x) mean(data < x)))
@@ -179,6 +189,7 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   }
   temp$data <- data
   temp$pred_perf <- store_pred_perf
+  temp$sim_vals <- store_sim_vals
   class(temp) <- "ithresh"
   return(temp)
 }
