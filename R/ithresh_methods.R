@@ -332,7 +332,7 @@ summary.ithresh <- function(object, ...) {
 #'   \code{\link[base]{format}} and \code{\link[base:Round]{signif}}.
 #' @param ... Additional optional arguments. At present no optional
 #'   arguments are used.
-#' @details Prints the call and a matrix of the estimates threshold weights.
+#' @details Prints a matrix of the estimated threshold weights.
 #'   Each row gives the weights for each training threshold for a given
 #'   validation threshold.  The row and column names are the approximate
 #'   quantile levels of the thresholds.
@@ -351,8 +351,6 @@ print.ithresh <- function(x, digits = 2, ...) {
   if (!inherits(x, "ithresh")) {
     stop("use only with \"ithresh\" objects")
   }
-  cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"),
-      "\n\n", sep = "")
   # Numbers of training and validation thresholds
   n_u <- length(x$u_vec)
   n_v <- length(x$v_vec)
@@ -364,7 +362,7 @@ print.ithresh <- function(x, digits = 2, ...) {
   rownames(tw) <- x$u_ps
   colnames(tw) <- x$v_ps
   cat("Threshold weights:\n")
-  print.default(format(t(tw), digits = digits), print.gap = 2L,
+  print.default(format(t(tw), digits = digits), print.gap = 1L,
                 quote = FALSE)
   return(invisible(x))
 }
