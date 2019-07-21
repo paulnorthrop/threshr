@@ -242,3 +242,146 @@ gp_profxi <- function (z, xlow, xup, conf = 0.95, nint = 100,
   }
   return(c(low_lim, up_lim))
 }
+
+# =========================== plot.stability ===========================
+
+#' Plot diagnostics for a stability object
+#'
+#' \code{plot} method for objects of class "stability" returned from
+#' \code{\link{stability}}
+#'
+#' @param x an object of class "stability", a result of a call to
+#'   \code{\link{stability}}.
+#' @param y Not used.
+#' @param prob A logical scalar.  If \code{TRUE} then the levels of thresholds
+#'   on the lower horizontal axis are represented by the proportion of
+#'   observations that lie below a threshold.  If \code{prob = FALSE} then the
+#'   values of the thresholds are used.
+#' @param top_scale A character scalar.
+#'   If \code{top_scale = "none"} then no axis labels appear on the upper
+#'   horizontal axis.
+#'   If \code{top_scale = "excesses"} then the number of threshold excesses
+#'   at each threshold are indicated.
+#'   If \code{top_scale = "opposite"} then the type of threshold level
+#'   \emph{not} chosen using \code{prob} is indicated.
+#' @param vertical A logical scalar.  Should the confidence intervals be
+#'   depicted using a vertical line for each threshold (\code{TRUE}) or by
+#'   joining up confidence limits across thresholds (\code{FALSE})?
+#' @param ... Additional arguments passed on to
+#'   \code{\link[graphics]{matplot}}, \code{\link[graphics]{axis}}
+#'   and/or \code{\link[graphics]{segments}}.
+#' @details Produces a simple threshold diagnostic plot based on the object
+#'   returned from \code{\link{stability}}.
+#'   The MLEs of the GP shape parameter $\eqn{\xi}$ and
+#'   approximate \code{conf}\% confidence intervals
+#'   for \eqn{\xi} are plotted against the threshold used to fit the GP model.
+#'   This plot is used to choose a threshold above which the underlying GP
+#'   shape parameter may be approximately constant. See Chapter 4 of
+#'   Coles (2001).  See also the vignette "Introducing threshr".
+#'   as described in .
+#'   See also the vignette "Introducing threshr".
+#' @return In addition to producing the plot a list of the arguments used
+#'   by \code{\link[graphics]{matplot}}, \code{\link[graphics]{axis}} is
+#'   returned (invisibly).
+#' @seealso \code{\link{stability}}.
+#' @examples
+#' u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
+#' gom_stab <- stability(data = gom, u_vec = u_vec_gom)
+#' plot(gom_stab)
+#' @export
+plot.stability <- function(x, y, ..., prob = TRUE,
+                           top_scale = c("none", "excesses", "opposite"),
+                           vertical = TRUE) {
+  if (!inherits(x, "stability")) {
+    stop("use only with \"stability\" objects")
+  }
+  top_scale <- match.arg(top_scale)
+  y_data <- cbind(x$lower, x$ests, x$upper)
+  y_lab <- expression(xi)
+  if (prob) {
+    x_data <- x$u_ps
+    t_data <- x$u_vec
+    x_lab <- "quantile of training threshold / %"
+  } else {
+    x_data <- x$u_vec
+    t_data <- x$u_ps
+    x_lab <- "threshold"
+  }
+  if (top_scale == "excesses") {
+    t_data <- x$nexc
+  }
+  xy_args <- list(x = x_data, y = y_data)
+  # Look for user-supplied arguments to matplot.
+  user_args <- list(...)
+  m_cond <- names(user_args) %in% methods::formalArgs(graphics::matplot)
+  a_cond <- names(user_args) %in% methods::formalArgs(graphics::axis)
+  s_cond <- names(user_args) %in% methods::formalArgs(graphics::segments)
+  matplot_args <- user_args[!a_cond | m_cond]
+  axis_args <- user_args[!m_cond | a_cond]
+  segments_args <- user_args[s_cond]
+  axis_args$col <- 1
+  if (is.null(matplot_args$xlab)) {
+    matplot_args$xlab <- x_lab
+  }
+  if (is.null(matplot_args$ylab)) {
+    matplot_args$ylab <- y_lab
+  }
+  if (is.null(matplot_args$type)) {
+    matplot_args$type <- c("l", "b", "l")
+  }
+  if (is.null(matplot_args$pch)) {
+    matplot_args$pch <- c(0, 16, 0)
+  }
+  if (is.null(matplot_args$col)) {
+    matplot_args$col <- 1
+  }
+  if (is.null(matplot_args$lty)) {
+    if (vertical) {
+      matplot_args$lty <- c(0, 1, 0)
+    } else {
+      matplot_args$lty <- c(2, 1, 2)
+    }
+  }
+  all_args <- c(xy_args, matplot_args)
+  do.call(graphics::matplot, c(all_args, axes = FALSE))
+  if (vertical) {
+    segments_args$x0 <- x_data
+    segments_args$x1 <- x_data
+    segments_args$y0 <- x$lower
+    segments_args$y1 <- x$upper
+    do.call(graphics::segments, segments_args)
+  }
+  axis_args$side <- 2
+  do.call(graphics::axis, axis_args)
+  axis_args$side <- 1
+  axis_args$at <- pretty(x_data)
+  do.call(graphics::axis, axis_args)
+  if (!is.null(axis_args$lwd)) {
+    graphics::box(lwd = axis_args$lwd)
+  } else {
+    graphics::box()
+  }
+  # Add top scale?
+  if (top_scale != "none") {
+    axis_args$side <- 3
+    if (top_scale == "excesses") {
+      axis_args$labels <- t_data
+      axis_args$at <- x_data
+    } else {
+      if (prob) {
+        x_pos <- c(pretty(x_data), max(x_data))
+        axis_args$at <- x_pos
+        axis_args$labels <- signif(stats::quantile(x$data, probs = x_pos
+                                                   / 100), 2)
+      } else {
+        top_vals <- pretty(t_data)
+        top_vals <- unique(c(top_vals, max(x$u_ps)))
+        axis_args$at <- stats::quantile(x$data, probs = top_vals / 100)
+        axis_args$labels <- top_vals
+      }
+    }
+    do.call(graphics::axis, axis_args)
+  }
+  return(invisible(list(matplot_args = matplot_args, axis_args = axis_args)))
+}
+
