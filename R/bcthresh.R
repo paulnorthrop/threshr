@@ -76,7 +76,7 @@
 #'       \code{\link[revdbayes]{rpost_rcpp}}
 #'       (or \code{\link[revdbayes]{rpost}}) was called, including
 #'       any user-supplied arguments to these functions.
-#'     \item{call}{The call to \code{bcthresh}.}
+#'     \item{\code{call:}} The call to \code{bcthresh}.
 #'   }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   (using \eqn{\lambda = 1}).

@@ -154,7 +154,7 @@ An object (list) of class \code{"bcthresh"}, containing the
       \code{\link[revdbayes]{rpost_rcpp}}
       (or \code{\link[revdbayes]{rpost}}) was called, including
       any user-supplied arguments to these functions.
-    \item{call}{The call to \code{bcthresh}.}
+    \item{\code{call:}} The call to \code{bcthresh}.
   }
 }
 \description{

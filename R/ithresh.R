@@ -155,7 +155,7 @@
 #'       \code{\link[revdbayes]{rpost_rcpp}}
 #'       (or \code{\link[revdbayes]{rpost}}) was called, including
 #'       any user-supplied arguments to these functions.
-#'     \item{call}{The call to \code{ithresh}.}
+#'     \item{\code{call:}} The call to \code{ithresh}.
 #'   }
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
 #'   class \code{ithresh}.
