@@ -155,6 +155,7 @@
 #'       \code{\link[revdbayes]{rpost_rcpp}}
 #'       (or \code{\link[revdbayes]{rpost}}) was called, including
 #'       any user-supplied arguments to these functions.
+#'     \item{call}{The call to \code{ithresh}.}
 #'   }
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
 #'   class \code{ithresh}.
@@ -237,6 +238,8 @@
 #'   \url{http://dx.doi.org/10.1016/j.oceaneng.2013.01.004}
 #' @export
 ithresh <- function(data, u_vec, ..., n_v = 1, npy = NULL, use_rcpp = TRUE) {
+  # Record the call for later use
+  Call <- match.call()
   # Store npy (if it has been supplied)
   if (!is.null(attr(data, "npy"))) {
     return_npy <- attr(data, "npy")
@@ -282,6 +285,7 @@ ithresh <- function(data, u_vec, ..., n_v = 1, npy = NULL, use_rcpp = TRUE) {
     temp$npy <- return_npy
   }
   temp$data <- data
+  temp$call <- Call
   class(temp) <- "ithresh"
   return(temp)
 }

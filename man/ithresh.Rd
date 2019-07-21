@@ -136,6 +136,7 @@ An object (list) of class \code{"ithresh"}, containing the
       \code{\link[revdbayes]{rpost_rcpp}}
       (or \code{\link[revdbayes]{rpost}}) was called, including
       any user-supplied arguments to these functions.
+    \item{call}{The call to \code{ithresh}.}
   }
 }
 \description{

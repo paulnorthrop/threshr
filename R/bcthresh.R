@@ -76,6 +76,7 @@
 #'       \code{\link[revdbayes]{rpost_rcpp}}
 #'       (or \code{\link[revdbayes]{rpost}}) was called, including
 #'       any user-supplied arguments to these functions.
+#'     \item{call}{The call to \code{bcthresh}.}
 #'   }
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   (using \eqn{\lambda = 1}).
@@ -138,6 +139,8 @@
 #' @export
 bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
                      use_rcpp = TRUE) {
+  # Record the call for later use
+  Call <- match.call()
   # Store npy (if it has been supplied)
   if (!is.null(attr(data, "npy"))) {
     return_npy <- attr(data, "npy")
@@ -217,6 +220,7 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   # The vectors of training and validation thresholds on the original scale
   temp$u_vec <- u_vec
   temp$v_vec <- v_vec
+  temp$call <- Call
   class(temp) <- "bcthresh"
   return(temp)
 }
