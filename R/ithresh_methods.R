@@ -94,6 +94,7 @@
 #'   based on leave-one-out cross-validation.
 #' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
 #'   predictive performance.
+#' @seealso \code{\link{print.ithresh}} Prints the threshold weights.
 #' @seealso \code{\link{predict.ithresh}} for predictive inference for the
 #'   largest value observed in N years.
 #' @export
@@ -303,6 +304,7 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
 #'   based on leave-one-out cross-validation.
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
 #'   class \code{ithresh}.
+#' @seealso \code{\link{print.ithresh}} Prints the threshold weights.
 #' @export
 summary.ithresh <- function(object, ...) {
   if (!inherits(object, "ithresh")) {
@@ -336,7 +338,14 @@ summary.ithresh <- function(object, ...) {
 #'   quantile levels of the thresholds.
 #' @return The argument \code{x}, invisibly, as for all
 #'   \code{\link[base]{print}} methods.
-#' @seealso \code{\link{gevreg}} GEV generalized linear regression modelling.
+#' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
+#'   based on leave-one-out cross-validation.
+#' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
+#'   predictive performance.
+#' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
+#'   class \code{ithresh}.
+#' @seealso \code{\link{predict.ithresh}} for predictive inference for the
+#'   largest value observed in N years.
 #' @export
 print.ithresh <- function(x, digits = 2, ...) {
   if (!inherits(x, "ithresh")) {

@@ -44,4 +44,6 @@ summary(gom_cv)
 
 \code{\link{plot.ithresh}} for the S3 plot method for objects of
   class \code{ithresh}.
+
+\code{\link{print.ithresh}} Prints the threshold weights.
 }
