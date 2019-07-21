@@ -412,7 +412,6 @@ plot.stability <- function(x, y, ..., prob = TRUE,
   return(invisible(list(matplot_args = matplot_args, axis_args = axis_args)))
 }
 
-
 # ============================== summary.ithresh ==============================
 
 #' Summarizing measures of threshold predictive performance
@@ -459,6 +458,48 @@ summary.ithresh <- function(object, ...) {
   rownames(res) <- 1:length(object$v_vec)
   colnames(res) <- c("v", "v quantile", "best u", "best u quantile", "index of u_vec")
   return(res)
+}
+
+# ================================ print.ithresh =============================
+
+#' Print method for objects of class "ithresh"
+#'
+#' \code{print} method for class "ithresh".
+#'
+#' @param x an object inheriting from class "ithresh", a result of a call to
+#'   \code{\link{ithresh}}.
+#' @param digits An integer. Used for number formatting with
+#'   \code{\link[base]{format}} and \code{\link[base:Round]{signif}}.
+#' @param ... Additional optional arguments. At present no optional
+#'   arguments are used.
+#' @details Prints the call and a matrix of the estimates threshold weights.
+#'   Each row gives the weights for each training threshold for a given
+#'   validation threshold.  The row and column names are the approximate
+#'   quantile levels of the thresholds.
+#' @return The argument \code{x}, invisibly, as for all
+#'   \code{\link[base]{print}} methods.
+#' @seealso \code{\link{gevreg}} GEV generalized linear regression modelling.
+#' @export
+print.ithresh <- function(x, digits = 2, ...) {
+  if (!inherits(x, "ithresh")) {
+    stop("use only with \"ithresh\" objects")
+  }
+  cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"),
+      "\n\n", sep = "")
+  # Numbers of training and validation thresholds
+  n_u <- length(x$u_vec)
+  n_v <- length(x$v_vec)
+  # Calculate threshold weights
+  shoof <- matrix(colMeans(x$pred_perf * !is.infinite(x$pred_perf),
+                           na.rm = TRUE), ncol = n_v, nrow = n_u,
+                  byrow = TRUE)
+  tw <- apply(exp(x$pred_perf - shoof), 2, function(x) x / sum(x, na.rm =TRUE))
+  rownames(tw) <- x$u_ps
+  colnames(tw) <- x$v_ps
+  cat("Threshold weights:\n")
+  print.default(format(t(tw), digits = digits), print.gap = 2L,
+                quote = FALSE)
+  return(invisible(x))
 }
 
 # =========================== plot.ithreshpred ===========================
