@@ -107,7 +107,7 @@
 #'
 #' gprobs <- seq(0.1, 0.9, 0.1)
 #' glambda <- seq(1, 3, 0.5)
-#' gom_args <- list(data = gom, probs = gom_probs, lambda = glambda, n_v = 2)
+#' gom_args <- list(data = gom, probs = gprobs, lambda = glambda, n_v = 2)
 #' gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
 #'
 #' ## North Sea significant wave heights -----------------------
