@@ -73,7 +73,7 @@ to produce a crude graphical diagnostic for threshold choice.
 For each threshold in \code{u_vec} a GP model is fitted by maximum
   likelihood estimation to the threshold excesses, i.e. the amounts
   by which the data exceed that threshold.  The MLEs of the GP shape
-  parameter $\eqn{\xi}$ and approximate \code{conf}\% confidence intervals
+  parameter \eqn{\xi} and approximate \code{conf}\% confidence intervals
   for \eqn{\xi} are stored for plotting (by \code{\link{plot.stability}})
   to produce a simple graphical diagnostic to inform threshold selection.
   This plot is used to choose a threshold above which the underlying GP
