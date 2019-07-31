@@ -177,8 +177,8 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   # Loop over the values in lambda
   # Save the raw_data
   raw_data <- data
-  lngm <- mean(log(raw_data))
-#  lngm <- 0
+#  lngm <- mean(log(raw_data))
+  lngm <- 0
   n_lambda <- length(lambda)
   store_pred_perf <- array(dim = c(n_u, n_v, n_lambda))
   nsim <- list(...)$n
