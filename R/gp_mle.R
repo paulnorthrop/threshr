@@ -1,3 +1,10 @@
+diag_pos <- function(x) {
+  # Diagonal elements of a matrix, returning NA for any negative values
+  y <- diag(x)
+  y[y < 0] <- NA
+  return(y)
+}
+
 # =========================== gp_mle ===========================
 
 gp_mle <- function(gp_data) {
@@ -29,7 +36,7 @@ gp_mle <- function(gp_data) {
   temp$nllh <- sum(log(sc)) + sum(log(1 + xi * gp_data / sc) * (1 / xi + 1))
   gp_info <- gp_obs_info(temp$mle, gp_data)
   temp$cov <- solve(gp_info)
-  temp$se <- sqrt(diag(temp$cov))
+  temp$se <- sqrt(diag_pos(temp$cov))
   return(temp)
 }
 
