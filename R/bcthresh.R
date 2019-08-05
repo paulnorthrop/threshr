@@ -27,7 +27,7 @@
 #'   \eqn{\lambda} can be compared.
 #'
 #'   Add advice (and convenience function?) for using \code{\link{stability}}
-#'   to set the argument \code{\lambda}.
+#'   to set the argument \code{lambda}.
 #'
 #'   \strong{Setting \code{lambda}}.  The function \code{\link{choose_lambda}}
 #'     can be used to extract results for a chosen value of \eqn{\lambda}.
