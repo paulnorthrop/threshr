@@ -7,7 +7,7 @@
 #' transformation.  The general aim is to seek a Box-Cox transformation
 #' parameter \eqn{\lambda} for which we can set a relatively low threshold,
 #' that is, a threshold that has a larger number of threshold excesses than
-#' for other values of \eqn{\lambda}.  For
+#' for other values of \eqn{\lambda}.
 #'
 #' @inheritParams ithresh
 #' @param probs A numeric vector of non-exceedance probabilities in [0, 1).
@@ -25,6 +25,9 @@
 #'   performance is calculated on the scale of the raw (\eqn{\lambda = 1})
 #'   data, in order that values resulting from different values of
 #'   \eqn{\lambda} can be compared.
+#'
+#'   Add advice (and convenience function?) for using \code{\link{stability}}
+#'   to set the argument \code{\lambda}.
 #'
 #'   \strong{Setting \code{lambda}}.  The function \code{\link{choose_lambda}}
 #'     can be used to extract results for a chosen value of \eqn{\lambda}.
@@ -126,16 +129,19 @@
 #' x <- exp(y)
 #' exp_args <- list(data = x, probs = eprobs, lambda = elambda)
 #' log_exp <- do.call(bcthresh, c(exp_args, prior_args))
+#' @references Box, G. and Cox, D. R. (1964) An Analysis of Transformations.
+#'  Journal of the Royal Statistical Society. Series B (Methodological), 26(2),
+#'  211-252, \url{https://www.jstor.org/stable/2984418}.
 #' @references Jonathan, P. and Ewans, K. (2013) Statistical modelling
 #'   of extreme ocean environments for marine design : a review.
 #'   \emph{Ocean Engineering}, \strong{62}, 91-109.
-#'   \url{http://dx.doi.org/10.1016/j.oceaneng.2013.01.004}
+#'   \url{https://doi.org/10.1016/j.oceaneng.2013.01.004}
 #' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
 #'   Cross-validatory extreme value threshold selection and uncertainty
 #'   with application to ocean storm severity.
 #'   \emph{Journal of the Royal Statistical Society Series C: Applied
 #'   Statistics}, \strong{66}(1), 93-120.
-#'   \url{http://dx.doi.org/10.1111/rssc.12159}
+#'   \url{https://doi.org/10.1111/rssc.12159}
 #' @export
 bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
                      use_rcpp = TRUE) {
