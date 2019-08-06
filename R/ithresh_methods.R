@@ -15,8 +15,8 @@
 #'
 #'   If \code{which_u} is not supplied (a threshold diagnostic plot is
 #'   required) \code{which_v} specifies the validation thresholds, that
-#'   is the indices of the argument \code{v_vec} to \code{\link{ithresh}},
-#'   to include in the plot.
+#'   is, a vector of the indices of the argument \code{v_vec} to
+#'   \code{\link{ithresh}}, to include in the plot.
 #'
 #'   If \code{which_u} is supplied (a plot of a posterior sample for a given
 #'   threshold is required) then \code{which_v} is a numeric scalar
@@ -105,21 +105,21 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
     stop("use only with \"ithresh\" objects")
   }
   n_u <- length(x$u_vec)
-  n_v <- length(x$v_vec)
-  # Check that which_v is admissible
-  if (is.null(which_v)) {
-    which_v <- 1L
-  } else {
-    if (!is.numeric(which_v) || !(which_v %in% 1:n_v)) {
-      stop("'which_v' must be in 1:length(object$v_vec)")
-    }
-  }
   # If which_u is supplied then produce a plot of the bin-GP posterior sample
   # using threshold x$u_vec[which_u].
   if (!is.null(which_u)) {
     # Check that which_u is admissible
     if (!(which_u %in% 1:n_u) & which_u != "best") {
       stop("'which_u' must be ''best'' or in 1:length(object$u_vec)")
+    }
+    # Check that which_v is admissible
+    n_v <- length(x$v_vec)
+    if (is.null(which_v)) {
+      which_v <- 1L
+    } else {
+      if (!is.numeric(which_v) || !(which_v %in% 1:n_v)) {
+        stop("'which_v' must be in 1:length(object$v_vec)")
+      }
     }
     if (which_u == "best") {
       which_u <- which.max(x$pred_perf[, which_v])
