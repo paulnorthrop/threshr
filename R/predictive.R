@@ -74,6 +74,9 @@
 #' }
 #'   If \code{which_u = "all"} then only \code{type = "p"} or \code{type = "d"}
 #'   are allowed.
+#' @param hpd A logical scalar.  The argument \code{hpd} of
+#'   \code{\link[revdbayes]{predict.evpost}}. Only relevant if
+#'   \code{type = "i"}.
 #' @param x A numeric vector.  The argument \code{x} of
 #'   \code{\link[revdbayes]{predict.evpost}}.  In the current context this
 #'   must be a vector (not a matrix, as suggested by the documentation of
@@ -135,6 +138,10 @@
 #' best_d <- predict(gom_cv, type = "d", n_years = c(100, 1000))
 #' plot(best_d)
 #'
+#' # Predictive intervals
+#' best_i <- predict(gom_cv, n_years = c(100, 1000), type = "i", hpd = TRUE)
+#' plot(best_i, which_int = "both")
+#'
 #' # See which threshold was used
 #' summary(gom_cv)
 #'
@@ -161,7 +168,8 @@
 predict.ithresh <- function(object, npy = NULL, n_years = 100,
                             which_u = c("best", "all"), which_v = 1L,
                             u_prior = rep(1, length(object$u_vec)),
-                            type = c("p", "d", "q", "i", "r"), x = NULL, ...) {
+                            type = c("p", "d", "q", "i", "r"), hpd = FALSE,
+                            x = NULL, ...) {
   if (!inherits(object, "ithresh")) {
     stop("object must be of class ''ithresh'', produced by ithresh()")
   }
@@ -223,7 +231,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
     evpost_obj$thresh <- object$u_vec[best_u]
     for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
-                               npy = npy, type = type, x = x)
+                               npy = npy, type = type, hpd = hpd, x = x)
     ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
   }
   if (which_u == "all") {
@@ -245,7 +253,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
     evpost_obj$thresh <- object$u_vec[best_u]
     for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
-                               npy = npy, type = type, x = x)
+                               npy = npy, type = type, hpd = hpd, x = x)
     ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
     x_vals <- ret_obj$x
     others <- (1:n_t)[-best_u]
@@ -259,7 +267,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
       evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
       evpost_obj$thresh <- object$u_vec[i]
       for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
-                                 npy = npy, type = type, x = x_vals)
+                                 npy = npy, type = type, hpd = hpd, x = x_vals)
       temp <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
       y_val[, 1 + i] <- temp$y
     }
