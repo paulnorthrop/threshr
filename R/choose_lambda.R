@@ -16,6 +16,7 @@
 #'   for which \code{plot}, \code{summary} and \code{predict} methods are
 #'   available.
 #' @return An object of class \code{"ithresh"}.  See \code{\link{ithresh}}.
+#'   In addition, the input \code{lambda} is added to this returned list.
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
 #'   class \code{ithresh}.
 #' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
@@ -54,8 +55,8 @@ choose_lambda <- function(x, lambda = 1) {
   x$data <- bc_gm(x$data, lambda = lambda, lngm = x$lngm)
   x$u_vec <- bc_gm(x$u_vec, lambda = lambda, lngm = x$lngm)
   x$v_vec <- bc_gm(x$v_vec, lambda = lambda, lngm = x$lngm)
+  x$lambda <- lambda
   # Remove things that are not in "ithresh" objects, just in case
-  x$lambda <- NULL
   x$lngm <- NULL
   class(x) <- "ithresh"
   return(x)

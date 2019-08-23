@@ -31,8 +31,8 @@
 #'
 #'   \strong{Setting \code{lambda}}.  The function \code{\link{choose_lambda}}
 #'     can be used to extract results for a chosen value of \eqn{\lambda}.
-#' @return An object (list) of class \code{"bcthresh"}, containing the
-#'   components
+#' @return An object (list) of class \code{c("bcthresh", "ithresh")},
+#'   containing the components
 #'   \itemize{
 #'     \item{\code{pred_perf}:} A numeric array with dimensions
 #'       \code{length(probs)} (the number of training thresholds),
@@ -123,7 +123,7 @@
 #' # Exponentiated exponential data ----------------------------
 #'
 #' eprobs <- seq(0, 0.9, 0.1)
-#' elambda <- seq(0, 1, 0.5)
+#' elambda <- seq(-0.5, 0.5, 0.5)
 #' set.seed(49)
 #' y <- rexp(1000)
 #' x <- exp(y)
@@ -227,7 +227,7 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   temp$u_vec <- u_vec
   temp$v_vec <- v_vec
   temp$call <- Call
-  class(temp) <- "bcthresh"
+  class(temp) <- c("bcthresh", "ithresh")
   return(temp)
 }
 

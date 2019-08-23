@@ -14,6 +14,7 @@ choose_lambda(x, lambda = 1)
 }
 \value{
 An object of class \code{"ithresh"}.  See \code{\link{ithresh}}.
+  In addition, the input \code{lambda} is added to this returned list.
 }
 \description{
 Extract from an object of class \code{"bcthresh"} returned from

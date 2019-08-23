@@ -13,7 +13,8 @@
 #' prior probability but the user can specify their own prior.
 #'
 #' @param object An object of class "ithresh", a result of a call to
-#'   \code{\link{ithresh}}.
+#'   \code{\link{ithresh}} or \code{\link{choose_lambda}}, or an object of
+#'   class "bcthresh", a result of a call to \code{\link{bcthresh}}.
 #' @param npy A numeric scalar. The mean number of observations per year
 #'   of data, after excluding any missing values, i.e. the number of
 #'   non-missing observations divided by total number of years of non-missing
@@ -83,6 +84,9 @@
 #'   \code{\link[revdbayes]{predict.evpost}}).  If \code{x} is not supplied
 #'   then a default value is set within
 #'   \code{\link[revdbayes]{predict.evpost}}.
+#' @param lambda A numeric scalar.  Only relevant if \code{object} was
+#'   returned from \code{\link{bcthresh}} or \code{\link{choose_lambda}}.
+#' Must be contained in \code{object$lambda}.
 #' @param ... Additional optional arguments. At present no optional arguments
 #'   are used.
 #' @details The function \code{\link[revdbayes]{predict.evpost}} is used to
@@ -99,6 +103,9 @@
 #'   \code{which_v} and the index \code{best_u} in
 #'   \code{u_vec = object$u_vec} of the best training threshold based on
 #'   the value of \code{which_v}.
+#'   It also contains the value of the Box-Cox transformation parameter
+#'   \code{lambda}.  This will always be equal to 1 if \code{object} was
+#'   returned from \code{ithresh}.
 #'
 #'   If \code{which_u == "all"} then
 #' \itemize{
@@ -169,9 +176,35 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
                             which_u = c("best", "all"), which_v = 1L,
                             u_prior = rep(1, length(object$u_vec)),
                             type = c("p", "d", "q", "i", "r"), hpd = FALSE,
-                            x = NULL, ...) {
-  if (!inherits(object, "ithresh")) {
-    stop("object must be of class ''ithresh'', produced by ithresh()")
+                            x = NULL, lambda = 1, ...) {
+  if (!inherits(object, "ithresh") && !inherits(object, "bcthresh")) {
+    stop("object must be of class ''ithresh'' or ''bcthresh''")
+  }
+  # From which function was object returned?
+  if (inherits(object, "bcthresh")) {
+    fn_object <- "bcthresh"
+  } else if (is.null(object$lambda)) {
+    fn_object <- "ithresh"
+  } else {
+    fn_object <- "choose_lambda"
+  }
+  # lambda is irrelevant if object was returned from ithresh()
+  if (fn_object == "ithresh" && !missing(lambda)) {
+    stop("lambda is not relevant for objects returned from ithresh()")
+  }
+  # If object was returned from bcthresh() then lambda must be supplied,
+  # directly or via choose_lambda().  If it is supplied then call
+  # choose_lambda() to extract the required information.
+  if (fn_object == "bcthresh") {
+    if (missing(lambda)) {
+      stop("lambda must be supplied, or chosen using choose_lambda()")
+    } else {
+      object <- choose_lambda(object, lambda = lambda)
+    }
+  }
+  # If object was returned from choose_lambda then we use object$lambda
+  if (fn_object == "choose_lambda") {
+    lambda <- object$lambda
   }
   # Numbers of training and validation thresholds
   n_u <- length(object$u_vec)
@@ -282,6 +315,39 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   ret_obj$which_v <- which_v
   ret_obj$v_vec <- object$v_vec
   ret_obj$best_u <- return_best_u
+  # Add the chosen value of lambda
+  ret_obj$lambda <- lambda
+  # If object was returned from bcthresh() or choose_lambda() then transform
+  # back to the original scale
+  if (fn_object == "bcthresh" || fn_object == "choose_lambda") {
+    if (ret_obj$type == "p" || ret_obj$type == "d") {
+      if (lambda == 0) {
+        ret_obj$x <- log(ret_obj$x)
+      } else {
+        ret_obj$x <- (lambda * ret_obj$x + 1) ^ (1 / lambda)
+      }
+    }
+    if (ret_obj$type == "q" || ret_obj$type == "r") {
+      if (lambda == 0) {
+        ret_obj$y <- log(ret_obj$y)
+      } else {
+        ret_obj$y <- (lambda * ret_obj$y + 1) ^ (1 / lambda)
+      }
+    }
+    if (ret_obj$type == "i") {
+      if (lambda == 0) {
+        ret_obj$long[, c("lower", "upper")] <-
+          log(ret_obj$long[, c("lower", "upper")])
+        ret_obj$short[, c("lower", "upper")] <-
+          log(ret_obj$short[, c("lower", "upper")])
+      } else {
+        ret_obj$long[, c("lower", "upper")] <-
+          (lambda * ret_obj$long[, c("lower", "upper")] + 1) ^ (1 / lambda)
+        ret_obj$short[, c("lower", "upper")] <-
+          (lambda * ret_obj$short[, c("lower", "upper")] + 1) ^ (1 / lambda)
+      }
+    }
+  }
   class(ret_obj) <- "ithreshpred"
   return(invisible(ret_obj))
 }

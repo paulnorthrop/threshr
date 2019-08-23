@@ -7,11 +7,12 @@
 \method{predict}{ithresh}(object, npy = NULL, n_years = 100,
   which_u = c("best", "all"), which_v = 1L, u_prior = rep(1,
   length(object$u_vec)), type = c("p", "d", "q", "i", "r"),
-  hpd = FALSE, x = NULL, ...)
+  hpd = FALSE, x = NULL, lambda = 1, ...)
 }
 \arguments{
 \item{object}{An object of class "ithresh", a result of a call to
-\code{\link{ithresh}}.}
+\code{\link{ithresh}} or \code{\link{choose_lambda}}, or an object of
+class "bcthresh", a result of a call to \code{\link{bcthresh}}.}
 
 \item{npy}{A numeric scalar. The mean number of observations per year
 of data, after excluding any missing values, i.e. the number of
@@ -90,6 +91,10 @@ must be a vector (not a matrix, as suggested by the documentation of
 then a default value is set within
 \code{\link[revdbayes]{predict.evpost}}.}
 
+\item{lambda}{A numeric scalar.  Only relevant if \code{object} was
+  returned from \code{\link{bcthresh}} or \code{\link{choose_lambda}}.
+Must be contained in \code{object$lambda}.}
+
 \item{...}{Additional optional arguments. At present no optional arguments
 are used.}
 }
@@ -102,6 +107,9 @@ An list object of class "ithreshpred" with a similar structure to
   \code{which_v} and the index \code{best_u} in
   \code{u_vec = object$u_vec} of the best training threshold based on
   the value of \code{which_v}.
+  It also contains the value of the Box-Cox transformation parameter
+  \code{lambda}.  This will always be equal to 1 if \code{object} was
+  returned from \code{ithresh}.
 
   If \code{which_u == "all"} then
 \itemize{

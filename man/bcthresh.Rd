@@ -106,8 +106,8 @@ function to set the prior for GP parameters,
 the (slower) function \code{\link[revdbayes]{rpost}} is used.}
 }
 \value{
-An object (list) of class \code{"bcthresh"}, containing the
-  components
+An object (list) of class \code{c("bcthresh", "ithresh")},
+  containing the components
   \itemize{
     \item{\code{pred_perf}:} A numeric array with dimensions
       \code{length(probs)} (the number of training thresholds),
@@ -208,7 +208,7 @@ ns_lambda <- do.call(bcthresh, c(ns_args, prior_args))
 # Exponentiated exponential data ----------------------------
 
 eprobs <- seq(0, 0.9, 0.1)
-elambda <- seq(0, 1, 0.5)
+elambda <- seq(-0.5, 0.5, 0.5)
 set.seed(49)
 y <- rexp(1000)
 x <- exp(y)

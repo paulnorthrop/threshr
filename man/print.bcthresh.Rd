@@ -8,7 +8,7 @@
 }
 \arguments{
 \item{x}{an object inheriting from class "bcthresh", a result of a call to
-\code{\link{ithresh}}.}
+\code{\link{bcthresh}}.}
 
 \item{digits}{An integer. Used for number formatting with
 \code{\link[base]{format}} and \code{\link[base:Round]{signif}}.}
