@@ -5,7 +5,7 @@
 #' \code{print} method for class "bcthresh".
 #'
 #' @param x an object inheriting from class "bcthresh", a result of a call to
-#'   \code{\link{ithresh}}.
+#'   \code{\link{bcthresh}}.
 #' @param digits An integer. Used for number formatting with
 #'   \code{\link[base]{format}} and \code{\link[base:Round]{signif}}.
 #' @param ... Additional optional arguments. At present no optional
@@ -52,3 +52,41 @@ print.bcthresh <- function(x, digits = 2, ...) {
   return(invisible(x))
 }
 
+# ================================ plot.bcthresh =============================
+
+#' Plot method for objects of class "bcthresh"
+#'
+#' \code{plot} method for class "bcthresh".
+#'
+#' @param x an object inheriting from class "bcthresh", a result of a call to
+#'   \code{\link{bcthresh}}.
+#' @param y Not used.
+#' @param which_v A numeric scalar.  Specifies the validation threshold, that
+#'   is the indices of the argument \code{v_vec} to \code{\link{bcthresh}},
+#'   to use in the plot.
+#' @param ... Additional arguments to be passed to
+#'   \code{\link[graphics]{matplot}}.
+#' @details Add details.
+#' @return Nothing.
+#' @export
+plot.bcthresh <- function(x, y, which_v = 1, ...) {
+  n_v <- length(x$v_vec)
+  # Check that which_v is admissible
+  if (!is.numeric(which_v) || !(which_v %in% 1:n_v)) {
+    stop("'which_v' must be in 1:length(object$v_vec)")
+  }
+
+  my_matplot <- function(x, y, ..., xlab = "threshold", ylab = "performance",
+                         type = "l") {
+    graphics::matplot(x, y, ..., xlab = xlab, ylab = ylab, type = type)
+  }
+  # x[, i, , drop = FALSE] gives a matrix of predictive performances
+  # Each column gives the values for a different value of lambda
+  ymat <- x$pred_perf[, which_v, ]
+  print(ymat)
+  my_matplot(x$u_vec, ymat, ...)
+  n_lambda <- length(x$lambda)
+  graphics::legend("bottom", legend = paste0("lambda = ", x$lambda),
+                   lty = 1:n_lambda, col = 1:n_lambda, lwd = 2)
+  return(invisible())
+}
