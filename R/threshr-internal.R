@@ -1,5 +1,16 @@
+#' Internal threshr functions
+#'
+#' Internal threshr functions
+#' @details
+#' These functions are not intended to be called by the user.
+#' @name threshr-internal
+#' @keywords internal
+NULL
+
 # =========================== box_cox_gm ===========================
 
+#' @keywords internal
+#' @rdname threshr-internal
 bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
   #
   # Computes the Box-Cox transformation of a vector.  If lambda is very close
