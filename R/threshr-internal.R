@@ -19,7 +19,7 @@ bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
   # Args:
   #   x          : A numeric vector. (Non-negative) values to be Box-Cox
   #                transformed.
-  #   lambda     : A numeric scalar.  Transformation parameter.
+  #   lambda     : A numeric vector.  Transformation parameter.
   #   lngm       : standardisation constant, often the mean of the logs of the
   #                original data vector.
   #   lambda_tol : A numeric scalar.  For abs(lambda) < lambda.tol use
