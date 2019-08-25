@@ -24,8 +24,8 @@ bc_gm <- function(x, lambda = 1, lngm = 0,
   # lngm <- mean(log(x))
   # y <- bc_gm(x, lambda = 2, lngm = lngm)
   # hist(y, prob = TRUE)
-  if (any(x < 0)) {
-    stop("Invalid x: x must be non-negative")
+  if (any(x <= 0)) {
+    stop("Invalid x: x must be positive")
   }
   max_len <- max(length(x), length(lambda))
   x <- rep_len(x, max_len)
