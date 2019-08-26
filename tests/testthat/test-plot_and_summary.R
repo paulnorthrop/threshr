@@ -46,7 +46,7 @@ test_that("plot.ithresh: columns sum to 1, or NA if v < max(u_vec)", {
 # 3. Check that when which_u is supplied the dimensions of the objects containing
 #    the simulated values are correct.
 
-check_plot <- suppressWarnings(plot(gom_cv, which_u = "best"))
+check_plot <- plot(gom_cv, which_u = "best")
 test_that("plot.ithresh, best: sim_vals has dim n by 2", {
   testthat::expect_equal(dim(check_plot$sim_vals), c(n, 2),
                          tolerance = my_tol)
@@ -56,7 +56,7 @@ test_that("plot.ithresh, best: bin_sim_vals has dim n by 1", {
                          tolerance = my_tol)
 })
 
-check_plot <- suppressWarnings(plot(gom_cv, which_u = 1))
+check_plot <- plot(gom_cv, which_u = 1)
 test_that("plot.ithresh, 1: sim_vals has dim n by 2", {
   testthat::expect_equal(dim(check_plot$sim_vals), c(n, 2),
                          tolerance = my_tol)
