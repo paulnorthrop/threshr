@@ -29,4 +29,17 @@ For each value in \code{x$lambda}, a matrix of the estimated
   Each row gives the weights for each training threshold for a given
   validation threshold.  The row and column names are the approximate
   quantile levels of the thresholds.
+
+  \strong{Each row is normalised to sum to one.  Therefore, this output
+  cannot be used to compare the peformances of different values of
+  \eqn{\lambda}, only different training thresholds for a given
+  \eqn{\lambda} (and validation threshold).}
+
+  Use \code{\link{plot.bcthresh}} to compare performance measures across
+  different values of \eqn{\lambda}.
 }
+\section{Examples}{
+
+See the examples in \code{\link{bcthresh}}.
+}
+

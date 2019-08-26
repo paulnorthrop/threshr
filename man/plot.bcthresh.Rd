@@ -4,7 +4,7 @@
 \alias{plot.bcthresh}
 \title{Plot method for objects of class "bcthresh"}
 \usage{
-\method{plot}{bcthresh}(x, y, which_v = 1, ...)
+\method{plot}{bcthresh}(x, y, which_v = 1, legend_pos = "bottom", ...)
 }
 \arguments{
 \item{x}{an object inheriting from class "bcthresh", a result of a call to
@@ -13,8 +13,10 @@
 \item{y}{Not used.}
 
 \item{which_v}{A numeric scalar.  Specifies the validation threshold, that
-is the indices of the argument \code{v_vec} to \code{\link{bcthresh}},
-to use in the plot.}
+is the components of \code{x$v_vec}, to use in the plot.}
+
+\item{legend_pos}{The position of the legend specified using the argument
+\code{x} in \code{\link[graphics]{legend}}.}
 
 \item{...}{Additional arguments to be passed to
 \code{\link[graphics]{matplot}}.}
@@ -26,5 +28,10 @@ Nothing.
 \code{plot} method for class "bcthresh".
 }
 \details{
-Add details.
+Plots the measure of predictive performance against threshold
 }
+\section{Examples}{
+
+See the examples in \code{\link{bcthresh}}.
+}
+
