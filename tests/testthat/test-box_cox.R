@@ -19,7 +19,6 @@ for (i in length(x)) {
   })
 }
 
-
 # Check that box_cox_deriv is correct for lambda very slightly smaller in
 # magnitude than lambda_tol = 1 / 50 and m (Taylor series polynomial order)
 # is large
