@@ -7,14 +7,16 @@
 #' @keywords internal
 NULL
 
-# =========================== box_cox_gm ===========================
+# ================================= bc_gm ====================================
 
 #' @keywords internal
 #' @rdname threshr-internal
 bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
   #
-  # Computes the Box-Cox transformation of a vector.  If lambda is very close
+  # Computes the Box-Cox transformation of a vector x.  If lambda is very close
   # to zero then a first order Taylor series approximation is used.
+  #
+  # This function is vectorised with respect to both x and lambda.
   #
   # Args:
   #   x          : A numeric vector. (Non-negative) values to be Box-Cox
@@ -24,7 +26,8 @@ bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
   #                original data vector.
   #   lambda_tol : A numeric scalar.  For abs(lambda) < lambda_tol use
   #                a Taylor series expansion.
-  #   m          : order of TS expansion (1 for linear, 1 for quadratic etc)
+  #   m          : order of TS expansion (1 for linear in lambda, 2 for
+  #                quadratic etc)
   # Returns:
   #   A numeric vector.  The transformed value
   #     (x^lambda - 1) / (lambda * gm ^ (lambda - 1),
@@ -50,5 +53,42 @@ bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
                     ifelse(x == 0, ifelse(la > 0, -1 / la, -Inf),
                       sum(lnx ^ (i + 1) * la ^ i / factorial(i + 1))))))
   retval <- retval * exp((1 - lambda) * lngm)
+  return(retval)
+}
+
+# =============================== inv_bc_gm ===================================
+
+#' @keywords internal
+#' @rdname threshr-internal
+inv_bc <- function(x, lambda, lambda_tol = 1 / 50, m = 4) {
+  #
+  # Computes the inverse Box-Cox transformation of a vector.  If lambda is very
+  # close to zero then a first order Taylor series approximation is used.
+  #
+  # Args:
+  #   x          : A numeric vector. (Non-negative) values to be Box-Cox
+  #                transformed.
+  #   lambda     : A numeric scalar.  Transformation parameter.
+  #   lambda_tol : A numeric scalar.  For abs(lambda) < lambda_tol use
+  #                a Taylor series expansion.
+  #   m          : order of TS expansion for the log of the inverse function
+  #                (1 for linear in lambda, 2 for quadratic etc)
+  # Returns:
+  #   A numeric vector.  The inverse transformed value
+  #     (1 + lambda x) ^ (1 / lambda)
+  if (lambda == 0) {
+    return(exp(x))
+  }
+  if (lambda > 0 && any(x <= -1 / lambda)) {
+    stop("At least one component of x is too small")
+  }
+  if (lambda < 0 && any(x >= -1 / lambda)) {
+    stop("At least one component of x is too large")
+  }
+  j <- 0:m
+  fun <- function(x) {
+    return(exp(x * sum((-1) ^ j * (lambda * x) ^ j / (j + 1))))
+  }
+  retval <- vapply(x, fun, 0.0)
   return(retval)
 }

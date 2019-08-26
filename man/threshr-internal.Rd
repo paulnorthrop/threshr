@@ -3,9 +3,12 @@
 \name{threshr-internal}
 \alias{threshr-internal}
 \alias{bc_gm}
+\alias{inv_bc}
 \title{Internal threshr functions}
 \usage{
 bc_gm(x, lambda = 1, lngm = 0, lambda_tol = 1/50, m = 4)
+
+inv_bc(x, lambda, lambda_tol = 1/50, m = 4)
 }
 \description{
 Internal threshr functions
