@@ -109,7 +109,7 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
   if (!is.null(which_u)) {
     # Check that which_u is admissible
     if (!(which_u %in% 1:n_u) & which_u != "best") {
-      stop("'which_u' must be ''best'' or in 1:length(object$u_vec)")
+      stop("'which_u' must be ''best'' or in 1:length(x$u_vec)")
     }
     # Check that which_v is admissible
     n_v <- length(x$v_vec)
@@ -117,7 +117,7 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
       which_v <- 1L
     } else {
       if (!is.numeric(which_v) || !(which_v %in% 1:n_v)) {
-        stop("'which_v' must be in 1:length(object$v_vec)")
+        stop("'which_v' must be in 1:length(x$v_vec)")
       }
     }
     if (which_u == "best") {
