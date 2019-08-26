@@ -361,7 +361,9 @@ print.ithresh <- function(x, digits = 2, ...) {
   tw <- apply(exp(x$pred_perf - shoof), 2, function(x) x / sum(x, na.rm =TRUE))
   rownames(tw) <- x$u_ps
   colnames(tw) <- x$v_ps
-  cat("Threshold weights:\n")
+  if (!inherits(x, "bcthresh")) {
+    cat("Threshold weights:\n")
+  }
   print.default(format(t(tw), digits = digits), print.gap = 1L,
                 quote = FALSE)
   return(invisible(x))
