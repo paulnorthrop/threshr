@@ -13,7 +13,7 @@ for (i in length(x)) {
 
 x <- -1
 for (i in length(x)) {
-  temp <- try(bc_gm(x = x, lambda = 0))
+  temp <- try(bc_gm(x = x, lambda = 0), silent = TRUE)
   test_that(paste("bc_gm for lambda = 0, x = ", x = x), {
     testthat::expect_equal(attr(temp, "class"), "try-error")
   })
