@@ -16,15 +16,15 @@
 \item{which_v}{A numeric scalar.  Specifies the validation threshold, that
 is the components of \code{x$v_vec}, to use in the plot.}
 
+\item{which_lambdas}{A numeric vector.  Specifies which values of
+\eqn{\lambda}, that is, the components of \code{x$lambda}, to use in the
+plot.  The default is to use all these values.}
+
 \item{legend_pos}{The position of the legend specified using the argument
 \code{x} in \code{\link[graphics]{legend}}.}
 
 \item{...}{Additional arguments to be passed to
 \code{\link[graphics]{matplot}}.}
-
-\item{which_lambda}{A numeric vector.  Specifies which values of
-\eqn{\lambda}, that is, the components of \code{x$lambda}, to use in the
-plot.  The default is to use all these values.}
 }
 \value{
 Nothing.

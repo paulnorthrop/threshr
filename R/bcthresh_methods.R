@@ -90,7 +90,7 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #' @param y Not used.
 #' @param which_v A numeric scalar.  Specifies the validation threshold, that
 #'   is the components of \code{x$v_vec}, to use in the plot.
-#' @param which_lambda A numeric vector.  Specifies which values of
+#' @param which_lambdas A numeric vector.  Specifies which values of
 #'   \eqn{\lambda}, that is, the components of \code{x$lambda}, to use in the
 #'   plot.  The default is to use all these values.
 #' @param legend_pos The position of the legend specified using the argument
