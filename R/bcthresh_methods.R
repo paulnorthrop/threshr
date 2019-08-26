@@ -32,27 +32,13 @@ print.bcthresh <- function(x, digits = 2, ...) {
   if (!inherits(x, "bcthresh")) {
     stop("use only with \"bcthresh\" objects")
   }
-  # Numbers of training and validation thresholds
-  n_u <- length(x$u_vec)
-  n_v <- length(x$v_vec)
-  # Calculate threshold weights
-  # 1. Find the largest value of predictive performance, and the lambda
-  which_max <- arrayInd(which.max(x$pred_perf), .dim = dim(x$pred_perf))
-  max_val <- x$pred_perf[which_max]
-  which_lambda <- which_max[3]
-  # 2. Shoof using the means of the values for this value of lambda
-  temp <- x$pred_perf[, , which_lambda, drop = FALSE]
-  shoof <- matrix(colMeans(temp * !is.infinite(temp), na.rm = TRUE),
-                  ncol = n_v, nrow = n_u, byrow = TRUE)
   cat("Threshold weights:\n")
-  for (i in 1:length(x$lambda)) {
-    cat("lambda =", x$lambda[i], "\n")
-    tw <- apply(exp(x$pred_perf[, , i] - shoof), 2,
-                function(x) x / sum(x, na.rm = TRUE))
-    rownames(tw) <- x$u_ps
-    colnames(tw) <- x$v_ps
-    print.default(format(t(tw), digits = digits), print.gap = 1L,
-                  quote = FALSE)
+  n_lambda <- length(x$lambda)
+  for (lambda in x$lambda) {
+    temp <- choose_lambda(x, lambda = lambda)
+    class(temp) <- c("ithresh", "bcthresh")
+    cat("lambda =", lambda, "\n")
+    print(temp)
   }
   return(invisible(x))
 }
