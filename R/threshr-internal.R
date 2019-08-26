@@ -60,7 +60,7 @@ bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
 
 #' @keywords internal
 #' @rdname threshr-internal
-inv_bc <- function(x, lambda, lambda_tol = 1 / 50, m = 4) {
+inv_bc <- function(x, lambda = 1, lambda_tol = 1 / 50, m = 4) {
   #
   # Computes the inverse Box-Cox transformation of a vector.  If lambda is very
   # close to zero then a first order Taylor series approximation is used.
@@ -85,10 +85,14 @@ inv_bc <- function(x, lambda, lambda_tol = 1 / 50, m = 4) {
   if (lambda < 0 && any(x >= -1 / lambda)) {
     stop("At least one component of x is too large")
   }
-  j <- 0:m
-  fun <- function(x) {
-    return(exp(x * sum((-1) ^ j * (lambda * x) ^ j / (j + 1))))
+  if (abs(lambda) > lambda_tol) {
+    retval <- (1 + lambda * x) ^ (1 / lambda)
+  } else {
+    j <- 0:m
+    fun <- function(x) {
+      return(exp(x * sum((-1) ^ j * (lambda * x) ^ j / (j + 1))))
+    }
+    retval <- vapply(x, fun, 0.0)
   }
-  retval <- vapply(x, fun, 0.0)
   return(retval)
 }

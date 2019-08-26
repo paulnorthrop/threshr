@@ -8,7 +8,7 @@
 \usage{
 bc_gm(x, lambda = 1, lngm = 0, lambda_tol = 1/50, m = 4)
 
-inv_bc(x, lambda, lambda_tol = 1/50, m = 4)
+inv_bc(x, lambda = 1, lambda_tol = 1/50, m = 4)
 }
 \description{
 Internal threshr functions
