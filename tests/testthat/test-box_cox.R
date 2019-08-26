@@ -19,7 +19,7 @@ for (i in length(x)) {
   })
 }
 
-# Check that box_cox_deriv is correct for lambda very slightly smaller in
+# Check that bc_gm() is correct for lambda very slightly smaller in
 # magnitude than lambda_tol = 1 / 50 and m (Taylor series polynomial order)
 # is large
 
@@ -45,7 +45,7 @@ for (i in 1:length(x)) {
 lambda <- -lambda_tol + eps
 check_val <- (x ^ lambda - 1) / lambda
 for (i in 1:length(x)) {
-  test_that(paste("box_cox_deriv, -lambda_tol < lambda < 0, x = ", x = x[i]), {
+  test_that(paste("box_cox, -lambda_tol < lambda < 0, x = ", x = x[i]), {
     testthat::expect_equal(bc_gm(x = x[i], lambda = lambda,
                                  lambda_tol = lambda_tol, m = m),
                            check_val[i])
