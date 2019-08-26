@@ -68,16 +68,26 @@ print.bcthresh <- function(x, digits = 2, ...) {
 #' @param y Not used.
 #' @param which_v A numeric scalar.  Specifies the validation threshold, that
 #'   is the components of \code{x$v_vec}, to use in the plot.
+#' @param which_lambda A numeric vector.  Specifies which values of
+#'   \eqn{\lambda}, that is, the components of \code{x$lambda}, to use in the
+#'   plot.  The default is to use all these values.
 #' @param legend_pos The position of the legend specified using the argument
 #'   \code{x} in \code{\link[graphics]{legend}}.
 #' @param ... Additional arguments to be passed to
 #'   \code{\link[graphics]{matplot}}.
-#' @details Plots the measure of predictive performance against threshold
+#' @details Plots the measure of predictive performance against quantile
+#'   of training threshold for different values of \eqn{\lambda}: those
+#'   stored in \code{x$lambda}.
 #' @return Nothing.
 #' @section Examples:
 #' See the examples in \code{\link{bcthresh}}.
 #' @export
-plot.bcthresh <- function(x, y, which_v = 1, legend_pos = "bottom", ...) {
+plot.bcthresh <- function(x, y, which_v = 1,
+                          which_lambdas = 1:dim(x$pred_perf)[3],
+                          legend_pos = "bottom", ...) {
+  # Choose the values of lambda
+  x$pred_perf <- x$pred_perf[, , which_lambdas, drop = FALSE]
+  x$lambda <- x$lambda[which_lambdas]
   n_v <- length(x$v_vec)
   # Check that which_v is admissible
   if (!is.numeric(which_v) || !(which_v %in% 1:n_v)) {

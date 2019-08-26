@@ -4,7 +4,8 @@
 \alias{plot.bcthresh}
 \title{Plot method for objects of class "bcthresh"}
 \usage{
-\method{plot}{bcthresh}(x, y, which_v = 1, legend_pos = "bottom", ...)
+\method{plot}{bcthresh}(x, y, which_v = 1,
+  which_lambdas = 1:dim(x$pred_perf)[3], legend_pos = "bottom", ...)
 }
 \arguments{
 \item{x}{an object inheriting from class "bcthresh", a result of a call to
@@ -20,6 +21,10 @@ is the components of \code{x$v_vec}, to use in the plot.}
 
 \item{...}{Additional arguments to be passed to
 \code{\link[graphics]{matplot}}.}
+
+\item{which_lambda}{A numeric vector.  Specifies which values of
+\eqn{\lambda}, that is, the components of \code{x$lambda}, to use in the
+plot.  The default is to use all these values.}
 }
 \value{
 Nothing.
@@ -28,7 +33,9 @@ Nothing.
 \code{plot} method for class "bcthresh".
 }
 \details{
-Plots the measure of predictive performance against threshold
+Plots the measure of predictive performance against quantile
+  of training threshold for different values of \eqn{\lambda}: those
+  stored in \code{x$lambda}.
 }
 \section{Examples}{
 
