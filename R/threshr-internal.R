@@ -22,7 +22,7 @@ bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
   #   lambda     : A numeric vector.  Transformation parameter.
   #   lngm       : standardisation constant, often the mean of the logs of the
   #                original data vector.
-  #   lambda_tol : A numeric scalar.  For abs(lambda) < lambda.tol use
+  #   lambda_tol : A numeric scalar.  For abs(lambda) < lambda_tol use
   #                a Taylor series expansion.
   #   m          : order of TS expansion (1 for linear, 1 for quadratic etc)
   # Returns:
