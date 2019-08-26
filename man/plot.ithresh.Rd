@@ -23,8 +23,7 @@ If \code{which_u} is supplied then these arguments are passed to
 
   If \code{which_u} is not supplied (a threshold diagnostic plot is
   required) \code{which_v} specifies the validation thresholds, that
-  is, a vector of the indices of the argument \code{v_vec} to
-  \code{\link{ithresh}}, to include in the plot.
+  is, the components of \code{x$v_vec}, to include in the plot.
 
   If \code{which_u} is supplied (a plot of a posterior sample for a given
   threshold is required) then \code{which_v} is a numeric scalar
