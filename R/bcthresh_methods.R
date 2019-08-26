@@ -43,6 +43,42 @@ print.bcthresh <- function(x, digits = 2, ...) {
   return(invisible(x))
 }
 
+# =============================== summary.bcthresh ============================
+
+#' Summarizing measures of threshold predictive performance
+#'
+#' \code{summary} method for class "bcthresh"
+#'
+#' @param object an object inheriting from class "bcthresh", a result of a call
+#'   to \code{\link{bcthresh}}.
+#' @param digits An integer. Used for number formatting with
+#'   \code{\link[base]{format}} and \code{\link[base:Round]{signif}}.
+#' @param ... Additional optional arguments. At present no optional
+#'   arguments are used.
+#' @return Returns a numeric matrix with 6 columns and \code{n_v} rows,
+#'   where \code{n_v} is an argument to \code{\link{ithresh}} that
+#'   determines how many of the largest training thresholds are used
+#'   a validation thresholds.  The first column is the value of \eqn{\lambda}.
+#'   The remaining 5 columns are those returned from
+#'   \code{\link{summary.ithresh}}.
+#' @section Examples:
+#' See the examples in \code{\link{bcthresh}}.
+#' @export
+summary.bcthresh <- function(object, digits = 2, ...) {
+  if (!inherits(object, "bcthresh")) {
+    stop("use only with \"bcthresh\" objects")
+  }
+  res <- NULL
+  n_lambda <- length(object$lambda)
+  for (lambda in object$lambda) {
+    temp <- choose_lambda(object, lambda = lambda)
+    res <- rbind(res, summary(temp))
+  }
+  lambda_vec <- rep(object$lambda, each = length(object$v_vec))
+  res <- cbind(lambda = lambda_vec, res)
+  return(res)
+}
+
 # ================================ plot.bcthresh =============================
 
 #' Plot method for objects of class "bcthresh"
