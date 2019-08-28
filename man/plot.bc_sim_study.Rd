@@ -4,39 +4,51 @@
 \alias{plot.bc_sim_study}
 \title{Plot method for objects of class "bc_sim_study"}
 \usage{
-\method{plot}{bc_sim_study}(x, sum = c("mean", "median", "quantiles"),
-  probs = 0.5, which_lambdas = 1:length(x$bcthresh_args$lambda),
+\method{plot}{bc_sim_study}(x, type = 0,
+  which_lambdas = 1:length(x$bcthresh_args$lambda),
   legend_pos = "bottom", ...)
 }
 \arguments{
 \item{x}{an object inheriting from class "bc_sim_study", a result of a call to
 \code{\link{bc_sim_study}}.}
 
-\item{sum}{Type of summary of the CV measures.}
-
-\item{probs}{If \code{sum = "quantiles"} then \code{probs} provides
-the argument to \code{\link[stats]{quantile}}.}
+\item{type}{A numeric vector.  Determines the statistic(s) used to
+summarise measures of performance across different simulated datasets,
+for each each combination of \eqn{\lambda} and threshold level.
+If \code{type = 0} then the mean is used.  Otherwise, sample quantiles
+are used and \code{type} is a numeric vector of values in (0, 1) that
+is passed as the argument \code{probs} to \code{\link[stats]{quantile}}.
+For example, if \code{type = 0.5} then the sample median is used.}
 
 \item{which_lambdas}{A numeric vector.  Specifies which values of
-\eqn{\lambda}, that is, the components of \code{x$lambda}, to use in the
-plot.  The default is to use all these values.}
+\eqn{\lambda}, that is, the components of \code{x$bcthresh_args$lambda},
+to include in the plot.  The default is to use all these values.}
 
 \item{legend_pos}{The position of the legend specified using the argument
 \code{x} in \code{\link[graphics]{legend}}.}
 
 \item{...}{Additional arguments to be passed to
-\code{\link[graphics]{matplot}}.}
+\code{\link[graphics]{matplot}} and/or \code{\link[graphics]{legend}}.
+Lines that relate to a common value of \eqn{\lambda} will share
+the same value of \code{lty}, \code{lwd} and \code{col}.
+The default setting plots solid lines (\code{lty = 1}) of width 2
+(\code{lwd = 2}) using \code{col = 1:length(x$bcthresh_args$lambda)}.}
 }
 \value{
 Nothing.
 }
 \description{
-\code{plot} method for class "bc_sim_study".
+\code{plot} method for class "bc_sim_study". Plots the summaries of
+predictive performance against quantile of training threshold for different
+values of \eqn{\lambda}: those stored in \code{x$lambda}.
 }
 \details{
-Plots the measure of predictive performance against quantile
-  of training threshold for different values of \eqn{\lambda}: those
-  stored in \code{x$lambda}.
+If \code{type = 0} then it is possible that a curve on the plot
+  may be incomplete.  This indicates that, for a particular \eqn{\lambda} and
+  threshold level, a measure of predictive performance is \code{-Inf} for
+  at least one simulated dataset.  It occurs when an observation in the
+  data lies above the estimated upper end point of the predictive
+  distribution produced when this observation is removed.
 }
 \section{Examples}{
 

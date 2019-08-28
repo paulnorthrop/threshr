@@ -4,46 +4,44 @@
 \alias{bc_sim_study}
 \title{Simulation study}
 \usage{
-bc_sim_study(sims, m = 1000, true_lambda = 1, sim_fn = stats::rexp,
-  sim_fn_args = list(), ...)
+bc_sim_study(sims, rbc_args, bcthresh_args)
 }
 \arguments{
 \item{sims}{An integer scalar.  The number of simulated datasets.}
 
-\item{m, true_lambda, sim_fn}{Arguments to be passed to \code{\link{rboxcox}}:
-\code{m} is passed to \code{\link{rboxcox}} as \code{n} (that is, the
-size of the simulated sample),
-\code{true_lambda} is passed to \code{\link{rboxcox}} as \code{lambda}.}
+\item{rbc_args}{A named list of arguments to be passed to \code{rbc},
+including any arguments to be passed to \code{sim_fn} via \code{...}
+in \code{rbc}.}
 
-\item{sim_fn_args}{A list of arguments to \code{sim_fn} to be passed
-to \code{\link{rboxcox}}.}
-
-\item{...}{Further arguments to be passed to \code{bcthresh}.
-In particular: \code{probs, lambda, n, prior}.
+\item{bcthresh_args}{A named list of arguments to be passed to
+\code{bcthresh}.  In particular: \code{probs, lambda, n, prior}.
 The defaults for \code{probs, lambda} and \code{n} are
-\code{probs = seq(0, 0.9, 0.1)}, \code{lambda = 1} and \code{n = 1000}.}
+\code{probs = seq(0, 0.9, 0.1)}, \code{lambda = 1} and \code{n = 1000}.
+By default \code{n_v = 1}.  If \code{n_v} is supplied then this value is
+ignored, without warning.  Similarly, if \code{data} is supplied then
+this is also ignored, without warning.}
 }
 \value{
 An object (a list) of class \code{"bc_sim_study"} containing the
   following components:
     \item{pred_perf }{An array with dimension
       (\code{length(probs)}, \code{sims}, \code{length(lambda)).}}
+    \item{bcthresh_args }{The arguments passed to \code{\link{bcthresh}}.}
+    \item{rbc_args }{The arguments passed to \code{\link{rbc}}.}
+    \item{call }{The call to \code{bc_sim_study}.}
 }
 \description{
 Add description
 }
 \details{
 Add details.
-  By default \code{n_v = 1}.  If \code{n_v} is supplied via \code{...} then
-  this value is ignored, without warning.
 }
 \examples{
-# Set Haldane and flatflat priors
 # Set a prior: flat for GP parameters, Haldane for P(exceedance)
 prior_args <- list(prior = "flatflat", bin_prior = "haldane",
                    h_prior = list(min_xi = -Inf))
 bcthresh_args <- c(list(lambda = c(0.5, 1, 1.5)), prior_args)
-rboxcox_args <- list(m = 1000, true_lambda = 1)
-res <- bc_sim_study(2, lambda = c(0.5, 1, 1.5))
+rbc_args <- list(n = 1000, lambda = 1)
+res <- bc_sim_study(2, rbc_args = rbc_args, bcthresh_args = bcthresh_args)
 plot(res)
 }
