@@ -89,17 +89,15 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
   # Set up an array in which to store the results
   res_array <- array(dim = c(length(bcthresh_args$prob), sims, n_lambda))
   for (i in 1:sims) {
-    # Simulate a new dataset
-    x <- do.call(rbc, rbc_args)
-    # Overwrite data with the newly-simulated data
-    bcthresh_args$data <- x
-    # Call bcthresh() using the new dataset
+    # Simulate a new dataset, overwrite bcthresh_args$data and call bcthresh()
+    bcthresh_args$data <- do.call(rbc, rbc_args)
     res <- do.call(bcthresh, bcthresh_args)
-    # Store the lambda-specific results
+    # Store lambda-specific results
     for (j in 1:n_lambda) {
       res_array[, i, j] <- res$pred_perf[, , j]
     }
   }
+  # Remove data from the returned list bcthresh_args
   bcthresh_args$data <- NULL
   temp <- list(pred_perf = res_array, rbc_args = rbc_args,
                bcthresh_args = bcthresh_args, call = Call)
