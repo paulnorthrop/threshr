@@ -17,8 +17,8 @@
 is the components of \code{x$v_vec}, to use in the plot.}
 
 \item{which_lambdas}{A numeric vector.  Specifies which values of
-\eqn{\lambda}, that is, the components of \code{x$lambda}, to use in the
-plot.  The default is to use all these values.}
+\eqn{\lambda}, that is, the components of \code{x$lambda}, to include in
+the plot.  The default is to use all these values.}
 
 \item{legend_pos}{The position of the legend specified using the argument
 \code{x} in \code{\link[graphics]{legend}}.}

@@ -59,8 +59,6 @@ rbc <- function(n = 1, lambda = 1, sim_fn = stats::rexp, ...) {
 #' res <- bc_sim_study(2, rbc_args = rbc_args, bcthresh_args = bcthresh_args)
 #' plot(res)
 #' @export
-#bc_sim_study <- function(sims, m = 1000, true_lambda = 1, sim_fn = stats::rexp,
-#                         sim_fn_args = list(), ...) {
 bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
   # Record the call for later use
   Call <- match.call()
