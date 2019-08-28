@@ -67,7 +67,7 @@ rbc <- function(n = 1, lambda = 1, sim_fn = stats::rexp, ...) {
 #'                    h_prior = list(min_xi = -Inf))
 #' bcthresh_args <- c(list(lambda = c(1, 1.5, 2, 2.5, 3)), prior_args)
 #' rbc_args <- list(n = 1000, lambda = 2)
-#' res <- bc_sim_study(2, rbc_args = rbc_args, bcthresh_args = bcthresh_args)
+#' res <- bc_sim_study(2, rbc_args, bcthresh_args)
 #' plot(res)
 #' @export
 bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
