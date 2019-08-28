@@ -5,7 +5,7 @@
 \title{Plot method for objects of class "bcthresh"}
 \usage{
 \method{plot}{bcthresh}(x, y, which_v = 1,
-  which_lambdas = 1:dim(x$pred_perf)[3], legend_pos = "bottom", ...)
+  which_lambdas = 1:length(x$lambda), legend_pos = "bottom", ...)
 }
 \arguments{
 \item{x}{an object inheriting from class "bcthresh", a result of a call to

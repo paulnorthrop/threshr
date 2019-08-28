@@ -105,7 +105,7 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #' See the examples in \code{\link{bcthresh}}.
 #' @export
 plot.bcthresh <- function(x, y, which_v = 1,
-                          which_lambdas = 1:dim(x$pred_perf)[3],
+                          which_lambdas = 1:length(x$lambda),
                           legend_pos = "bottom", ...) {
   # Choose the values of lambda
   x$pred_perf <- x$pred_perf[, , which_lambdas, drop = FALSE]
