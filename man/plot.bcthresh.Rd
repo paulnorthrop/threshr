@@ -4,14 +4,12 @@
 \alias{plot.bcthresh}
 \title{Plot method for objects of class "bcthresh"}
 \usage{
-\method{plot}{bcthresh}(x, y, which_v = 1,
+\method{plot}{bcthresh}(x, which_v = 1,
   which_lambdas = 1:length(x$lambda), legend_pos = "bottom", ...)
 }
 \arguments{
 \item{x}{an object inheriting from class "bcthresh", a result of a call to
 \code{\link{bcthresh}}.}
-
-\item{y}{Not used.}
 
 \item{which_v}{A numeric scalar.  Specifies the validation threshold, that
 is the components of \code{x$v_vec}, to use in the plot.}
@@ -23,8 +21,8 @@ the plot.  The default is to use all these values.}
 \item{legend_pos}{The position of the legend specified using the argument
 \code{x} in \code{\link[graphics]{legend}}.}
 
-\item{...}{Additional arguments to be passed to
-\code{\link[graphics]{matplot}}.}
+\item{...}{Additional graphical parameters to be passed to
+\code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.}
 }
 \value{
 Nothing.

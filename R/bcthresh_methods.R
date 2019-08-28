@@ -87,7 +87,6 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #'
 #' @param x an object inheriting from class "bcthresh", a result of a call to
 #'   \code{\link{bcthresh}}.
-#' @param y Not used.
 #' @param which_v A numeric scalar.  Specifies the validation threshold, that
 #'   is the components of \code{x$v_vec}, to use in the plot.
 #' @param which_lambdas A numeric vector.  Specifies which values of
@@ -95,8 +94,8 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #'   the plot.  The default is to use all these values.
 #' @param legend_pos The position of the legend specified using the argument
 #'   \code{x} in \code{\link[graphics]{legend}}.
-#' @param ... Additional arguments to be passed to
-#'   \code{\link[graphics]{matplot}}.
+#' @param ... Additional graphical parameters to be passed to
+#'   \code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.
 #' @details Plots the measure of predictive performance against quantile
 #'   of training threshold for different values of \eqn{\lambda}: those
 #'   stored in \code{x$lambda}.
@@ -104,7 +103,7 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #' @section Examples:
 #' See the examples in \code{\link{bcthresh}}.
 #' @export
-plot.bcthresh <- function(x, y, which_v = 1,
+plot.bcthresh <- function(x, which_v = 1,
                           which_lambdas = 1:length(x$lambda),
                           legend_pos = "bottom", ...) {
   # Choose the values of lambda
