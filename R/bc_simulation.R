@@ -146,11 +146,12 @@ plot.bc_sim_study <- function(x, sum = c("mean", "median", "quantiles"),
     print(dim(ymat))
   } else if (sum == "median") {
     my_ylab <- "median CV performance"
-    ymat <- apply(x$pred_perf, MARGIN = c(1, 3), median)
+    ymat <- apply(x$pred_perf, MARGIN = c(1, 3), stats::median)
   } else {
     my_ylab <- "quantile(s) of CV performance"
     my_fn <- function(probs) {
-      return(apply(x$pred_perf, MARGIN = c(1, 3), quantile, probs = probs))
+      return(apply(x$pred_perf, MARGIN = c(1, 3), stats::quantile,
+                   probs = probs))
     }
     # This returns an array in which the 3rd dimension indexes probs
     ymat <- vapply(probs, my_fn, matrix(0, nrow = n_probs, ncol = n_lambda))
