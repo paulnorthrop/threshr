@@ -120,7 +120,7 @@ plot.bcthresh <- function(x, which_v = 1,
   my_matplot <- function(x, y, ...,
                          xlab = "quantile of training threshold / %",
                          ylab = "CV performance", type = "l",
-                         lty = my_ly, col = my_col, lwd = my_lwd) {
+                         lty = my_lty, col = my_col, lwd = my_lwd) {
     graphics::matplot(x, y, ..., xlab = xlab, ylab = ylab, type = type,
                       lty = lty, col = col, lwd = lwd)
   }
