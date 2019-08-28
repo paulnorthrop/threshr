@@ -2,9 +2,9 @@
 
 #' Simulation with (Inverse) Box-Cox Transformation
 #'
-#' Random generation for a randm variable that has the following property:
-#' a Box-Cox transformation of the variable has a specified target
-#' distribution.
+#' Random generation for a random variable that has the following property:
+#' a Box-Cox transformation with parameter \code{lambda} of the variable has a
+#' specified distribution.
 #' @param n An integer scalar.  The sample size required.
 #' @param lambda A numeric scalar.  The Box-Cox transformation parameter.
 #' @param sim_fn An R function that simulates from the target probability
@@ -25,12 +25,11 @@ rbc <- function(n = 1, lambda = 1, sim_fn = stats::rexp, ...) {
 
 # ============================== bc_sim_study =================================
 
-# Change arguments to lists: rbc_args and bcthresh_args?
-# Less ambiguity but clunkier.
-
-#' Simulation study
+#' Box-Cox threshold selection simulation study
 #'
-#' Add description
+#' Performs a simulation study to compare the extreme value predictive
+#' performance over a range of training threshold levels after different
+#' Box-Cox transformation.
 #' @param sims An integer scalar.  The number of simulated datasets.
 #' @param rbc_args A named list of arguments to be passed to \code{rbc},
 #'   including any arguments to be passed to \code{sim_fn} via \code{...}
@@ -42,7 +41,19 @@ rbc <- function(n = 1, lambda = 1, sim_fn = stats::rexp, ...) {
 #'   By default \code{n_v = 1}.  If \code{n_v} is supplied then this value is
 #'   ignored, without warning.  Similarly, if \code{data} is supplied then
 #'   this is also ignored, without warning.
-#' @details Add details.
+#' @details The general idea is to simulated repeatedly data from a
+#'   distribution for which a certain value of the Box-Cox transformation
+#'   parameter will produce known behaviour.  This is achieved by simulating
+#'   data using the function \code{\link{rbc}}.
+#'
+#'   In the example below data are simulated for a random variable that has the
+#'   following property: a Box-Cox transformation with parameter
+#'   \eqn{\lambda = 2} of the variable has a unit exponential distribution,
+#'   which is in the Generalised Pareto family.
+#'   Therefore, we should find that, when transforming prior to a
+#'   threshold-based extreme value anaysis, using \eqn{\lambda = 2} produces
+#'   better performance, for lower threshold levels, that other values of
+#'   \eqn{\lambda}.
 #' @return An object (a list) of class \code{"bc_sim_study"} containing the
 #'   following components:
 #'     \item{pred_perf }{An array with dimension
@@ -54,18 +65,14 @@ rbc <- function(n = 1, lambda = 1, sim_fn = stats::rexp, ...) {
 #' # Set a prior: flat for GP parameters, Haldane for P(exceedance)
 #' prior_args <- list(prior = "flatflat", bin_prior = "haldane",
 #'                    h_prior = list(min_xi = -Inf))
-#' bcthresh_args <- c(list(lambda = c(0.5, 1, 1.5)), prior_args)
-#' rbc_args <- list(n = 1000, lambda = 1)
+#' bcthresh_args <- c(list(lambda = c(1, 1.5, 2, 2.5, 3)), prior_args)
+#' rbc_args <- list(n = 1000, lambda = 2)
 #' res <- bc_sim_study(2, rbc_args = rbc_args, bcthresh_args = bcthresh_args)
 #' plot(res)
 #' @export
 bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
   # Record the call for later use
   Call <- match.call()
-#  rbc_args <- c(list(n = m, lambda = true_lambda, sim_fn = sim_fn),
-#                sim_fn_args)
-#  # Set arguments to and bcthresh()
-#  bcthresh_args <- list(...)
   if (!is.null(bcthresh_args$n_v)) {
     bcthresh_args$n_v <- 1
   }

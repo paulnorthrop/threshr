@@ -2,7 +2,7 @@
 % Please edit documentation in R/bc_simulation.R
 \name{bc_sim_study}
 \alias{bc_sim_study}
-\title{Simulation study}
+\title{Box-Cox threshold selection simulation study}
 \usage{
 bc_sim_study(sims, rbc_args, bcthresh_args)
 }
@@ -31,17 +31,31 @@ An object (a list) of class \code{"bc_sim_study"} containing the
     \item{call }{The call to \code{bc_sim_study}.}
 }
 \description{
-Add description
+Performs a simulation study to compare the extreme value predictive
+performance over a range of training threshold levels after different
+Box-Cox transformation.
 }
 \details{
-Add details.
+The general idea is to simulated repeatedly data from a
+  distribution for which a certain value of the Box-Cox transformation
+  parameter will produce known behaviour.  This is achieved by simulating
+  data using the function \code{\link{rbc}}.
+
+  In the example below data are simulated for a random variable that has the
+  following property: a Box-Cox transformation with parameter
+  \eqn{\lambda = 2} of the variable has a unit exponential distribution,
+  which is in the Generalised Pareto family.
+  Therefore, we should find that, when transforming prior to a
+  threshold-based extreme value anaysis, using \eqn{\lambda = 2} produces
+  better performance, for lower threshold levels, that other values of
+  \eqn{\lambda}.
 }
 \examples{
 # Set a prior: flat for GP parameters, Haldane for P(exceedance)
 prior_args <- list(prior = "flatflat", bin_prior = "haldane",
                    h_prior = list(min_xi = -Inf))
-bcthresh_args <- c(list(lambda = c(0.5, 1, 1.5)), prior_args)
-rbc_args <- list(n = 1000, lambda = 1)
+bcthresh_args <- c(list(lambda = c(1, 1.5, 2, 2.5, 3)), prior_args)
+rbc_args <- list(n = 1000, lambda = 2)
 res <- bc_sim_study(2, rbc_args = rbc_args, bcthresh_args = bcthresh_args)
 plot(res)
 }

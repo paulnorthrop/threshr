@@ -20,9 +20,9 @@ distribution.}
 A numeric vector of length \code{n}.
 }
 \description{
-Random generation for a randm variable that has the following property:
-a Box-Cox transformation of the variable has a specified target
-distribution.
+Random generation for a random variable that has the following property:
+a Box-Cox transformation with parameter \code{lambda} of the variable has a
+specified distribution.
 }
 \details{
 A sample of size \code{n} is simulated using the function supplied
