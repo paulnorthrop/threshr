@@ -27,8 +27,8 @@ to include in the plot.  The default is to use all these values.}
 \item{legend_pos}{The position of the legend specified using the argument
 \code{x} in \code{\link[graphics]{legend}}.}
 
-\item{...}{Additional arguments to be passed to
-\code{\link[graphics]{matplot}} and/or \code{\link[graphics]{legend}}.
+\item{...}{Additional graphical parameters to be passed to
+\code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.
 Lines that relate to a common value of \eqn{\lambda} will share
 the same value of \code{lty}, \code{lwd} and \code{col}.
 The default setting plots solid lines (\code{lty = 1}) of width 2
