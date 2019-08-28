@@ -4,7 +4,7 @@
 \alias{plot.bc_sim_study}
 \title{Plot method for objects of class "bc_sim_study"}
 \usage{
-\method{plot}{bc_sim_study}(x, type = 0,
+\method{plot}{bc_sim_study}(x, stat = 0,
   which_lambdas = 1:length(x$bcthresh_args$lambda),
   legend_pos = "bottom", ...)
 }
@@ -12,13 +12,13 @@
 \item{x}{an object inheriting from class "bc_sim_study", a result of a call to
 \code{\link{bc_sim_study}}.}
 
-\item{type}{A numeric vector.  Determines the statistic(s) used to
+\item{stat}{A numeric vector.  Determines the statistic(s) used to
 summarise measures of performance across different simulated datasets,
 for each each combination of \eqn{\lambda} and threshold level.
-If \code{type = 0} then the mean is used.  Otherwise, sample quantiles
-are used and \code{type} is a numeric vector of values in (0, 1) that
+If \code{stat = 0} then the mean is used.  Otherwise, sample quantiles
+are used and \code{stat} is a numeric vector of values in (0, 1) that
 is passed as the argument \code{probs} to \code{\link[stats]{quantile}}.
-For example, if \code{type = 0.5} then the sample median is used.}
+For example, if \code{stat = 0.5} then the sample median is used.}
 
 \item{which_lambdas}{A numeric vector.  Specifies which values of
 \eqn{\lambda}, that is, the components of \code{x$bcthresh_args$lambda},
@@ -43,7 +43,7 @@ predictive performance against quantile of training threshold for different
 values of \eqn{\lambda}: those stored in \code{x$lambda}.
 }
 \details{
-If \code{type = 0} then it is possible that a curve on the plot
+If \code{stat = 0} then it is possible that a curve on the plot
   may be incomplete.  This indicates that, for a particular \eqn{\lambda} and
   threshold level, a measure of predictive performance is \code{-Inf} for
   at least one simulated dataset.  It occurs when an observation in the

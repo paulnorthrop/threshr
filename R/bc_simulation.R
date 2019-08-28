@@ -89,6 +89,9 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
   # Set up an array in which to store the results
   res_array <- array(dim = c(length(bcthresh_args$prob), sims, n_lambda))
   for (i in 1:sims) {
+    if (i %% 10 == 0) {
+      print(i)
+    }
     # Simulate a new dataset, overwrite bcthresh_args$data and call bcthresh()
     bcthresh_args$data <- do.call(rbc, rbc_args)
     res <- do.call(bcthresh, bcthresh_args)
@@ -115,13 +118,13 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
 #'
 #' @param x an object inheriting from class "bc_sim_study", a result of a call to
 #'   \code{\link{bc_sim_study}}.
-#' @param type A numeric vector.  Determines the statistic(s) used to
+#' @param stat A numeric vector.  Determines the statistic(s) used to
 #'   summarise measures of performance across different simulated datasets,
 #'   for each each combination of \eqn{\lambda} and threshold level.
-#'   If \code{type = 0} then the mean is used.  Otherwise, sample quantiles
-#'   are used and \code{type} is a numeric vector of values in (0, 1) that
+#'   If \code{stat = 0} then the mean is used.  Otherwise, sample quantiles
+#'   are used and \code{stat} is a numeric vector of values in (0, 1) that
 #'   is passed as the argument \code{probs} to \code{\link[stats]{quantile}}.
-#'   For example, if \code{type = 0.5} then the sample median is used.
+#'   For example, if \code{stat = 0.5} then the sample median is used.
 #' @param which_lambdas A numeric vector.  Specifies which values of
 #'   \eqn{\lambda}, that is, the components of \code{x$bcthresh_args$lambda},
 #'   to include in the plot.  The default is to use all these values.
@@ -133,7 +136,7 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
 #'   the same value of \code{lty}, \code{lwd} and \code{col}.
 #'   The default setting plots solid lines (\code{lty = 1}) of width 2
 #'   (\code{lwd = 2}) using \code{col = 1:length(x$bcthresh_args$lambda)}.
-#' @details If \code{type = 0} then it is possible that a curve on the plot
+#' @details If \code{stat = 0} then it is possible that a curve on the plot
 #'   may be incomplete.  This indicates that, for a particular \eqn{\lambda} and
 #'   threshold level, a measure of predictive performance is \code{-Inf} for
 #'   at least one simulated dataset.  It occurs when an observation in the
@@ -143,7 +146,7 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
 #' @section Examples:
 #' See the examples in \code{\link{bc_sim_study}}.
 #' @export
-plot.bc_sim_study <- function(x, type = 0,
+plot.bc_sim_study <- function(x, stat = 0,
                               which_lambdas = 1:length(x$bcthresh_args$lambda),
                               legend_pos = "bottom", ...) {
   # Choose the values of lambda
@@ -151,31 +154,31 @@ plot.bc_sim_study <- function(x, type = 0,
   lambda <- x$bcthresh_args$lambda[which_lambdas]
   n_lambda <- length(lambda)
   n_probs <- length(x$bcthresh_args$probs)
-  if (length(type) == 1 && type == 0) {
+  if (length(stat) == 1 && stat == 0) {
     my_ylab <- "mean CV performance"
     ymat <- apply(x$pred_perf, MARGIN = c(1, 3), mean)
-  } else if (length(type) == 1 && type == 0.5) {
+  } else if (length(stat) == 1 && stat == 0.5) {
     my_ylab <- "median CV performance"
     ymat <- apply(x$pred_perf, MARGIN = c(1, 3), stats::median)
   } else {
     my_ylab <- "quantile(s) of CV performance"
-    my_fn <- function(type) {
+    my_fn <- function(stat) {
       return(apply(x$pred_perf, MARGIN = c(1, 3), stats::quantile,
-                   probs = type))
+                   probs = stat))
     }
     # This returns an array in which the 3rd dimension indexes probs
-    ymat <- vapply(type, my_fn, matrix(0, nrow = n_probs, ncol = n_lambda))
+    ymat <- vapply(stat, my_fn, matrix(0, nrow = n_probs, ncol = n_lambda))
     # Collapse to a matrix for plotting
-    dim(ymat) <- c(n_probs, n_lambda * length(type))
+    dim(ymat) <- c(n_probs, n_lambda * length(stat))
   }
   my_lty <- 1
   my_col <- 1:n_lambda
   my_matplot <- function(x, y, ..., lty = my_lty, col = my_col, lwd = 2,
                          xlab = "quantile of training threshold / %",
                          ylab = my_ylab, type = "l") {
-    lty <- rep(rep_len(lty, n_lambda), times = length(type))
-    col <- rep(rep_len(col, n_lambda), times = length(type))
-    lwd <- rep(rep_len(lwd, n_lambda), times = length(type))
+    lty <- rep(rep_len(lty, n_lambda), times = length(stat))
+    col <- rep(rep_len(col, n_lambda), times = length(stat))
+    lwd <- rep(rep_len(lwd, n_lambda), times = length(stat))
     graphics::matplot(x, y, ..., lty = lty, col = col, lwd = lwd, xlab = xlab,
                       ylab = ylab, type = type)
   }
