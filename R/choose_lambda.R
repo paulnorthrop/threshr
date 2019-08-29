@@ -52,12 +52,10 @@ choose_lambda <- function(x, lambda = 1) {
   x$pred_perf <- as.matrix(x$pred_perf[, , which_lambda])
   x$sim_vals <- as.matrix(x$sim_vals[, , which_lambda])
   # Create the correct data, training and validation thresholds
-  x$data <- bc_gm(x$data, lambda = lambda, lngm = x$lngm)
-  x$u_vec <- bc_gm(x$u_vec, lambda = lambda, lngm = x$lngm)
-  x$v_vec <- bc_gm(x$v_vec, lambda = lambda, lngm = x$lngm)
+  x$data <- bc(x$data, lambda = lambda)
+  x$u_vec <- bc(x$u_vec, lambda = lambda)
+  x$v_vec <- bc(x$v_vec, lambda = lambda)
   x$lambda <- lambda
-  # Remove things that are not in "ithresh" objects, just in case
-  x$lngm <- NULL
   class(x) <- "ithresh"
   return(x)
 }
