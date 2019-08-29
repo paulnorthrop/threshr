@@ -173,7 +173,8 @@ best_d <- predict(gom_cv, type = "d", n_years = c(100, 1000))
 plot(best_d)
 
 # Predictive intervals
-best_i <- predict(gom_cv, n_years = c(100, 1000), type = "i", hpd = TRUE)
+best_i <- predict(gom_cv, n_years = c(100, 1000), type = "i", hpd = TRUE,
+                  level = c(95, 99))
 plot(best_i, which_int = "both")
 
 # See which threshold was used
