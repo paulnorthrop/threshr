@@ -9,13 +9,13 @@ for (i in length(x)) {
   })
 }
 
-# Check that inv_bc_gm() throws an error when x is out of range
+# Check that inv_bc() throws an error when x is out of range
 
 lambda <- 2
 x <- -1 / lambda
 for (i in length(x)) {
   temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
-  test_that(paste("bc_gm for lambda = 0, x = ", x = x), {
+  test_that(paste("bc for lambda = 0, x = ", x = x), {
     testthat::expect_equal(attr(temp, "class"), "try-error")
   })
 }
@@ -24,7 +24,7 @@ lambda <- 2
 x <- -1 / lambda - 0.0001
 for (i in length(x)) {
   temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
-  test_that(paste("bc_gm for lambda = 0, x = ", x = x), {
+  test_that(paste("bc for lambda = 0, x = ", x = x), {
     testthat::expect_equal(attr(temp, "class"), "try-error")
   })
 }
@@ -33,7 +33,7 @@ lambda <- -2
 x <- -1 / lambda
 for (i in length(x)) {
   temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
-  test_that(paste("bc_gm for lambda = 0, x = ", x = x), {
+  test_that(paste("bc for lambda = 0, x = ", x = x), {
     testthat::expect_equal(attr(temp, "class"), "try-error")
   })
 }
@@ -42,7 +42,7 @@ lambda <- -2
 x <- -1 / lambda + 0.0001
 for (i in length(x)) {
   temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
-  test_that(paste("bc_gm for lambda = 0, x = ", x = x), {
+  test_that(paste("bc for lambda = 0, x = ", x = x), {
     testthat::expect_equal(attr(temp, "class"), "try-error")
   })
 }
