@@ -61,6 +61,12 @@
 #'   thresholds chosen in \code{which_v}.  The result is a plot like those in
 #'   the top row of Figure 7 in
 #'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}.
+#'
+#'   It is possible that a curve on the plot may be incomplete.  This indicates
+#'   that, for a particular threshold level, a measure of predictive
+#'   performance is \code{-Inf}. This occurs when an observation in the data
+#'   lies above the estimated upper end point of the predictive distribution
+#'   produced when this observation is removed.
 #' @return If \code{which_u} is supplied then the object with which
 #'   \code{\link[revdbayes]{plot.evpost}} was called is returned (invisibly).
 #'   Otherwise, a list is returned (again invisibly) with two components.
