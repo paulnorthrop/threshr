@@ -96,9 +96,16 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #'   \code{x} in \code{\link[graphics]{legend}}.
 #' @param ... Additional graphical parameters to be passed to
 #'   \code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.
+#'   The default setting plots solid lines (\code{lty = 1}) of width 2
+#'   (\code{lwd = 2}) using \code{col = 1:length(x$lambda)}.
 #' @details Plots the measure of predictive performance against quantile
 #'   of training threshold for different values of \eqn{\lambda}: those
-#'   stored in \code{x$lambda}.
+#'   stored in \code{x$lambda}.  It is possible that a curve on the plot
+#'   may be incomplete.  This indicates that, for a particular \eqn{\lambda}
+#'   and threshold level, a measure of predictive performance is \code{-Inf}.
+#'   This occurs when an observation in the data lies above the estimated upper
+#'   end point of the predictive distribution produced when this observation is
+#'   removed.
 #' @return Nothing.
 #' @section Examples:
 #' See the examples in \code{\link{bcthresh}}.
