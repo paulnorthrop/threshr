@@ -113,7 +113,7 @@ An object (list) of class \code{"yjthresh"}, containing the
     \item{\code{pred_perf}:} A numeric array with dimensions
       \code{length(probs)} (the number of training thresholds),
       \code{length(n_v)} (the number of validation thresholds)
-      and \code{length(lambda)} (the number of values of \eqn{lambda}),
+      and \code{length(lambda)} (the number of values of \eqn{\lambda}),
       containing the respective values of the measures predictive
       performance.
       \code{as.matrix(pred_perf[ , , i])} is an \code{length(probs)} by
