@@ -25,11 +25,10 @@ using a particular value of \eqn{\lambda}.
 \details{
 The function simply extracts the relevant objects from \code{x}
   and recreates the transformed data, training and validation thresholds
-  using the values of \code{lambda} and the normalizing constant
-  stored in \code{x$lngm}.  The returned object has class \code{"ithresh"}
-  and the same structure as an object returned from \code{\link{ithresh}},
-  for which \code{plot}, \code{summary} and \code{predict} methods are
-  available.
+  using the values of \code{lambda}.  The returned object has class
+  \code{"ithresh"} and the same structure as an object returned from
+  \code{\link{ithresh}}, for which \code{plot}, \code{summary} and
+  \code{predict} methods are available.
 }
 \examples{
 probs <- seq(0, 0.9, 0.1)
