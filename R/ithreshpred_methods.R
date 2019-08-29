@@ -102,7 +102,7 @@ plot.ithreshpred <- function(x, y, ..., ave_only = FALSE, add_best = FALSE) {
     n_col_y <- ncol(temp$y)
     # Create list of arguments for revdbayes' plot.evpred()
     # Set lty, lwd and col if they have not be supplied by the user
-    # If they have been supplie dthen make them the correct length
+    # If they have been supplied then make them the correct length
     for_plot <- list(x = temp, ...)
     if (is.null(for_plot$lty)) {
       for_plot$lty <- rep(1, n_col_y)
