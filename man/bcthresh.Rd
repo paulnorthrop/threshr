@@ -121,8 +121,6 @@ An object (list) of class \code{c("bcthresh", "ithresh")},
       Entries corresponding to cases where the training threshold is above
       the validation threshold will be \code{NA}.
     \item{\code{lambda}:} The argument \code{lambda} to \code{bcthresh}.
-    \item{\code{lngm}:} The natural log of the geometric mean of the raw
-      data \code{data}.
     \item{\code{u_vec}:} A numeric vector. The training thresholds (that
       would be) used for the raw data, i.e. when \eqn{\lambda = 1}.
     \item{\code{v_vec}:} A numeric vector. The validation thresholds (that

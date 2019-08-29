@@ -46,8 +46,6 @@
 #'       Entries corresponding to cases where the training threshold is above
 #'       the validation threshold will be \code{NA}.
 #'     \item{\code{lambda}:} The argument \code{lambda} to \code{bcthresh}.
-#'     \item{\code{lngm}:} The natural log of the geometric mean of the raw
-#'       data \code{data}.
 #'     \item{\code{u_vec}:} A numeric vector. The training thresholds (that
 #'       would be) used for the raw data, i.e. when \eqn{\lambda = 1}.
 #'     \item{\code{v_vec}:} A numeric vector. The validation thresholds (that
@@ -183,8 +181,6 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   # Loop over the values in lambda
   # Save the raw_data
   raw_data <- data
-#  lngm <- mean(log(raw_data))
-  lngm <- 0
   n_lambda <- length(lambda)
   store_pred_perf <- array(dim = c(n_u, n_v, n_lambda))
   nsim <- list(...)$n
@@ -194,12 +190,12 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   store_sim_vals <- array(dim = c(n_u * nsim, 4, n_lambda))
   for (i in 1:n_lambda) {
     # Transform the data and the thresholds
-    bc_data <- bc_gm(raw_data, lambda = lambda[i], lngm = lngm)
-    bc_u_vec <- bc_gm(u_vec, lambda = lambda[i], lngm = lngm)
-    bc_v_vec <- bc_gm(v_vec, lambda = lambda[i], lngm = lngm)
+    bc_data <- bc(raw_data, lambda = lambda[i])
+    bc_u_vec <- bc(u_vec, lambda = lambda[i])
+    bc_v_vec <- bc(v_vec, lambda = lambda[i])
     temp <- bccv_fn(data = bc_data, u_vec = bc_u_vec, v_vec = bc_v_vec,
                     n_u = n_u, n_v = n_v, use_rcpp = use_rcpp,
-                    raw_data = raw_data, lambda = lambda[i], lngm = lngm, ...)
+                    raw_data = raw_data, lambda = lambda[i], ...)
     store_pred_perf[ , , i] <- temp$pred_perf
     store_sim_vals[ , , i] <- temp$sim_vals
   }
@@ -222,7 +218,6 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
   temp$pred_perf <- store_pred_perf
   temp$sim_vals <- store_sim_vals
   temp$lambda <- lambda
-  temp$lngm <- lngm
   # The vectors of training and validation thresholds on the original scale
   temp$u_vec <- u_vec
   temp$v_vec <- v_vec
@@ -234,7 +229,7 @@ bcthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
 # =========================== cv_fn ===========================
 
 bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
-                    lngm, ...) {
+                    ...) {
   # Extract arguments for passing to revdbayes function rpost -----------------
   # GP prior.
   cv_control <- list(...)
@@ -374,7 +369,7 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
                                       z_rm = data_rm, n = n,
                                       raw_rm = raw_data[-j_max],
                                       raw_z_max = raw_data[j_max],
-                                      lambda = lambda, lngm = lngm)
+                                      lambda = lambda)
     # Save the posterior samples values
     which_rows <- (1 + (i - 1) * n):(i * n)
     sim_vals[which_rows, ] <- cbind(theta, i)
@@ -389,9 +384,7 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
 # =========================== new_bloocv ===========================
 
 bcbloocv <- function(z, theta, theta_rm, u1, u2_vec, z_max, z_rm, n,
-                     raw_rm, raw_z_max, lambda, lngm){
-  gm <- exp(lngm)
-  #
+                     raw_rm, raw_z_max, lambda){
   n1 <- sum(z_rm <= u1)      # number of values that do not exceed u1
   z_gt_u1 <- z_rm[z_rm > u1] # data greater than u1 (not including maximum)
   n2 <- length(u2_vec)       # number of validation thresholds considered
@@ -444,7 +437,7 @@ bcbloocv <- function(z, theta, theta_rm, u1, u2_vec, z_max, z_rm, n,
       w3 <- which(z_gt_u1 > u2_vec[k])
       fr3 <- temp[, w3, drop = FALSE]
       t3 <- 1 / colMeans(1 / fr3)
-      t3 <- t3 * (raw_rm_gt_u1[w3] / gm) ^ (lambda - 1)
+      t3 <- t3 * raw_rm_gt_u1[w3] ^ (lambda - 1)
     }
     #
     return(n1 * log(t1) + sum(log(t2)) + sum(log(t3)))
