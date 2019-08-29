@@ -118,12 +118,12 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
 #'
 #' @param x an object inheriting from class "bc_sim_study", a result of a call to
 #'   \code{\link{bc_sim_study}}.
-#' @param stat A numeric vector.  Determines the statistic(s) used to
+#' @param stat A numeric scalar.  Determines the statistic(s) used to
 #'   summarise measures of performance across different simulated datasets,
 #'   for each each combination of \eqn{\lambda} and threshold level.
-#'   If \code{stat = 0} then the mean is used.  Otherwise, sample quantiles
-#'   are used and \code{stat} is a numeric vector of values in (0, 1) that
-#'   is passed as the argument \code{probs} to \code{\link[stats]{quantile}}.
+#'   If \code{stat = -1} then the mean is used.  Otherwise, the
+#'   100\code{stat}\% sample quantile is used, with \code{stat} being passed
+#'   as the argument \code{probs} to \code{\link[stats]{quantile}}.
 #'   For example, if \code{stat = 0.5} then the sample median is used.
 #' @param which_lambdas A numeric vector.  Specifies which values of
 #'   \eqn{\lambda}, that is, the components of \code{x$bcthresh_args$lambda},
@@ -132,21 +132,21 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
 #'   \code{x} in \code{\link[graphics]{legend}}.
 #' @param ... Additional graphical parameters to be passed to
 #'   \code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.
-#'   Lines that relate to a common value of \eqn{\lambda} will share
-#'   the same value of \code{lty}, \code{lwd} and \code{col}.
 #'   The default setting plots solid lines (\code{lty = 1}) of width 2
 #'   (\code{lwd = 2}) using \code{col = 1:length(x$bcthresh_args$lambda)}.
-#' @details If \code{stat = 0} then it is possible that a curve on the plot
-#'   may be incomplete.  This indicates that, for a particular \eqn{\lambda} and
-#'   threshold level, a measure of predictive performance is \code{-Inf} for
-#'   at least one simulated dataset.  It occurs when an observation in the
-#'   data lies above the estimated upper end point of the predictive
-#'   distribution produced when this observation is removed.
+#' @details If \code{stat = -1} (the plot contains sample means) or if
+#'   \code{stat} is close to zero (plot contains estimates of low quantiles)
+#'   then it is possible that a curve on the plot may be incomplete.  This
+#'   indicates that, for a particular \eqn{\lambda} and threshold level, a
+#'   measure of predictive performance is \code{-Inf} for at least one
+#'   simulated dataset. This occurs when an observation in the data lies above
+#'   the estimated upper end point of the predictive distribution produced when
+#'   this observation is removed.
 #' @return Nothing.
 #' @section Examples:
 #' See the examples in \code{\link{bc_sim_study}}.
 #' @export
-plot.bc_sim_study <- function(x, stat = 0,
+plot.bc_sim_study <- function(x, stat = -1,
                               which_lambdas = 1:length(x$bcthresh_args$lambda),
                               legend_pos = "bottom", ...) {
   # Choose the values of lambda
@@ -154,40 +154,27 @@ plot.bc_sim_study <- function(x, stat = 0,
   lambda <- x$bcthresh_args$lambda[which_lambdas]
   n_lambda <- length(lambda)
   n_probs <- length(x$bcthresh_args$probs)
-  if (length(stat) == 1 && stat == 0) {
+  if (length(stat) > 1 || !is.numeric(stat)) {
+    stop("''stat'' must be a numeric scalar")
+  }
+  if (stat == -1) {
     my_ylab <- "mean CV performance"
     ymat <- apply(x$pred_perf, MARGIN = c(1, 3), mean)
-  } else if (length(stat) == 1 && stat == 0.5) {
-    my_ylab <- "median CV performance"
-    ymat <- apply(x$pred_perf, MARGIN = c(1, 3), stats::median)
   } else {
-    my_ylab <- "quantile(s) of CV performance"
-    my_fn <- function(stat) {
-      return(apply(x$pred_perf, MARGIN = c(1, 3), stats::quantile,
-                   probs = stat))
-    }
-    # This returns an array in which the 3rd dimension indexes probs
-    ymat <- vapply(stat, my_fn, matrix(0, nrow = n_probs, ncol = n_lambda))
-    # Collapse to a matrix for plotting
-    dim(ymat) <- c(n_probs, n_lambda * length(stat))
+    my_ylab <- paste0(100 * stat, "% quantile of CV performance")
+    ymat <- apply(x$pred_perf, MARGIN = c(1, 3), stats::quantile, probs = stat)
   }
   my_lty <- 1
   my_col <- 1:n_lambda
   my_matplot <- function(x, y, ..., lty = my_lty, col = my_col, lwd = 2,
                          xlab = "quantile of training threshold / %",
                          ylab = my_ylab, type = "l") {
-    lty <- rep(rep_len(lty, n_lambda), times = length(stat))
-    col <- rep(rep_len(col, n_lambda), times = length(stat))
-    lwd <- rep(rep_len(lwd, n_lambda), times = length(stat))
     graphics::matplot(x, y, ..., lty = lty, col = col, lwd = lwd, xlab = xlab,
                       ylab = ylab, type = type)
   }
   my_legend <- function(..., x = legend_pos,
                         legend = paste0("lambda = ", lambda), lty = my_lty,
                         col = my_col, lwd = 2) {
-    lty <- rep_len(lty, n_lambda)
-    col <- rep_len(col, n_lambda)
-    lwd <- rep_len(lwd, n_lambda)
     graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd)
   }
   # Apply the averaging function over dimensions 1 and 3 of x$pred_perf

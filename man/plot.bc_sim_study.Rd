@@ -4,7 +4,7 @@
 \alias{plot.bc_sim_study}
 \title{Plot method for objects of class "bc_sim_study"}
 \usage{
-\method{plot}{bc_sim_study}(x, stat = 0,
+\method{plot}{bc_sim_study}(x, stat = -1,
   which_lambdas = 1:length(x$bcthresh_args$lambda),
   legend_pos = "bottom", ...)
 }
@@ -12,12 +12,12 @@
 \item{x}{an object inheriting from class "bc_sim_study", a result of a call to
 \code{\link{bc_sim_study}}.}
 
-\item{stat}{A numeric vector.  Determines the statistic(s) used to
+\item{stat}{A numeric scalar.  Determines the statistic(s) used to
 summarise measures of performance across different simulated datasets,
 for each each combination of \eqn{\lambda} and threshold level.
-If \code{stat = 0} then the mean is used.  Otherwise, sample quantiles
-are used and \code{stat} is a numeric vector of values in (0, 1) that
-is passed as the argument \code{probs} to \code{\link[stats]{quantile}}.
+If \code{stat = -1} then the mean is used.  Otherwise, the
+100\code{stat}\% sample quantile is used, with \code{stat} being passed
+as the argument \code{probs} to \code{\link[stats]{quantile}}.
 For example, if \code{stat = 0.5} then the sample median is used.}
 
 \item{which_lambdas}{A numeric vector.  Specifies which values of
@@ -29,8 +29,6 @@ to include in the plot.  The default is to use all these values.}
 
 \item{...}{Additional graphical parameters to be passed to
 \code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.
-Lines that relate to a common value of \eqn{\lambda} will share
-the same value of \code{lty}, \code{lwd} and \code{col}.
 The default setting plots solid lines (\code{lty = 1}) of width 2
 (\code{lwd = 2}) using \code{col = 1:length(x$bcthresh_args$lambda)}.}
 }
@@ -43,12 +41,14 @@ predictive performance against quantile of training threshold for different
 values of \eqn{\lambda}: those stored in \code{x$lambda}.
 }
 \details{
-If \code{stat = 0} then it is possible that a curve on the plot
-  may be incomplete.  This indicates that, for a particular \eqn{\lambda} and
-  threshold level, a measure of predictive performance is \code{-Inf} for
-  at least one simulated dataset.  It occurs when an observation in the
-  data lies above the estimated upper end point of the predictive
-  distribution produced when this observation is removed.
+If \code{stat = -1} (the plot contains sample means) or if
+  \code{stat} is close to zero (plot contains estimates of low quantiles)
+  then it is possible that a curve on the plot may be incomplete.  This
+  indicates that, for a particular \eqn{\lambda} and threshold level, a
+  measure of predictive performance is \code{-Inf} for at least one
+  simulated dataset. This occurs when an observation in the data lies above
+  the estimated upper end point of the predictive distribution produced when
+  this observation is removed.
 }
 \section{Examples}{
 
