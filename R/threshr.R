@@ -32,6 +32,9 @@
 #' @docType package
 #' @name threshr
 #' @import methods
+#' @importFrom revdbayes plot.evpost
+#' @importFrom revdbayes plot.evpred
+#' @importFrom revdbayes predict.evpost
 NULL
 
 #' Storm peak significant wave heights from the Gulf of Mexico

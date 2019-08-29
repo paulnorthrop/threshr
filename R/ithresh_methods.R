@@ -168,7 +168,8 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
     if (!is.null(for_plot_evpost$ru_scale)) {
       for_plot_evpost$ru_scale <- NULL
     }
-    suppressWarnings(do.call(revdbayes:::plot.evpost, for_plot_evpost))
+    # plot is revdbayes:::plot.evpost
+    suppressWarnings(do.call(plot, for_plot_evpost))
     return(invisible(temp))
   }
   # Use only the validation thresholds in columns which_v.

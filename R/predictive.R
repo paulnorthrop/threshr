@@ -270,7 +270,8 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     evpost_obj$thresh <- object$u_vec[best_u]
     for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
                                npy = npy, type = type, hpd = hpd, x = x, ...)
-    ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
+    # predict is revdbayes:::predict.evpost
+    ret_obj <- do.call(predict, for_predict_evpost)
   }
   if (which_u == "all") {
     # All thresholds
@@ -292,7 +293,8 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     evpost_obj$thresh <- object$u_vec[best_u]
     for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
                                npy = npy, type = type, hpd = hpd, x = x, ...)
-    ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
+    # predict is revdbayes:::predict.evpost
+    ret_obj <- do.call(predict, for_predict_evpost)
     x_vals <- ret_obj$x
     others <- (1:n_t)[-best_u]
     # Create matrix: y_val
@@ -307,7 +309,8 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
       for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
                                  npy = npy, type = type, hpd = hpd, x = x_vals,
                                  ...)
-      temp <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
+      # predict is revdbayes:::predict.evpost
+      temp <- do.call(predict, for_predict_evpost)
       y_val[, 1 + i] <- temp$y
     }
     # Row-wise mean weighted by the posterior threshold weights
