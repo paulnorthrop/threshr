@@ -7,7 +7,7 @@
 #' @keywords internal
 NULL
 
-# =================================== bc ======================================
+# ================================ Box-Cox ====================================
 
 #' @keywords internal
 #' @rdname threshr-internal
@@ -50,7 +50,7 @@ bc <- function(x, lambda = 1, lambda_tol = 1 / 50, m = 4) {
   return(retval)
 }
 
-# ================================= inv_bc ====================================
+# ============================= inverse Box-Cox ===============================
 
 #' @keywords internal
 #' @rdname threshr-internal
@@ -88,5 +88,39 @@ inv_bc <- function(x, lambda = 1, lambda_tol = 1 / 50, m = 4) {
     }
     retval <- vapply(x, fun, 0.0)
   }
+  return(retval)
+}
+
+# ================================ Yeo-Johnson ================================
+
+#' @keywords internal
+#' @rdname threshr-internal
+yj <- function(x, lambda = 1, lambda_tol = 1 / 50, m = 4) {
+  #
+  # Computes the Yeo-Johnson transformation of a vector.  If lambda is very
+  # close to zero then a first order Taylor series approximation is used.
+  #
+  # Args:
+  #   x          : A numeric vector. Values to be Yeo-Johnson transformed.
+  #   lambda     : A numeric scalar.  Transformation parameter.
+  #   lambda_tol : A numeric scalar.  For abs(lambda) < lambda_tol use
+  #                a Taylor series expansion.
+  #   m          : order of TS expansion (1 for linear in lambda, 2 for
+  #                quadratic etc)
+  # Returns:
+  #   A numeric vector.  The transformed value
+  #     bc(1 + x, lambda),     if x >= 0,
+  #     bc(1 - x, 2 - lambda), if x < 0
+  #   where bc() is the Box-Cox transformation
+  #
+  # Example
+  # x <- rnorm(100)
+  # y <- yj(x, lambda = 2)
+  # hist(y, prob = TRUE)
+  retval <- numeric(length(x))
+  xlt0 <- x < 0
+  xgt0 <- !xlt0
+  retval[xlt0] <- bc(1 - x[xlt0], 2 - lambda, lambda_tol, m)
+  retval[xgt0] <- bc(1 + x[xgt0], lambda, lambda_tol, m)
   return(retval)
 }
