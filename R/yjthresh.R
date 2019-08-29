@@ -138,6 +138,7 @@
 #'   \emph{Journal of the Royal Statistical Society Series C: Applied
 #'   Statistics}, \strong{66}(1), 93-120.
 #'   \url{https://doi.org/10.1111/rssc.12159}
+#' @export
 yjthresh <- function(data, probs, lambda, ..., n_v = 1, npy = NULL,
                      use_rcpp = TRUE) {
   # Record the call for later use
