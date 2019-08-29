@@ -436,8 +436,8 @@ yjbloocv <- function(z, theta, theta_rm, u1, u2_vec, z_max, z_rm, n,
       fr3 <- temp[, w3, drop = FALSE]
       t3 <- 1 / colMeans(1 / fr3)
       yj <- raw_rm_gt_u1[w3]
-      t3 <- t3 * ifelse(yj < 0, ((1 - yj)) ^ (1 - lambda),
-                        ((1 + yj)) ^ (lambda - 1))
+      t3 <- t3 * ifelse(yj < 0, (1 - yj) ^ (1 - lambda),
+                        (1 + yj) ^ (lambda - 1))
     }
     #
     return(n1 * log(t1) + sum(log(t2)) + sum(log(t3)))
@@ -462,8 +462,8 @@ yjbloocv <- function(z, theta, theta_rm, u1, u2_vec, z_max, z_rm, n,
                       lin_max ^ pow2),
                0)
   t4 <- mean(p1 * t4 / sigma_1)
-  t4 <- t4 * ifelse(raw_z_max < 0, ((1 - raw_z_max)) ^ (1 - lambda),
-                    ((1 + raw_z_max)) ^ (lambda - 1))
+  t4 <- t4 * ifelse(raw_z_max < 0, (1 - raw_z_max) ^ (1 - lambda),
+                    (1 + raw_z_max) ^ (lambda - 1))
   #
   return(t123 + n_max * log(t4))
 }
