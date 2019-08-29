@@ -74,7 +74,7 @@ validation thresholds in \code{object$v_vec}.}
   \item "p" for the predictive distribution function,
   \item "d" for the predictive density function,
   \item "q" for the predictive quantile function,
-  \item "i" for predictive intervals,
+  \item "i" for predictive intervals (see \code{...} to set \code{level}),
   \item "r" for random generation from the predictive distribution.
 }
   If \code{which_u = "all"} then only \code{type = "p"} or \code{type = "d"}
@@ -95,8 +95,12 @@ then a default value is set within
   returned from \code{\link{bcthresh}} or \code{\link{choose_lambda}}.
 Must be contained in \code{object$lambda}.}
 
-\item{...}{Additional optional arguments. At present no optional arguments
-are used.}
+\item{...}{Additional arguments to be passed to
+\code{\link[revdbayes]{predict.evpost}}.  In particular:
+\code{level}, which can be used to set (multiple) levels
+for predictive intervals when \code{type = "i"};
+\code{lower_tail} (relevant when \code{type = "p"} or \code{"q"}) and
+\code{log} (relevant when \code{type = "d"}).}
 }
 \value{
 An list object of class "ithreshpred" with a similar structure to

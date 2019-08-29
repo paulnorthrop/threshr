@@ -70,7 +70,7 @@
 #'   \item "p" for the predictive distribution function,
 #'   \item "d" for the predictive density function,
 #'   \item "q" for the predictive quantile function,
-#'   \item "i" for predictive intervals,
+#'   \item "i" for predictive intervals (see \code{...} to set \code{level}),
 #'   \item "r" for random generation from the predictive distribution.
 #' }
 #'   If \code{which_u = "all"} then only \code{type = "p"} or \code{type = "d"}
@@ -87,8 +87,12 @@
 #' @param lambda A numeric scalar.  Only relevant if \code{object} was
 #'   returned from \code{\link{bcthresh}} or \code{\link{choose_lambda}}.
 #' Must be contained in \code{object$lambda}.
-#' @param ... Additional optional arguments. At present no optional arguments
-#'   are used.
+#' @param ... Additional arguments to be passed to
+#'   \code{\link[revdbayes]{predict.evpost}}.  In particular:
+#'   \code{level}, which can be used to set (multiple) levels
+#'   for predictive intervals when \code{type = "i"};
+#'   \code{lower_tail} (relevant when \code{type = "p"} or \code{"q"}) and
+#'   \code{log} (relevant when \code{type = "d"}).
 #' @details The function \code{\link[revdbayes]{predict.evpost}} is used to
 #'   perform predictive based on the binomial-GP posterior sample generated
 #'   using a given training threshold.  For mathematical details of the
@@ -146,7 +150,8 @@
 #' plot(best_d)
 #'
 #' # Predictive intervals
-#' best_i <- predict(gom_cv, n_years = c(100, 1000), type = "i", hpd = TRUE)
+#' best_i <- predict(gom_cv, n_years = c(100, 1000), type = "i", hpd = TRUE,
+#'                   level = c(95, 99))
 #' plot(best_i, which_int = "both")
 #'
 #' # See which threshold was used
@@ -264,7 +269,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
     evpost_obj$thresh <- object$u_vec[best_u]
     for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
-                               npy = npy, type = type, hpd = hpd, x = x)
+                               npy = npy, type = type, hpd = hpd, x = x, ...)
     ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
   }
   if (which_u == "all") {
@@ -286,7 +291,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
     evpost_obj$thresh <- object$u_vec[best_u]
     for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
-                               npy = npy, type = type, hpd = hpd, x = x)
+                               npy = npy, type = type, hpd = hpd, x = x, ...)
     ret_obj <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
     x_vals <- ret_obj$x
     others <- (1:n_t)[-best_u]
@@ -300,7 +305,8 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
       evpost_obj$sim_vals <- object$sim_vals[which_rows, 2:3]
       evpost_obj$thresh <- object$u_vec[i]
       for_predict_evpost <- list(object = evpost_obj, n_years = n_years,
-                                 npy = npy, type = type, hpd = hpd, x = x_vals)
+                                 npy = npy, type = type, hpd = hpd, x = x_vals,
+                                 ...)
       temp <- do.call(revdbayes:::predict.evpost, for_predict_evpost)
       y_val[, 1 + i] <- temp$y
     }
@@ -321,30 +327,19 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   # back to the original scale
   if (fn_object == "bcthresh" || fn_object == "choose_lambda") {
     if (ret_obj$type == "p" || ret_obj$type == "d") {
-      if (lambda == 0) {
-        ret_obj$x <- log(ret_obj$x)
-      } else {
-        ret_obj$x <- (lambda * ret_obj$x + 1) ^ (1 / lambda)
-      }
+      ret_obj$x <- inv_bc(ret_obj$x, lambda)
     }
     if (ret_obj$type == "q" || ret_obj$type == "r") {
-      if (lambda == 0) {
-        ret_obj$y <- log(ret_obj$y)
-      } else {
-        ret_obj$y <- (lambda * ret_obj$y + 1) ^ (1 / lambda)
-      }
+      ret_obj$y <- inv_bc(ret_obj$y, lambda)
     }
     if (ret_obj$type == "i") {
-      if (lambda == 0) {
-        ret_obj$long[, c("lower", "upper")] <-
-          log(ret_obj$long[, c("lower", "upper")])
-        ret_obj$short[, c("lower", "upper")] <-
-          log(ret_obj$short[, c("lower", "upper")])
-      } else {
-        ret_obj$long[, c("lower", "upper")] <-
-          (lambda * ret_obj$long[, c("lower", "upper")] + 1) ^ (1 / lambda)
-        ret_obj$short[, c("lower", "upper")] <-
-          (lambda * ret_obj$short[, c("lower", "upper")] + 1) ^ (1 / lambda)
+      temp <- apply(ret_obj$long[, c("lower", "upper"), drop = FALSE], 2,
+                   inv_bc, lambda = lambda)
+      ret_obj$long[, c("lower", "upper")] <- temp
+      if (hpd) {
+        temp <- apply(ret_obj$short[, c("lower", "upper"), drop = FALSE], 2,
+                      inv_bc, lambda = lambda)
+        ret_obj$short[, c("lower", "upper")] <- temp
       }
     }
   }
@@ -361,7 +356,7 @@ post_thresh_weights <- function(x, which_v = 1, u_prior = NULL) {
   #   x       : A object of class "ithresh" returned by ithresh.
   #   which_v : A numeric scalar.  Indicates which validation threshold,
   #             i.e. which element of x$v_vec and hence which column of
-  #             x$pred_perf containing the measures of predictiv performance,
+  #             x$pred_perf containing the measures of predictive performance,
   #             is used.
   #   u_prior : A numeric vector.  Prior probabilities for the thresholds
   #             in u_vec.  If this is NULL then it is set to a vector of

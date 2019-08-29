@@ -12,7 +12,7 @@
 
 * In `plot.ithresh()` a more informative error message is given if an inappropriate value of the argument `which_v` is supplied.
 
-* In `predict.ithresh()` an example has been added in which predictive intervals are calculated.
+* In `predict.ithresh()` further arguments can now be passed to `revdbayes::predict.evpost`.  In particular, the level(s) of predictive intervals can be set.  An example has been added to the documentation.
 
 # threshr 1.0.1
 
