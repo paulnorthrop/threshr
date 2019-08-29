@@ -31,7 +31,7 @@ bc <- function(x, lambda = 1, lambda_tol = 1 / 50, m = 4) {
   #
   # Example
   # x <- rexp(100)
-  # y <- bc_gm(x, lambda = 2)
+  # y <- bc(x, lambda = 2)
   # hist(y, prob = TRUE)
   if (any(x < 0)) {
     stop("Invalid x: x must be non-negative")
