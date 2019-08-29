@@ -7,11 +7,11 @@
 #' @keywords internal
 NULL
 
-# ================================= bc_gm ====================================
+# =================================== bc ======================================
 
 #' @keywords internal
 #' @rdname threshr-internal
-bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
+bc <- function(x, lambda = 1, lambda_tol = 1 / 50, m = 4) {
   #
   # Computes the Box-Cox transformation of a vector x.  If lambda is very close
   # to zero then a first order Taylor series approximation is used.
@@ -22,21 +22,16 @@ bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
   #   x          : A numeric vector. (Non-negative) values to be Box-Cox
   #                transformed.
   #   lambda     : A numeric vector.  Transformation parameter.
-  #   lngm       : standardisation constant, often the mean of the logs of the
-  #                original data vector.
   #   lambda_tol : A numeric scalar.  For abs(lambda) < lambda_tol use
   #                a Taylor series expansion.
   #   m          : order of TS expansion (1 for linear in lambda, 2 for
   #                quadratic etc)
   # Returns:
-  #   A numeric vector.  The transformed value
-  #     (x^lambda - 1) / (lambda * gm ^ (lambda - 1),
-  #   where gm = exp(lngm).
+  #   A numeric vector.  The transformed value (x^lambda - 1) / lambda
   #
   # Example
   # x <- rexp(100)
-  # lngm <- mean(log(x))
-  # y <- bc_gm(x, lambda = 2, lngm = lngm)
+  # y <- bc_gm(x, lambda = 2)
   # hist(y, prob = TRUE)
   if (any(x < 0)) {
     stop("Invalid x: x must be non-negative")
@@ -52,11 +47,10 @@ bc_gm <- function(x, lambda = 1, lngm = 0, lambda_tol = 1 / 50, m = 4) {
                   ifelse(la < 0, -1 / la, Inf),
                     ifelse(x == 0, ifelse(la > 0, -1 / la, -Inf),
                       sum(lnx ^ (i + 1) * la ^ i / factorial(i + 1))))))
-  retval <- retval * exp((1 - lambda) * lngm)
   return(retval)
 }
 
-# =============================== inv_bc_gm ===================================
+# ================================= inv_bc ====================================
 
 #' @keywords internal
 #' @rdname threshr-internal
