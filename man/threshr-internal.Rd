@@ -5,6 +5,7 @@
 \alias{bc}
 \alias{inv_bc}
 \alias{yj}
+\alias{inv_yj}
 \title{Internal threshr functions}
 \usage{
 bc(x, lambda = 1, lambda_tol = 1/50, m = 4)
@@ -12,6 +13,8 @@ bc(x, lambda = 1, lambda_tol = 1/50, m = 4)
 inv_bc(x, lambda = 1, lambda_tol = 1/50, m = 4)
 
 yj(x, lambda = 1, lambda_tol = 1/50, m = 4)
+
+inv_yj(x, lambda = 1, lambda_tol = 1/50, m = 4)
 }
 \description{
 Internal threshr functions
