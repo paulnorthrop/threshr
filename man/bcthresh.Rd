@@ -195,13 +195,15 @@ gprobs <- seq(0.1, 0.9, 0.1)
 glambda <- seq(1, 3, 0.5)
 gom_args <- list(data = gom, probs = gprobs, lambda = glambda)
 gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
+plot(gom_lambda)
 
 ## North Sea significant wave heights -----------------------
 
-nprobs <- seq(0.1, 0.9, 0.1)
-nlambda <- seq(-1/2, 2, 0.5)
+nprobs <- seq(0, 0.9, 0.1)
+nlambda <- seq(-0.5, 2, 0.5)
 ns_args <- list(data = ns, probs = nprobs, lambda = nlambda, trans = "BC")
 ns_lambda <- do.call(bcthresh, c(ns_args, prior_args))
+plot(ns_lambda)
 
 # Exponentiated exponential data ----------------------------
 
@@ -212,6 +214,7 @@ y <- rexp(1000)
 x <- exp(y)
 exp_args <- list(data = x, probs = eprobs, lambda = elambda)
 log_exp <- do.call(bcthresh, c(exp_args, prior_args))
+plot(log_exp)
 }
 \references{
 Box, G. and Cox, D. R. (1964) An Analysis of Transformations.
