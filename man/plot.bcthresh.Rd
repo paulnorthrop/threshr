@@ -4,19 +4,29 @@
 \alias{plot.bcthresh}
 \title{Plot method for objects of class "bcthresh"}
 \usage{
-\method{plot}{bcthresh}(x, which_v = 1,
-  which_lambdas = 1:length(x$lambda), legend_pos = "bottom", ...)
+\method{plot}{bcthresh}(x, which_v = length(x$v_vec),
+  which_lambdas = 1:length(x$lambda), normalise = FALSE,
+  legend_pos = "bottom", ...)
 }
 \arguments{
-\item{x}{an object inheriting from class "bcthresh", a result of a call to
-\code{\link{bcthresh}}.}
+\item{x}{an object inheriting from class \code{"bcthresh"}, a result of a
+call to \code{\link{bcthresh}}.}
 
 \item{which_v}{A numeric scalar.  Specifies the validation threshold, that
-is the components of \code{x$v_vec}, to use in the plot.}
+is the component of \code{x$v_vec}, to use in the plot.}
 
 \item{which_lambdas}{A numeric vector.  Specifies which values of
 \eqn{\lambda}, that is, the components of \code{x$lambda}, to include in
 the plot.  The default is to use all these values.}
+
+\item{normalise}{A logical scalar.  Controls what is plotted on the
+vertical axis of the plot.  If \code{normalise = FALSE} then the
+measure of performance defined in equation (7) of Northrop et al. (2017)
+is plotted. Otherwise, these measures are normalised in the manner of
+equation (14) Northrop et al. (2017).  The same normalisation constant
+is used across of values of \eqn{\lambda} that appear in the plot,
+with the property that the values sum to 1 for one value of \eqn{\lambda}
+and less than 1 for all other values of \eqn{\lambda}.}
 
 \item{legend_pos}{The position of the legend specified using the argument
 \code{x} in \code{\link[graphics]{legend}}.}
@@ -47,3 +57,11 @@ Plots the measure of predictive performance against quantile
 See the examples in \code{\link{bcthresh}}.
 }
 
+\references{
+Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
+  Cross-validatory extreme value threshold selection and uncertainty
+  with application to ocean storm severity.
+  \emph{Journal of the Royal Statistical Society Series C: Applied
+  Statistics}, \strong{66}(1), 93-120.
+  \url{https://doi.org/10.1111/rssc.12159}
+}

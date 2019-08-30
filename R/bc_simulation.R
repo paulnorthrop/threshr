@@ -128,6 +128,14 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
 #' @param which_lambdas A numeric vector.  Specifies which values of
 #'   \eqn{\lambda}, that is, the components of \code{x$bcthresh_args$lambda},
 #'   to include in the plot.  The default is to use all these values.
+#' @param normalise A logical scalar.  Controls what is plotted on the
+#'   vertical axis of the plot.  If \code{normalise = FALSE} then the
+#'   measure of performance defined in equation (7) of Northrop et al. (2017)
+#'   is plotted. Otherwise, these measures are normalised in the manner of
+#'   equation (14) Northrop et al. (2017).  The same normalisation constant
+#'   is used across of values of \eqn{\lambda} that appear in the plot,
+#'   with the property that the values sum to 1 for one value of \eqn{\lambda}
+#'   and less than 1 for all other values of \eqn{\lambda}.
 #' @param legend_pos The position of the legend specified using the argument
 #'   \code{x} in \code{\link[graphics]{legend}}.
 #' @param ... Additional graphical parameters to be passed to
@@ -148,7 +156,7 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
 #' @export
 plot.bc_sim_study <- function(x, stat = -1,
                               which_lambdas = 1:length(x$bcthresh_args$lambda),
-                              legend_pos = "bottom", ...) {
+                              normalise = FALSE, legend_pos = "bottom", ...) {
   # Choose the values of lambda
   x$pred_perf <- x$pred_perf[, , which_lambdas, drop = FALSE]
   lambda <- x$bcthresh_args$lambda[which_lambdas]
@@ -160,9 +168,21 @@ plot.bc_sim_study <- function(x, stat = -1,
   if (stat == -1) {
     my_ylab <- "mean CV performance"
     ymat <- apply(x$pred_perf, MARGIN = c(1, 3), mean)
+    if (normalise){
+      ymat_shoof <- ymat - mean(ymat * !is.infinite(ymat), na.rm = TRUE)
+      ymat <- exp(ymat_shoof) / sum(exp(ymat_shoof), na.rm = TRUE)
+      ymat <- ymat / max(colSums(ymat, na.rm = TRUE), na.rm = TRUE)
+      my_ylab <- paste0("normalised mean CV performance")
+    }
   } else {
     my_ylab <- paste0(100 * stat, "% quantile of CV performance")
     ymat <- apply(x$pred_perf, MARGIN = c(1, 3), stats::quantile, probs = stat)
+    if (normalise){
+      ymat_shoof <- ymat - mean(ymat * !is.infinite(ymat), na.rm = TRUE)
+      ymat <- exp(ymat_shoof) / sum(exp(ymat_shoof), na.rm = TRUE)
+      ymat <- ymat / max(colSums(ymat, na.rm = TRUE), na.rm = TRUE)
+      my_ylab <- paste0("normalised ",100*stat,"% quantile of CV performance")
+    }
   }
   my_lty <- 1
   my_col <- 1:n_lambda

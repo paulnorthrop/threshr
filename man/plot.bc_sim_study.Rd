@@ -5,7 +5,7 @@
 \title{Plot method for objects of class "bc_sim_study"}
 \usage{
 \method{plot}{bc_sim_study}(x, stat = -1,
-  which_lambdas = 1:length(x$bcthresh_args$lambda),
+  which_lambdas = 1:length(x$bcthresh_args$lambda), normalise = FALSE,
   legend_pos = "bottom", ...)
 }
 \arguments{
@@ -23,6 +23,15 @@ For example, if \code{stat = 0.5} then the sample median is used.}
 \item{which_lambdas}{A numeric vector.  Specifies which values of
 \eqn{\lambda}, that is, the components of \code{x$bcthresh_args$lambda},
 to include in the plot.  The default is to use all these values.}
+
+\item{normalise}{A logical scalar.  Controls what is plotted on the
+vertical axis of the plot.  If \code{normalise = FALSE} then the
+measure of performance defined in equation (7) of Northrop et al. (2017)
+is plotted. Otherwise, these measures are normalised in the manner of
+equation (14) Northrop et al. (2017).  The same normalisation constant
+is used across of values of \eqn{\lambda} that appear in the plot,
+with the property that the values sum to 1 for one value of \eqn{\lambda}
+and less than 1 for all other values of \eqn{\lambda}.}
 
 \item{legend_pos}{The position of the legend specified using the argument
 \code{x} in \code{\link[graphics]{legend}}.}

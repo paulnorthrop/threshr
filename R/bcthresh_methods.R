@@ -85,13 +85,21 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #'
 #' \code{plot} method for class "bcthresh".
 #'
-#' @param x an object inheriting from class "bcthresh", a result of a call to
-#'   \code{\link{bcthresh}}.
+#' @param x an object inheriting from class \code{"bcthresh"}, a result of a
+#'   call to \code{\link{bcthresh}}.
 #' @param which_v A numeric scalar.  Specifies the validation threshold, that
-#'   is the components of \code{x$v_vec}, to use in the plot.
+#'   is the component of \code{x$v_vec}, to use in the plot.
 #' @param which_lambdas A numeric vector.  Specifies which values of
 #'   \eqn{\lambda}, that is, the components of \code{x$lambda}, to include in
 #'   the plot.  The default is to use all these values.
+#' @param normalise A logical scalar.  Controls what is plotted on the
+#'   vertical axis of the plot.  If \code{normalise = FALSE} then the
+#'   measure of performance defined in equation (7) of Northrop et al. (2017)
+#'   is plotted. Otherwise, these measures are normalised in the manner of
+#'   equation (14) Northrop et al. (2017).  The same normalisation constant
+#'   is used across of values of \eqn{\lambda} that appear in the plot,
+#'   with the property that the values sum to 1 for one value of \eqn{\lambda}
+#'   and less than 1 for all other values of \eqn{\lambda}.
 #' @param legend_pos The position of the legend specified using the argument
 #'   \code{x} in \code{\link[graphics]{legend}}.
 #' @param ... Additional graphical parameters to be passed to
@@ -109,9 +117,16 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #' @return Nothing.
 #' @section Examples:
 #' See the examples in \code{\link{bcthresh}}.
+#' @references Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
+#'   Cross-validatory extreme value threshold selection and uncertainty
+#'   with application to ocean storm severity.
+#'   \emph{Journal of the Royal Statistical Society Series C: Applied
+#'   Statistics}, \strong{66}(1), 93-120.
+#'   \url{https://doi.org/10.1111/rssc.12159}
 #' @export
-plot.bcthresh <- function(x, which_v = 1,
+plot.bcthresh <- function(x, which_v = length(x$v_vec),
                           which_lambdas = 1:length(x$lambda),
+                          normalise = FALSE,
                           legend_pos = "bottom", ...) {
   # Choose the values of lambda
   x$pred_perf <- x$pred_perf[, , which_lambdas, drop = FALSE]
@@ -121,24 +136,32 @@ plot.bcthresh <- function(x, which_v = 1,
   if (!is.numeric(which_v) || !(which_v %in% 1:n_v)) {
     stop("'which_v' must be in 1:length(x$v_vec)")
   }
+  # x[, i, , drop = FALSE] gives a matrix of predictive performances
+  # Each column gives the values for a different value of lambda
+  ymat <- x$pred_perf[, which_v, ]
+  if (normalise){
+    ymat_shoof <- ymat - mean(ymat * !is.infinite(ymat), na.rm = TRUE)
+    ymat <- exp(ymat_shoof) / sum(exp(ymat_shoof), na.rm = TRUE)
+    ymat <- ymat / max(colSums(ymat, na.rm = TRUE), na.rm = TRUE)
+    my_ylab <- "threshold weight"
+  } else {
+    my_ylab <- "CV performance"
+  }
   my_lty <- 1
   my_col <- 1:length(x$lambda)
   my_lwd <- 2
   my_matplot <- function(x, y, ...,
                          xlab = "quantile of training threshold / %",
-                         ylab = "CV performance", type = "l",
-                         lty = my_lty, col = my_col, lwd = my_lwd) {
+                         ylab = my_ylab, type = "l", lty = my_lty,
+                         col = my_col, lwd = my_lwd) {
     graphics::matplot(x, y, ..., xlab = xlab, ylab = ylab, type = type,
                       lty = lty, col = col, lwd = lwd)
   }
   my_legend <- function(..., x = legend_pos,
-                        legend = paste0("lambda = ", the_lambdas), lty = my_lty,
-                        col = my_col, lwd = my_lwd) {
+                        legend = paste0("lambda = ", the_lambdas),
+                        lty = my_lty, col = my_col, lwd = my_lwd) {
     graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd)
   }
-  # x[, i, , drop = FALSE] gives a matrix of predictive performances
-  # Each column gives the values for a different value of lambda
-  ymat <- x$pred_perf[, which_v, ]
   my_matplot(x$u_ps, ymat, ...)
   my_legend(...)
   return(invisible())
