@@ -123,7 +123,7 @@
 #' # Exponentiated exponential data ----------------------------
 #'
 #' eprobs <- seq(0, 0.9, 0.1)
-#' elambda <- seq(-0.5, 0.5, 0.5)
+#' elambda <- seq(-0.25, 0.5, 0.5)
 #' set.seed(49)
 #' y <- rexp(1000)
 #' x <- exp(y)
