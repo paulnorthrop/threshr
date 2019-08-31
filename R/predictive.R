@@ -405,3 +405,69 @@ post_thresh_weights <- function(x, which_v = 1, u_prior = NULL) {
   ptw <- ptw / sum(ptw)
   return(ptw)
 }
+
+# ============================== predict.bcthresh =============================
+
+#' @export
+predict.bcthresh <- function(object, lambda, ...) {
+  if (!inherits(object, "bcthresh")) {
+    stop("object must be of class ''bcthresh''")
+  }
+  if (missing(lambda)) {
+    stop("lambda must be supplied, or chosen using choose_lambda()")
+  }
+  # Create an object of class "ithresh" for lambda = lambda[1]
+  temp <- choose_lambda(object, lambda = lambda[1])
+  # Extract arguments that the user want to pass to predict.ithresh
+  user_args <- list(...)
+  # If type = "p" or "d" then we need to set values at which to evaluate
+  # the cdf or pdf that are equally-spaced on the original (lambda = 1) scale
+  # To do this we call predict.ithesh using type = "q" in order to estimate
+  # the 0.1% and 99% quantiles on the original scale, set the values to be
+  # equally-spaced on this scale and transform them to the transformed scale.
+  # However, if the user has supplied x (in user_args$x) then we don't do this.
+  if (user_args$type %in% c("p", "d") && is.null(user_args$x)) {
+    my_args <- user_args
+    my_args$type <- "q"
+    my_args$x <- c(0.001, 0.99)
+    my_args$object <- temp
+    tempx <- do.call(predict.ithresh, my_args)
+    if (is.null(my_args$x_num)) {
+      x_num <- 100
+    } else {
+      x_num <- my_args$x_num
+    }
+    x_vals <- seq(tempx$y[1, 1], tempx$y[2, 1], len = x_num)
+    x_vals <- bc(x_vals, lambda[1])
+    ret_obj <- predict(temp, x = x_vals, ...)
+  } else {
+    ret_obj <- predict(temp, ...)
+  }
+  # If there are other lambdas then call predict.ithresh again
+  if (length(lambda) > 1) {
+    for (i in 2:length(lambda)) {
+      temp <- choose_lambda(object, lambda = lambda[i])
+      if (user_args$type %in% c("p", "d") && is.null(user_args$x)) {
+        my_args <- user_args
+        my_args$type <- "q"
+        my_args$x <- c(0.001, 0.99)
+        my_args$object <- temp
+        tempx <- do.call(predict.ithresh, my_args)
+        if (is.null(my_args$x_num)) {
+          x_num <- 100
+        } else {
+          x_num <- my_args$x_num
+        }
+        x_vals <- seq(tempx$y[1, 1], tempx$y[2, 1], len = x_num)
+        x_vals <- bc(x_vals, lambda[i])
+        temp <- predict(temp, x = x_vals, ...)
+      } else {
+        temp <- predict(temp, ...)
+      }
+      ret_obj$x <- cbind(ret_obj$x, temp$x)
+      ret_obj$y <- cbind(ret_obj$y, temp$y)
+    }
+  }
+  class(ret_obj) <- "ithreshpred"
+  return(invisible(ret_obj))
+}
