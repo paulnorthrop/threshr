@@ -198,6 +198,9 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   if (fn_object == "ithresh" && !missing(lambda)) {
     stop("lambda is not relevant for objects returned from ithresh()")
   }
+  if (fn_object == "choose_lambda" && !missing(lambda)) {
+    stop("lambda was set in the call to choose_lambda()")
+  }
   # If object was returned from bcthresh() then lambda must be supplied,
   # directly or via choose_lambda().  If it is supplied then call
   # choose_lambda() to extract the required information.
