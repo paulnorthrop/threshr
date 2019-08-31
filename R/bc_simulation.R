@@ -165,6 +165,7 @@ plot.bc_sim_study <- function(x, stat = -1,
   if (length(stat) > 1 || !is.numeric(stat)) {
     stop("''stat'' must be a numeric scalar")
   }
+  my_ylim <- NULL
   if (stat == -1) {
     my_ylab <- "mean CV performance"
     ymat <- apply(x$pred_perf, MARGIN = c(1, 3), mean)
@@ -173,6 +174,7 @@ plot.bc_sim_study <- function(x, stat = -1,
       ymat <- exp(ymat_shoof) / sum(exp(ymat_shoof), na.rm = TRUE)
       ymat <- ymat / max(colSums(ymat, na.rm = TRUE), na.rm = TRUE)
       my_ylab <- paste0("normalised mean CV performance")
+      my_ylim <- c(0, max(ymat, na.rm = TRUE))
     }
   } else {
     my_ylab <- paste0(100 * stat, "% quantile of CV performance")
@@ -182,15 +184,16 @@ plot.bc_sim_study <- function(x, stat = -1,
       ymat <- exp(ymat_shoof) / sum(exp(ymat_shoof), na.rm = TRUE)
       ymat <- ymat / max(colSums(ymat, na.rm = TRUE), na.rm = TRUE)
       my_ylab <- paste0("normalised ",100*stat,"% quantile of CV performance")
+      my_ylim <- c(0, max(ymat, na.rm = TRUE))
     }
   }
   my_lty <- 1
   my_col <- 1:n_lambda
   my_matplot <- function(x, y, ..., lty = my_lty, col = my_col, lwd = 2,
                          xlab = "quantile of training threshold / %",
-                         ylab = my_ylab, type = "l") {
+                         ylab = my_ylab, type = "l", ylim = my_ylim) {
     graphics::matplot(x, y, ..., lty = lty, col = col, lwd = lwd, xlab = xlab,
-                      ylab = ylab, type = type)
+                      ylab = ylab, type = type, ylim = ylim)
   }
   my_legend <- function(..., x = legend_pos,
                         legend = paste0("lambda = ", lambda), lty = my_lty,

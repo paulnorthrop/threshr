@@ -144,8 +144,10 @@ plot.bcthresh <- function(x, which_v = length(x$v_vec),
     ymat <- exp(ymat_shoof) / sum(exp(ymat_shoof), na.rm = TRUE)
     ymat <- ymat / max(colSums(ymat, na.rm = TRUE), na.rm = TRUE)
     my_ylab <- "threshold weight"
+    my_ylim <- c(0, max(ymat, na.rm = TRUE))
   } else {
     my_ylab <- "CV performance"
+    my_ylim <- NULL
   }
   my_lty <- 1
   my_col <- 1:length(x$lambda)
@@ -153,9 +155,9 @@ plot.bcthresh <- function(x, which_v = length(x$v_vec),
   my_matplot <- function(x, y, ...,
                          xlab = "quantile of training threshold / %",
                          ylab = my_ylab, type = "l", lty = my_lty,
-                         col = my_col, lwd = my_lwd) {
+                         col = my_col, lwd = my_lwd, ylim = my_ylim) {
     graphics::matplot(x, y, ..., xlab = xlab, ylab = ylab, type = type,
-                      lty = lty, col = col, lwd = lwd)
+                      lty = lty, col = col, lwd = lwd, ylim = ylim)
   }
   my_legend <- function(..., x = legend_pos,
                         legend = paste0("lambda = ", the_lambdas),
