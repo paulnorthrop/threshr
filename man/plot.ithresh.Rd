@@ -9,7 +9,7 @@
   which_u = NULL)
 }
 \arguments{
-\item{x}{an object of class "ithresh", a result of a call to
+\item{x}{an object of class \code{"ithresh"}, a result of a call to
 \code{\link{ithresh}}.}
 
 \item{y}{Not used.}
