@@ -40,7 +40,7 @@ gom_args <- list(data = gom, probs = probs, lambda = lambda)
 gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
 
 # lambda = 1 (the default)
-res1 <- choose_lambda(gom_lambda)
+res1 <- choose_lambda(gom_lambda, lambda = 1)
 plot(res1)
 # lambda = 2
 res2 <- choose_lambda(gom_lambda, lambda = 2)
