@@ -7,7 +7,7 @@
 \method{predict}{ithresh}(object, npy = NULL, n_years = 100,
   which_u = c("best", "all"), which_v = 1L, u_prior = rep(1,
   length(object$u_vec)), type = c("p", "d", "q", "i", "r"),
-  hpd = FALSE, x = NULL, lambda, ...)
+  hpd = FALSE, x = NULL, lambda = 1, ...)
 }
 \arguments{
 \item{object}{An object of class "ithresh", a result of a call to
