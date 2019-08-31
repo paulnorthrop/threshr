@@ -43,7 +43,7 @@ choose_lambda <- function(x, lambda = 1) {
     stop("use only with \"bcthresh\" objects")
   }
   if (!(lambda %in% x$lambda)) {
-    stop(paste("lambda must be one of ", x$lambda))
+    stop("lambda must be one of ", paste(x$lambda, collapse = ", "))
   }
   # Find the index of lambda in x$lambda
   which_lambda <- which(lambda == x$lambda)
