@@ -2,7 +2,7 @@
 
 #' Predictive inference for the largest value observed in N years.
 #'
-#' \code{predict} method for class "ithresh".  Predictive inferences can
+#' \code{predict} method for class \code{"ithresh"}.  Predictive inferences can
 #' either be based on a \emph{single training threshold} or using a weighted
 #' average of inferences over \emph{multiple training thresholds}.  A single
 #' threshold may chosen to be the best performing threshold, as judged by the
@@ -12,7 +12,7 @@
 #' training thresholds.  By default all thresholds are given the same
 #' prior probability but the user can specify their own prior.
 #'
-#' @param object An object of class "ithresh", a result of a call to
+#' @param object An object of class \code{"ithresh"}, a result of a call to
 #'   \code{\link{ithresh}} or \code{\link{choose_lambda}}, or an object of
 #'   class "bcthresh", a result of a call to \code{\link{bcthresh}}.
 #' @param npy A numeric scalar. The mean number of observations per year
@@ -87,7 +87,7 @@
 #' @param lambda A numeric scalar.  Only relevant if \code{object} was
 #'   returned from \code{\link{bcthresh}}.  The value of the Box-Cox
 #'   transformation parameter \eqn{\lambda} to use when performing predictive
-#'   inference. Must be contained in \code{object$lambda}.
+#'   inference.  These must be contained in \code{object$lambda}.
 #' @param ... Additional arguments to be passed to
 #'   \code{\link[revdbayes]{predict.evpost}}.  In particular:
 #'   \code{level}, which can be used to set (multiple) levels
@@ -408,6 +408,18 @@ post_thresh_weights <- function(x, which_v = 1, u_prior = NULL) {
 
 # ============================== predict.bcthresh =============================
 
+#' Predictive inference for the largest value observed in N years.
+#'
+#' \code{predict} method for class \code{"bcthresh"}.  Calls
+#' \code{\link{predict.ithresh}} for each value of \eqn{\lambda} in
+#' \code{lambda}.
+#' @param object An object of class \code{"bcthresh"}, a result of a call to
+#'   \code{\link{bcthresh}}.
+#' @param lambda A numeric vector containing values of the Box-Cox
+#'   transformation parameter \eqn{\lambda} to use when performing predictive
+#'   inference.  These must be contained in \code{object$lambda}.
+#' @param ... Additional arguments to be passed to
+#'   \code{\link{predict.ithresh}}.
 #' @export
 predict.bcthresh <- function(object, lambda, ...) {
   if (!inherits(object, "bcthresh")) {
@@ -476,6 +488,6 @@ predict.bcthresh <- function(object, lambda, ...) {
     }
   }
   ret_obj$lambda <- lambda
-  class(ret_obj) <- "ithreshpred"
+  class(ret_obj) <- "bcthreshpred"
   return(invisible(ret_obj))
 }
