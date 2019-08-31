@@ -10,7 +10,7 @@
   hpd = FALSE, x = NULL, lambda = 1, ...)
 }
 \arguments{
-\item{object}{An object of class "ithresh", a result of a call to
+\item{object}{An object of class \code{"ithresh"}, a result of a call to
 \code{\link{ithresh}} or \code{\link{choose_lambda}}, or an object of
 class "bcthresh", a result of a call to \code{\link{bcthresh}}.}
 
@@ -94,7 +94,7 @@ then a default value is set within
 \item{lambda}{A numeric scalar.  Only relevant if \code{object} was
 returned from \code{\link{bcthresh}}.  The value of the Box-Cox
 transformation parameter \eqn{\lambda} to use when performing predictive
-inference. Must be contained in \code{object$lambda}.}
+inference.  These must be contained in \code{object$lambda}.}
 
 \item{...}{Additional arguments to be passed to
 \code{\link[revdbayes]{predict.evpost}}.  In particular:
@@ -130,7 +130,7 @@ An list object of class "ithreshpred" with a similar structure to
 }
 }
 \description{
-\code{predict} method for class "ithresh".  Predictive inferences can
+\code{predict} method for class \code{"ithresh"}.  Predictive inferences can
 either be based on a \emph{single training threshold} or using a weighted
 average of inferences over \emph{multiple training thresholds}.  A single
 threshold may chosen to be the best performing threshold, as judged by the
