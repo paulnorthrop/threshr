@@ -17,6 +17,7 @@ The `threshr` package deals primarily with the selection of thresholds for use i
 The main function in the threshr package is `ithresh`. It uses Bayesian leave-one-out cross-validation to compare the extreme value predictive ability resulting from the use of each of a user-supplied set of thresholds. The following code produces a threshold diagnostic plot using a dataset `gom` containing 315 storm peak significant waveheights. We set a vector `u_vec` of thresholds; call `ithresh`, supplying the data and thresholds; and use then plot the results. In this minimal example (`ithresh` has further arguments) thresholds are judged in terms of the quality of prediction of whether the validation observation lies above the highest threshold in `u_vec` and, if it does, how much it exceeds this highest threshold.
 
 ``` r
+library(threshr)
 u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))
 gom_cv <- ithresh(data = gom, u_vec = u_vec_gom)
 plot(gom_cv)
