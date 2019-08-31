@@ -333,8 +333,14 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   # If object was returned from bcthresh() or choose_lambda() then transform
   # back to the original scale
   if (fn_object == "bcthresh" || fn_object == "choose_lambda") {
-    if (ret_obj$type == "p" || ret_obj$type == "d") {
+    if (ret_obj$type == "p") {
       ret_obj$x <- inv_bc(ret_obj$x, lambda)
+    }
+    if (ret_obj$type == "d") {
+      # Transform the ordinates
+      ret_obj$x <- inv_bc(ret_obj$x, lambda)
+      # Transformed density, using Jacobian based on untransformed ordinates
+      ret_obj$y <- ret_obj$y * ret_obj$x ^ (lambda - 1)
     }
     if (ret_obj$type == "q" || ret_obj$type == "r") {
       ret_obj$y <- inv_bc(ret_obj$y, lambda)
@@ -399,4 +405,3 @@ post_thresh_weights <- function(x, which_v = 1, u_prior = NULL) {
   ptw <- ptw / sum(ptw)
   return(ptw)
 }
-
