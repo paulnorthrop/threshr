@@ -464,10 +464,18 @@ predict.bcthresh <- function(object, lambda, ...) {
       } else {
         temp <- predict(temp, ...)
       }
-      ret_obj$x <- cbind(ret_obj$x, temp$x)
-      ret_obj$y <- cbind(ret_obj$y, temp$y)
+      if (user_args$type %in% c("p", "d", "q")) {
+        ret_obj$x <- cbind(ret_obj$x, temp$x)
+        ret_obj$y <- cbind(ret_obj$y, temp$y)
+      } else if (user_args$type == "i") {
+        ret_obj$long <- rbind(ret_obj$long, temp$long)
+        ret_obj$short <- rbind(ret_obj$short, temp$short)
+      } else if (user_args$type == "r") {
+        ret_obj$y <- cbind(ret_obj$y, temp$y)
+      }
     }
   }
+  ret_obj$lambda <- lambda
   class(ret_obj) <- "ithreshpred"
   return(invisible(ret_obj))
 }
