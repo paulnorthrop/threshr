@@ -7,7 +7,6 @@
 #'
 #' @param x an object of class "ithreshpred", a result of a call to
 #'   \code{\link{ithresh}}.
-#' @param y Not used.
 #' @param ... Additional arguments passed on to
 #'   \code{\link[revdbayes]{plot.evpred}}.
 #' @param ave_only  A logical scalar.  Only relevant if
@@ -81,7 +80,7 @@
 #' @seealso \code{\link{summary.ithresh}} Summarizing measures of threshold
 #'   predictive performance.
 #' @export
-plot.ithreshpred <- function(x, y, ..., ave_only = FALSE, add_best = FALSE) {
+plot.ithreshpred <- function(x, ..., ave_only = FALSE, add_best = FALSE) {
   if (!inherits(x, "ithreshpred")) {
     stop("use only with \"ithreshpred\" objects")
   }
