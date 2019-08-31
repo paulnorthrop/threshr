@@ -182,7 +182,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
                             which_u = c("best", "all"), which_v = 1L,
                             u_prior = rep(1, length(object$u_vec)),
                             type = c("p", "d", "q", "i", "r"), hpd = FALSE,
-                            x = NULL, lambda = 1, ...) {
+                            x = NULL, lambda, ...) {
   if (!inherits(object, "ithresh") && !inherits(object, "bcthresh")) {
     stop("object must be of class ''ithresh'' or ''bcthresh''")
   }
