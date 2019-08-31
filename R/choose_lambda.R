@@ -38,9 +38,12 @@
 #' res2 <- choose_lambda(gom_lambda, lambda = 2)
 #' plot(res2)
 #' @export
-choose_lambda <- function(x, lambda = 1) {
+choose_lambda <- function(x, lambda) {
   if (!inherits(x, "bcthresh")) {
     stop("use only with \"bcthresh\" objects")
+  }
+  if (missing(lambda)) {
+    stop("lambda must be supplied, one of ", paste(x$lambda, collapse = ", "))
   }
   if (!(lambda %in% x$lambda)) {
     stop("lambda must be one of ", paste(x$lambda, collapse = ", "))

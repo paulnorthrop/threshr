@@ -4,7 +4,7 @@
 \alias{choose_lambda}
 \title{Extract results for a chosen value of \eqn{\lambda}}
 \usage{
-choose_lambda(x, lambda = 1)
+choose_lambda(x, lambda)
 }
 \arguments{
 \item{x}{An object of class \code{"bcthresh"} returned from
