@@ -85,8 +85,9 @@
 #'   then a default value is set within
 #'   \code{\link[revdbayes]{predict.evpost}}.
 #' @param lambda A numeric scalar.  Only relevant if \code{object} was
-#'   returned from \code{\link{bcthresh}} or \code{\link{choose_lambda}}.
-#' Must be contained in \code{object$lambda}.
+#'   returned from \code{\link{bcthresh}}.  The value of the Box-Cox
+#'   transformation parameter \eqn{\lambda} to use when performing predictive
+#'   inference. Must be contained in \code{object$lambda}.
 #' @param ... Additional arguments to be passed to
 #'   \code{\link[revdbayes]{predict.evpost}}.  In particular:
 #'   \code{level}, which can be used to set (multiple) levels
@@ -207,7 +208,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
       object <- choose_lambda(object, lambda = lambda)
     }
   }
-  # If object was returned from choose_lambda then we use object$lambda
+  # If object was returned from choose_lambda() then we use object$lambda
   if (fn_object == "choose_lambda") {
     lambda <- object$lambda
   }

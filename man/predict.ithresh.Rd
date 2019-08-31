@@ -92,8 +92,9 @@ then a default value is set within
 \code{\link[revdbayes]{predict.evpost}}.}
 
 \item{lambda}{A numeric scalar.  Only relevant if \code{object} was
-  returned from \code{\link{bcthresh}} or \code{\link{choose_lambda}}.
-Must be contained in \code{object$lambda}.}
+returned from \code{\link{bcthresh}}.  The value of the Box-Cox
+transformation parameter \eqn{\lambda} to use when performing predictive
+inference. Must be contained in \code{object$lambda}.}
 
 \item{...}{Additional arguments to be passed to
 \code{\link[revdbayes]{predict.evpost}}.  In particular:
