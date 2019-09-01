@@ -140,10 +140,8 @@ plot.bcthresh <- function(x, which_v = length(x$v_vec),
   # Each column gives the values for a different value of lambda
   ymat <- x$pred_perf[, which_v, , drop = FALSE]
   if (normalise){
-    print(ymat)
     ymat_shoof <- ymat - mean(ymat * !is.infinite(ymat), na.rm = TRUE)
     ymat <- exp(ymat_shoof) / sum(exp(ymat_shoof), na.rm = TRUE)
-    print(ymat)
     ymat <- ymat / max(colSums(ymat, na.rm = TRUE), na.rm = TRUE)
     my_ylab <- "threshold weight"
     my_ylim <- c(0, max(ymat, na.rm = TRUE))
