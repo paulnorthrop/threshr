@@ -437,32 +437,26 @@ predict.bcthresh <- function(object, lambda = object$lambda, ...) {
   if (!inherits(object, "bcthresh")) {
     stop("object must be of class ''bcthresh''")
   }
-  # Create an object of class "ithresh" for lambda = lambda[1]
-  temp <- choose_lambda(object, lambda = lambda[1])
   # Extract arguments that the user want to pass to predict.ithresh
   user_args <- list(...)
+  # Create an object of class "ithresh" for lambda = lambda[1]
+  temp <- choose_lambda(object, lambda = lambda[1])
   # If type = "p" or "d" then we need to set values at which to evaluate
   # the cdf or pdf that are equally-spaced on the original (lambda = 1) scale
-  # To do this we call predict.ithesh using type = "q" in order to estimate
-  # the 0.1% and 99% quantiles on the original scale, set the values to be
-  # equally-spaced on this scale and transform them to the transformed scale.
+  # To do this we first make a call to predict.ithresh using x_dum = 2.
+  # This estimates the 0.1% and 99% quantiles on the original scale, using
+  # we set values to be equally-spaced between these quantiles on this scale
+  # and transform them to the transformed scale.
   # However, if the user has supplied x (in user_args$x) then we don't do this.
-#  print("1")
+  # We also respect user_args$x_num, should this exist.
   if (user_args$type %in% c("p", "d") && is.null(user_args$x)) {
-    my_args <- user_args
-    my_args$type <- "q"
-    my_args$x <- c(0.001, 0.99)
-    my_args$object <- temp
-#    my_args$which_u <- "best"
-#    print("2")
-    tempx <- do.call(predict.ithresh, my_args)
-#    print("3")
-    if (is.null(my_args$x_num)) {
+    tempx <- predict(temp, x_num = 2, ...)
+    if (is.null(user_args$x_num)) {
       x_num <- 100
     } else {
-      x_num <- my_args$x_num
+      x_num <- user_args$x_num
     }
-    x_vals <- seq(tempx$y[1, 1], tempx$y[2, 1], len = x_num)
+    x_vals <- seq(tempx$x[1, 1], tempx$x[2, 1], len = x_num)
     x_vals <- bc(x_vals, lambda[1])
     ret_obj <- predict(temp, x = x_vals, ...)
   } else {
@@ -473,17 +467,13 @@ predict.bcthresh <- function(object, lambda = object$lambda, ...) {
     for (i in 2:length(lambda)) {
       temp <- choose_lambda(object, lambda = lambda[i])
       if (user_args$type %in% c("p", "d") && is.null(user_args$x)) {
-#        my_args <- user_args
-#        my_args$type <- "q"
-#        my_args$x <- c(0.001, 0.99)
-        my_args$object <- temp
-        tempx <- do.call(predict.ithresh, my_args)
-        if (is.null(my_args$x_num)) {
+        tempx <- predict(temp, x_num = 2, ...)
+        if (is.null(user_args$x_num)) {
           x_num <- 100
         } else {
-          x_num <- my_args$x_num
+          x_num <- user_args$x_num
         }
-        x_vals <- seq(tempx$y[1, 1], tempx$y[2, 1], len = x_num)
+        x_vals <- seq(tempx$x[1, 1], tempx$x[2, 1], len = x_num)
         x_vals <- bc(x_vals, lambda[i])
         temp <- predict(temp, x = x_vals, ...)
       } else {
