@@ -420,13 +420,22 @@ post_thresh_weights <- function(x, which_v = 1, u_prior = NULL) {
 #'   inference.  These must be contained in \code{object$lambda}.
 #' @param ... Additional arguments to be passed to
 #'   \code{\link{predict.ithresh}}.
+#' @examples
+#' # Set a prior: flat for GP parameters, Haldane for P(exceedance)
+#' prior_args <- list(prior = "flatflat", bin_prior = "haldane",
+#'                    h_prior = list(min_xi = -Inf))
+#'
+#' ## Gulf of Mexico significant wave heights ------------------
+#'
+#' gprobs <- seq(0.1, 0.9, 0.1)
+#' glambda <- seq(1, 3, 0.5)
+#' gom_args <- list(data = gom, probs = gprobs, lambda = glambda)
+#' gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
+#' dgom <- predict(gom_lambda, type = "d")
 #' @export
-predict.bcthresh <- function(object, lambda, ...) {
+predict.bcthresh <- function(object, lambda = object$lambda, ...) {
   if (!inherits(object, "bcthresh")) {
     stop("object must be of class ''bcthresh''")
-  }
-  if (missing(lambda)) {
-    stop("lambda must be supplied, or chosen using choose_lambda()")
   }
   # Create an object of class "ithresh" for lambda = lambda[1]
   temp <- choose_lambda(object, lambda = lambda[1])
@@ -438,12 +447,16 @@ predict.bcthresh <- function(object, lambda, ...) {
   # the 0.1% and 99% quantiles on the original scale, set the values to be
   # equally-spaced on this scale and transform them to the transformed scale.
   # However, if the user has supplied x (in user_args$x) then we don't do this.
+#  print("1")
   if (user_args$type %in% c("p", "d") && is.null(user_args$x)) {
     my_args <- user_args
     my_args$type <- "q"
     my_args$x <- c(0.001, 0.99)
     my_args$object <- temp
+#    my_args$which_u <- "best"
+#    print("2")
     tempx <- do.call(predict.ithresh, my_args)
+#    print("3")
     if (is.null(my_args$x_num)) {
       x_num <- 100
     } else {
@@ -460,9 +473,9 @@ predict.bcthresh <- function(object, lambda, ...) {
     for (i in 2:length(lambda)) {
       temp <- choose_lambda(object, lambda = lambda[i])
       if (user_args$type %in% c("p", "d") && is.null(user_args$x)) {
-        my_args <- user_args
-        my_args$type <- "q"
-        my_args$x <- c(0.001, 0.99)
+#        my_args <- user_args
+#        my_args$type <- "q"
+#        my_args$x <- c(0.001, 0.99)
         my_args$object <- temp
         tempx <- do.call(predict.ithresh, my_args)
         if (is.null(my_args$x_num)) {

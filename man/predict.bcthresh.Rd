@@ -4,7 +4,7 @@
 \alias{predict.bcthresh}
 \title{Predictive inference for the largest value observed in N years.}
 \usage{
-\method{predict}{bcthresh}(object, lambda, ...)
+\method{predict}{bcthresh}(object, lambda = object$lambda, ...)
 }
 \arguments{
 \item{object}{An object of class \code{"bcthresh"}, a result of a call to
@@ -21,4 +21,17 @@ inference.  These must be contained in \code{object$lambda}.}
 \code{predict} method for class \code{"bcthresh"}.  Calls
 \code{\link{predict.ithresh}} for each value of \eqn{\lambda} in
 \code{lambda}.
+}
+\examples{
+# Set a prior: flat for GP parameters, Haldane for P(exceedance)
+prior_args <- list(prior = "flatflat", bin_prior = "haldane",
+                   h_prior = list(min_xi = -Inf))
+
+## Gulf of Mexico significant wave heights ------------------
+
+gprobs <- seq(0.1, 0.9, 0.1)
+glambda <- seq(1, 3, 0.5)
+gom_args <- list(data = gom, probs = gprobs, lambda = glambda)
+gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
+dgom <- predict(gom_lambda, type = "d")
 }
