@@ -1,6 +1,7 @@
 context("predict: bcthresh vs ithresh")
 
-# We check that predict.bcthresh aress predict.ithresh, for different choices of the argument type.
+# We check that predict.bcthresh aress predict.ithresh, for different choices
+# of the argument type.
 
 set.seed(1092019)
 
@@ -17,6 +18,8 @@ gprobs <- seq(0.1, 0.9, 0.1)
 glambda <- seq(1, 3, 0.5)
 gom_args <- list(data = gom, probs = gprobs, lambda = glambda)
 gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
+
+## Density
 
 b1d <- predict(gom_lambda, lambda = 1, type = "d")
 b2d <- predict(gom_lambda, lambda = 2, type = "d")
@@ -42,3 +45,31 @@ test_that("bcthresh vs ithresh: pred_perf", {
 test_that("bcthresh vs ithresh: pred_perf", {
   testthat::expect_equivalent(c3d, b3d, tolerance = my_tol)
 })
+
+## Distribution function
+
+b1p <- predict(gom_lambda, lambda = 1, type = "p")
+b2p <- predict(gom_lambda, lambda = 2, type = "p")
+b3p <- predict(gom_lambda, lambda = 3, type = "p")
+
+res1 <- choose_lambda(gom_lambda, lambda = 1)
+res2 <- choose_lambda(gom_lambda, lambda = 2)
+res3 <- choose_lambda(gom_lambda, lambda = 3)
+
+c1p <- predict(res1, type = "p")
+# Fiddle with the xs to make them the same as those used in predict.bcthresh()
+c2p <- predict(res2, type = "p", x = threshr:::bc(b2p$x, res2$lambda))
+c3p <- predict(res3, type = "p", x = threshr:::bc(b3p$x, res3$lambda))
+
+# Equal apart from the class, so used equivalent
+test_that("bcthresh vs ithresh: pred_perf", {
+  testthat::expect_equivalent(c1p, b1p, tolerance = my_tol)
+})
+# Why are these different? ... because the xs are equally-spaced on different scales
+test_that("bcthresh vs ithresh: pred_perf", {
+  testthat::expect_equivalent(c2p, b2p, tolerance = my_tol)
+})
+test_that("bcthresh vs ithresh: pred_perf", {
+  testthat::expect_equivalent(c3p, b3p, tolerance = my_tol)
+})
+
