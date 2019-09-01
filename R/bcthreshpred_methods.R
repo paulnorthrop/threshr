@@ -24,9 +24,10 @@ plot.bcthreshpred <- function(x,
   if (missing(legend_pos)) {
     legend_pos <- switch(x$type,
                          d = "topright",
-                         p = "topleft",
+                         p = "bottomright",
                          q = "topleft")
   }
+  n_lambda <- length(x$lambda)
   lambda <- x$lambda[which_lambdas]
   my_col <- 1:length(lambda)
   my_lty <- 1
@@ -52,6 +53,11 @@ plot.bcthreshpred <- function(x,
   if (x$type == "q") {
     my_xlab <- "probability"
     my_ylab <- "quantile"
+  }
+  # If we averaged over thresholds then use only the threshold-averaged values
+  if (x$which_u == "all") {
+    n_u <- length(x$u_vec)
+    x$y <- x$y[, (n_u + 1) * 1:n_lambda, drop = FALSE]
   }
   if (x$type %in% c("d", "p", "q")) {
     x$x <- x$x[, which_lambdas, drop = FALSE]

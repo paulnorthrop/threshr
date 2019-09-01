@@ -340,7 +340,8 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
       # Transform the ordinates
       ret_obj$x <- inv_bc(ret_obj$x, lambda)
       # Transformed density, using Jacobian based on untransformed ordinates
-      ret_obj$y <- ret_obj$y * ret_obj$x ^ (lambda - 1)
+      # Code so this works when which_u = "all" and so ret_obj$y is a matrix
+      ret_obj$y <- ret_obj$y * as.vector(ret_obj$x ^ (lambda - 1))
     }
     if (ret_obj$type == "q" || ret_obj$type == "r") {
       ret_obj$y <- inv_bc(ret_obj$y, lambda)
@@ -439,6 +440,9 @@ predict.bcthresh <- function(object, lambda = object$lambda, ...) {
   }
   # Extract arguments that the user want to pass to predict.ithresh
   user_args <- list(...)
+  if (is.null(user_args$type)){
+    user_args$type <- "p"
+  }
   # Create an object of class "ithresh" for lambda = lambda[1]
   temp <- choose_lambda(object, lambda = lambda[1])
   # If type = "p" or "d" then we need to set values at which to evaluate
