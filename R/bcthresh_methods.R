@@ -164,7 +164,6 @@ plot.bcthresh <- function(x, which_v = length(x$v_vec),
                         lty = my_lty, col = my_col, lwd = my_lwd) {
     graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd)
   }
-  print(ymat)
   my_matplot(x$u_ps, ymat, ...)
   my_legend(...)
   return(invisible())
