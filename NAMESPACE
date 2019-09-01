@@ -2,6 +2,7 @@
 
 S3method(plot,bc_sim_study)
 S3method(plot,bcthresh)
+S3method(plot,bcthreshpred)
 S3method(plot,ithresh)
 S3method(plot,ithreshpred)
 S3method(plot,stability)
