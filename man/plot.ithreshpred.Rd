@@ -29,8 +29,8 @@ A list containing the graphical parameters using in producing the
   plot including any arguments supplied via ... is returned (invisibly).
 }
 \description{
-\code{plot} method for class "ithreshpred".  Produces plots to summarise
-the predictive inferences made by \code{\link{predict.ithresh}}.
+\code{plot} method for class \code{"ithreshpred"}.  Produces plots to
+summarise the predictive inferences made by \code{\link{predict.ithresh}}.
 }
 \details{
 \emph{Single threshold case}, where
