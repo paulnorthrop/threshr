@@ -2,6 +2,8 @@ context("predict.ithresh function")
 
 # We check predict.ithresh, for different choices of the argument type.
 
+set.seed(1092019)
+
 # Set a tolerance for the comparison of the simulated values
 my_tol <- 1e-5
 
