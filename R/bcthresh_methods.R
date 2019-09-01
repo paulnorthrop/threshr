@@ -138,7 +138,7 @@ plot.bcthresh <- function(x, which_v = length(x$v_vec),
   }
   # x[, i, , drop = FALSE] gives a matrix of predictive performances
   # Each column gives the values for a different value of lambda
-  ymat <- x$pred_perf[, which_v, , drop = FALSE]
+  ymat <- as.matrix(x$pred_perf[, which_v, ])
   if (normalise){
     ymat_shoof <- ymat - mean(ymat * !is.infinite(ymat), na.rm = TRUE)
     ymat <- exp(ymat_shoof) / sum(exp(ymat_shoof), na.rm = TRUE)
@@ -164,6 +164,7 @@ plot.bcthresh <- function(x, which_v = length(x$v_vec),
                         lty = my_lty, col = my_col, lwd = my_lwd) {
     graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd)
   }
+  print(ymat)
   my_matplot(x$u_ps, ymat, ...)
   my_legend(...)
   return(invisible())
