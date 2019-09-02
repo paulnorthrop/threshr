@@ -108,7 +108,7 @@
 #'   \code{lambda}.  This will always be equal to 1 if \code{object} was
 #'   returned from \code{ithresh}.
 #'
-#'   If \code{which_u == "all"} then
+#'   If \code{which_u = "all"} then
 #' \itemize{
 #'   \item the list also contains the \emph{posterior threshold weights}
 #'     in component \code{post_thresh_wts}
@@ -182,6 +182,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   if (!inherits(object, "ithresh")) {
     stop("object must be of class ''ithresh''")
   }
+  which_u <- match.arg(which_u)
   # Check that which_u and n_years are compatible
   if (which_u == "all" & length(n_years) > 1){
     stop("If which = \"all\" then n_years must have length 1")
