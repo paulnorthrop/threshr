@@ -34,11 +34,18 @@ c1d <- predict(res1, type = "d")
 c2d <- predict(res2, type = "d", x = threshr:::bc(b2d$x, res2$lambda))
 c3d <- predict(res3, type = "d", x = threshr:::bc(b3d$x, res3$lambda))
 
+# Make $x and $y returned from predict.ithresh arrays, like predict.bcthresh
+c1d$x <- array(c1d$x, dim = c(nrow(c1d$x), 1, 1))
+c1d$y <- array(c1d$y, dim = c(nrow(c1d$y), 1, 1))
+c2d$x <- array(c2d$x, dim = c(nrow(c2d$x), 1, 1))
+c2d$y <- array(c2d$y, dim = c(nrow(c2d$y), 1, 1))
+c3d$x <- array(c3d$x, dim = c(nrow(c3d$x), 1, 1))
+c3d$y <- array(c3d$y, dim = c(nrow(c3d$y), 1, 1))
+
 # Equal apart from the class, so used equivalent
 test_that("bcthresh vs ithresh: pred_perf", {
   testthat::expect_equivalent(c1d, b1d, tolerance = my_tol)
 })
-# Why are these different? ... because the xs are equally-spaced on different scales
 test_that("bcthresh vs ithresh: pred_perf", {
   testthat::expect_equivalent(c2d, b2d, tolerance = my_tol)
 })
@@ -60,6 +67,14 @@ c1p <- predict(res1, type = "p")
 # Fiddle with the xs to make them the same as those used in predict.bcthresh()
 c2p <- predict(res2, type = "p", x = threshr:::bc(b2p$x, res2$lambda))
 c3p <- predict(res3, type = "p", x = threshr:::bc(b3p$x, res3$lambda))
+
+# Make $x and $y returned from predict.ithresh arrays, like predict.bcthresh
+c1p$x <- array(c1p$x, dim = c(nrow(c1p$x), 1, 1))
+c1p$y <- array(c1p$y, dim = c(nrow(c1p$y), 1, 1))
+c2p$x <- array(c2p$x, dim = c(nrow(c2p$x), 1, 1))
+c2p$y <- array(c2p$y, dim = c(nrow(c2p$y), 1, 1))
+c3p$x <- array(c3p$x, dim = c(nrow(c3p$x), 1, 1))
+c3p$y <- array(c3p$y, dim = c(nrow(c3p$y), 1, 1))
 
 # Equal apart from the class, so used equivalent
 test_that("bcthresh vs ithresh: pred_perf", {
