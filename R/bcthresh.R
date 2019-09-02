@@ -106,7 +106,7 @@
 #'
 #' ## Gulf of Mexico significant wave heights ------------------
 #'
-#' gprobs <- seq(0, 0.9, 0.1)
+#' gprobs <- seq(0, 0.8, 0.1)
 #' glambda <- seq(1, 3, 0.5)
 #' gom_args <- list(data = gom, probs = gprobs, lambda = glambda)
 #' gom_lambda <- do.call(bcthresh, c(gom_args, prior_args))
