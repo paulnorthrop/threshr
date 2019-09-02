@@ -111,7 +111,7 @@ An list object of class "ithreshpred" with a similar structure to
   \code{lambda}.  This will always be equal to 1 if \code{object} was
   returned from \code{ithresh}.
 
-  If \code{which_u == "all"} then
+  If \code{which_u = "all"} then
 \itemize{
   \item the list also contains the \emph{posterior threshold weights}
     in component \code{post_thresh_wts}

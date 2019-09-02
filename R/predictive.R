@@ -182,9 +182,8 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   if (!inherits(object, "ithresh")) {
     stop("object must be of class ''ithresh''")
   }
-  which_u <- match.arg(which_u)
   # Check that which_u and n_years are compatible
-  if (which_u == "all" & length(n_years) > 1){
+  if (which_u[1] == "all" & length(n_years) > 1){
     stop("If which = \"all\" then n_years must have length 1")
   }
   # From which function was object returned?
