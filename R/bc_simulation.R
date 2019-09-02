@@ -23,6 +23,12 @@ rbc <- function(n = 1, lambda = 1, sim_fn = stats::rexp, ...) {
   return(inv_bc(sim_fn(n, ...), lambda = lambda))
 }
 
+#' @export
+MN_median <- function(lambda = 1, npy, N, quantile_fn = stats::qexp, ...) {
+  return(inv_bc(quantile_fn(-log(2) / (N * npy), log.p = TRUE, ...),
+         lambda = lambda))
+}
+
 # ============================== bc_sim_study =================================
 
 #' Box-Cox threshold selection simulation study
@@ -34,6 +40,7 @@ rbc <- function(n = 1, lambda = 1, sim_fn = stats::rexp, ...) {
 #' @param rbc_args A named list of arguments to be passed to \code{rbc},
 #'   including any arguments to be passed to \code{sim_fn} via \code{...}
 #'   in \code{rbc}.
+#' @param quantile_args A named list of arguments to be
 #' @param bcthresh_args A named list of arguments to be passed to
 #'   \code{bcthresh}.  In particular: \code{probs, lambda, n, prior}.
 #'   The defaults for \code{probs, lambda} and \code{n} are
@@ -67,10 +74,12 @@ rbc <- function(n = 1, lambda = 1, sim_fn = stats::rexp, ...) {
 #'                    h_prior = list(min_xi = -Inf))
 #' bcthresh_args <- c(list(lambda = c(1, 1.5, 2, 2.5, 3)), prior_args)
 #' rbc_args <- list(n = 1000, lambda = 2)
-#' res <- bc_sim_study(2, rbc_args, bcthresh_args)
+#' MN_args <- list(npy = 20, N = 10 ^ seq(2, 4, len = 15))
+#' MN_args <- c(MN_args, lambda = rbc_args$lambda)
+#' res <- bc_sim_study(2, rbc_args, bcthresh_args, MN_args)
 #' plot(res)
 #' @export
-bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
+bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
   # Record the call for later use
   Call <- match.call()
   if (!is.null(bcthresh_args$n_v)) {
@@ -86,8 +95,14 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
     bcthresh_args$n <- 1000
   }
   n_lambda <- length(bcthresh_args$lambda)
-  # Set up an array in which to store the results
+  # Set up an array in which to store the predctive performance results
   res_array <- array(dim = c(length(bcthresh_args$prob), sims, n_lambda))
+  # ... and for predictive medians of N-year maxima, best threshold
+  best_array <- array(dim = c(length(MN_args$N), sims, n_lambda))
+#  # ... and for predictive medians of N-year maxima, averaged over thresholds
+#  ave_array <- array(dim = c(length(MN_args$N), sims, n_lambda))
+  # Create a sims by n_lambda matrix in which to store the best thresholds
+  best_u <- matrix(NA, ncol = n_lambda, nrow = sims)
   for (i in 1:sims) {
     if (i %% 10 == 0) {
       print(i)
@@ -99,11 +114,29 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args) {
     for (j in 1:n_lambda) {
       res_array[, i, j] <- res$pred_perf[, , j]
     }
+    # Estimate predictive medians of N-year maxima for best threshold
+    qbest <- predict(res, npy = MN_args$npy, n_years = MN_args$N,
+                     which_u = "best", type = "q", x = 1 / 2)
+    for (j in 1:n_lambda) {
+      best_array[, i, j] <- qbest$y[, , j]
+    }
+    best_u[i, ] <- qbest$best_u
+#    for (k in 1:length(MN_args$N)) {
+#      qall <- predict(res, npy = MN_args$npy, n_years = MN_args$N[k],
+#                      which_u = "all", type = "q", x = 1 / 2)
+#      for (j in 1:n_lambda) {
+#        all_array[, i, j] <- qall$y[, , j]
+#      }
+#    }
   }
   # Remove data from the returned list bcthresh_args
   bcthresh_args$data <- NULL
+  # Calculate the true medians
+  true_medians <- do.call(MN_median, MN_args)
   temp <- list(pred_perf = res_array, rbc_args = rbc_args,
-               bcthresh_args = bcthresh_args, call = Call)
+               bcthresh_args = bcthresh_args, MN_args = MN_args,
+               best_array = best_array, best_u = best_u,
+               true_medians = true_medians, call = Call)
   class(temp) <- "bc_sim_study"
   return(temp)
 }

@@ -4,7 +4,7 @@
 \alias{bc_sim_study}
 \title{Box-Cox threshold selection simulation study}
 \usage{
-bc_sim_study(sims, rbc_args, bcthresh_args)
+bc_sim_study(sims, rbc_args, bcthresh_args, MN_args)
 }
 \arguments{
 \item{sims}{An integer scalar.  The number of simulated datasets.}
@@ -20,6 +20,8 @@ The defaults for \code{probs, lambda} and \code{n} are
 By default \code{n_v = 1}.  If \code{n_v} is supplied then this value is
 ignored, without warning.  Similarly, if \code{data} is supplied then
 this is also ignored, without warning.}
+
+\item{quantile_args}{A named list of arguments to be}
 }
 \value{
 An object (a list) of class \code{"bc_sim_study"} containing the
@@ -56,6 +58,8 @@ prior_args <- list(prior = "flatflat", bin_prior = "haldane",
                    h_prior = list(min_xi = -Inf))
 bcthresh_args <- c(list(lambda = c(1, 1.5, 2, 2.5, 3)), prior_args)
 rbc_args <- list(n = 1000, lambda = 2)
-res <- bc_sim_study(2, rbc_args, bcthresh_args)
+MN_args <- list(npy = 20, N = 10 ^ seq(2, 4, len = 15))
+MN_args <- c(MN_args, lambda = rbc_args$lambda)
+res <- bc_sim_study(2, rbc_args, bcthresh_args, MN_args)
 plot(res)
 }
