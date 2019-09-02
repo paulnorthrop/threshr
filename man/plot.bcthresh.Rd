@@ -13,7 +13,8 @@
 call to \code{\link{bcthresh}}.}
 
 \item{which_v}{A numeric scalar.  Specifies the validation threshold, that
-is the component of \code{x$v_vec}, to use in the plot.}
+is the component of \code{x$v_vec}, to use in the plot.
+The default is to use the highest of the validatin thresholds.}
 
 \item{which_lambdas}{A numeric vector.  Specifies which values of
 \eqn{\lambda}, that is, the components of \code{x$lambda}, to include in

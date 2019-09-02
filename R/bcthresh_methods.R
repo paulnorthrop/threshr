@@ -89,6 +89,7 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #'   call to \code{\link{bcthresh}}.
 #' @param which_v A numeric scalar.  Specifies the validation threshold, that
 #'   is the component of \code{x$v_vec}, to use in the plot.
+#'   The default is to use the highest of the validatin thresholds.
 #' @param which_lambdas A numeric vector.  Specifies which values of
 #'   \eqn{\lambda}, that is, the components of \code{x$lambda}, to include in
 #'   the plot.  The default is to use all these values.
