@@ -183,7 +183,7 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
     stop("object must be of class ''ithresh''")
   }
   # Check that which_u and n_years are compatible
-  if (which_u == "all" && length(n_years) > 1){
+  if (which_u == "all" & length(n_years) > 1){
     stop("If which = \"all\" then n_years must have length 1")
   }
   # From which function was object returned?
@@ -426,8 +426,8 @@ predict.bcthresh <- function(object, lambda = object$lambda, ...) {
     user_args$type <- "p"
   }
   # Check that which_u and n_years are compatible
-  if (!is.null(user_args$which_u) && !is.null(user_args$n_years)) {
-    if (user_args$which_u == "all" && length(user_args$n_years) > 1){
+  if (!is.null(user_args$which_u) & !is.null(user_args$n_years)) {
+    if (user_args$which_u == "all" & length(user_args$n_years) > 1){
       stop("If which = \"all\" then n_years must have length 1")
     }
   }
