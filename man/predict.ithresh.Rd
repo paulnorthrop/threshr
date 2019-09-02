@@ -7,7 +7,7 @@
 \method{predict}{ithresh}(object, npy = NULL, n_years = 100,
   which_u = c("best", "all"), which_v = 1L, u_prior = rep(1,
   length(object$u_vec)), type = c("p", "d", "q", "i", "r"),
-  hpd = FALSE, x = NULL, lambda = 1, ...)
+  hpd = FALSE, x = NULL, ...)
 }
 \arguments{
 \item{object}{An object of class \code{"ithresh"}, a result of a call to
@@ -90,11 +90,6 @@ must be a vector (not a matrix, as suggested by the documentation of
 \code{\link[revdbayes]{predict.evpost}}).  If \code{x} is not supplied
 then a default value is set within
 \code{\link[revdbayes]{predict.evpost}}.}
-
-\item{lambda}{A numeric scalar.  Only relevant if \code{object} was
-returned from \code{\link{bcthresh}}.  The value of the Box-Cox
-transformation parameter \eqn{\lambda} to use when performing predictive
-inference.  These must be contained in \code{object$lambda}.}
 
 \item{...}{Additional arguments to be passed to
 \code{\link[revdbayes]{predict.evpost}}.  In particular:

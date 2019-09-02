@@ -84,10 +84,6 @@
 #'   \code{\link[revdbayes]{predict.evpost}}).  If \code{x} is not supplied
 #'   then a default value is set within
 #'   \code{\link[revdbayes]{predict.evpost}}.
-#' @param lambda A numeric scalar.  Only relevant if \code{object} was
-#'   returned from \code{\link{bcthresh}}.  The value of the Box-Cox
-#'   transformation parameter \eqn{\lambda} to use when performing predictive
-#'   inference.  These must be contained in \code{object$lambda}.
 #' @param ... Additional arguments to be passed to
 #'   \code{\link[revdbayes]{predict.evpost}}.  In particular:
 #'   \code{level}, which can be used to set (multiple) levels
@@ -182,34 +178,15 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
                             which_u = c("best", "all"), which_v = 1L,
                             u_prior = rep(1, length(object$u_vec)),
                             type = c("p", "d", "q", "i", "r"), hpd = FALSE,
-                            x = NULL, lambda = 1, ...) {
-  if (!inherits(object, "ithresh") && !inherits(object, "bcthresh")) {
-    stop("object must be of class ''ithresh'' or ''bcthresh''")
+                            x = NULL, ...) {
+  if (!inherits(object, "ithresh")) {
+    stop("object must be of class ''ithresh''")
   }
   # From which function was object returned?
-  if (inherits(object, "bcthresh")) {
-    fn_object <- "bcthresh"
-  } else if (is.null(object$lambda)) {
+  if (is.null(object$lambda)) {
     fn_object <- "ithresh"
   } else {
     fn_object <- "choose_lambda"
-  }
-  # lambda is irrelevant if object was returned from ithresh()
-  if (fn_object == "ithresh" && !missing(lambda)) {
-    stop("lambda is not relevant for objects returned from ithresh()")
-  }
-  if (fn_object == "choose_lambda" && !missing(lambda)) {
-    stop("lambda was set in the call to choose_lambda()")
-  }
-  # If object was returned from bcthresh() then lambda must be supplied,
-  # directly or via choose_lambda().  If it is supplied then call
-  # choose_lambda() to extract the required information.
-  if (fn_object == "bcthresh") {
-    if (missing(lambda)) {
-      stop("lambda must be supplied, or chosen using choose_lambda()")
-    } else {
-      object <- choose_lambda(object, lambda = lambda)
-    }
   }
   # If object was returned from choose_lambda() then we use object$lambda
   if (fn_object == "choose_lambda") {
@@ -328,11 +305,11 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   ret_obj$which_v <- which_v
   ret_obj$v_vec <- object$v_vec
   ret_obj$best_u <- return_best_u
-  # Add the chosen value of lambda
-  ret_obj$lambda <- lambda
-  # If object was returned from bcthresh() or choose_lambda() then transform
+  # If object was returned from choose_lambda() then transform
   # back to the original scale
-  if (fn_object == "bcthresh" || fn_object == "choose_lambda") {
+  if (fn_object == "choose_lambda") {
+    # Add the value of lambda
+    ret_obj$lambda <- lambda
     if (ret_obj$type == "p") {
       ret_obj$x <- inv_bc(ret_obj$x, lambda)
     }
