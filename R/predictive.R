@@ -498,6 +498,8 @@ predict.bcthresh <- function(object, lambda = object$lambda, ...) {
       } else if (user_args$type == "r") {
         ret_obj$y[, , i] <- temp$y
       }
+      # Add the best threshold
+      ret_obj$best_u <- c(ret_obj$best_u, temp$best_u)
     }
   }
   ret_obj$lambda <- lambda
