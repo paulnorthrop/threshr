@@ -7,16 +7,22 @@
 #'
 #' @param x an object of class "bthreshpred", a result of a call to
 #'   \code{\link{ithresh}}.
-#' @param which_lambdas A numeric vector.  Specifies which values of
-#'   \eqn{\lambda}, that is, the components of \code{x$lambda},
-#'   to include in the plot.  The default is to use all these values.
+#' @param lambda A numeric vector.  Specifies which values of
+#'   \eqn{\lambda} to include in the plot.  These values must be present
+#'   in \code{x$lambda}.  The default is to use all these values.
+#' @param n_years A numeric vector.  Specifies which values in
+#'   \code{x$n_years} to use for the time horizon.  If
+#'   \code{length(lambda) > 1} then \code{n_years} must have length 1.
+#'   The defaults are that \code{x$n_years[1]} is used if
+#'   \code{length(lambda) > 1} and \code{x$years} otherwise.
 #' @param legend_pos The position of the legend specified using the argument
 #'   \code{x} in \code{\link[graphics]{legend}}.  If \code{legend_pos} is
 #'   missing then it is set internally, based on \code{x$type}.
 #' @param ... Additional arguments passed to \code{\link[graphics]{matplot}}.
 #' @export
-plot.bcthreshpred <- function(x,
-                              which_lambdas = 1:length(x$lambda),
+plot.bcthreshpred <- function(x, lambda = x$lambda,
+                              n_years = if (length(lambda) == 1) x$n_years else
+                                x$n_years[1],
                               legend_pos, ...) {
   if (!inherits(x, "bcthreshpred")) {
     stop("use only with \"bcthreshpred\" objects")
@@ -27,9 +33,16 @@ plot.bcthreshpred <- function(x,
                          p = "bottomright",
                          q = "topleft")
   }
-  n_lambda <- length(x$lambda)
-  lambda <- x$lambda[which_lambdas]
-  my_col <- 1:length(lambda)
+  n_lambda <- length(lambda)
+  if (!all(lambda %in% x$lambda)) {
+    stop("All lambda must be in x$lambda")
+  }
+  if (n_lambda > 1 && length(n_years) > 1) {
+    stop("If length(lambda) > 1 then length(n_years) must be 1")
+  }
+  which_lambdas <- which(x$lambda %in% lambda)
+  which_n_years <- which(x$n_years %in% n_years)
+  my_col <- 1:n_lambda
   my_lty <- 1
   my_lwd <- 2
   my_matplot <- function(x, y, ..., type = "l", col = my_col, lty = my_lty,
@@ -55,13 +68,14 @@ plot.bcthreshpred <- function(x,
     my_ylab <- "quantile"
   }
   # If we averaged over thresholds then use only the threshold-averaged values
-  if (x$which_u == "all") {
-    n_u <- length(x$u_vec)
-    x$y <- x$y[, (n_u + 1) * 1:n_lambda, drop = FALSE]
-  }
   if (x$type %in% c("d", "p", "q")) {
-    x$x <- x$x[, which_lambdas, drop = FALSE]
-    x$y <- x$y[, which_lambdas, drop = FALSE]
+    if (x$which_u == "all") {
+      x$x <- x$x[, 1, which_lambdas]
+      x$y <- x$y[, length(x$u_vec), which_lambdas]
+    } else {
+      x$x <- x$x[, which_n_years, which_lambdas]
+      x$y <- x$y[, which_n_years, which_lambdas]
+    }
     my_matplot(x$x, x$y, ...)
     my_legend()
   }

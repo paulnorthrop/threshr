@@ -22,6 +22,9 @@ inference.  These must be contained in \code{object$lambda}.}
 \code{\link{predict.ithresh}} for each value of \eqn{\lambda} in
 \code{lambda}.
 }
+\details{
+If \code{which_u = "all"} then \code{n_years} must have length 1.
+}
 \examples{
 # Set a prior: flat for GP parameters, Haldane for P(exceedance)
 prior_args <- list(prior = "flatflat", bin_prior = "haldane",

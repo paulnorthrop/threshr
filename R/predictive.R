@@ -182,6 +182,10 @@ predict.ithresh <- function(object, npy = NULL, n_years = 100,
   if (!inherits(object, "ithresh")) {
     stop("object must be of class ''ithresh''")
   }
+  # Check that which_u and n_years are compatible
+  if (which_u == "all" && length(n_years) > 1){
+    stop("If which = \"all\" then n_years must have length 1")
+  }
   # From which function was object returned?
   if (is.null(object$lambda)) {
     fn_object <- "ithresh"
@@ -398,6 +402,7 @@ post_thresh_weights <- function(x, which_v = 1, u_prior = NULL) {
 #'   inference.  These must be contained in \code{object$lambda}.
 #' @param ... Additional arguments to be passed to
 #'   \code{\link{predict.ithresh}}.
+#' @details If \code{which_u = "all"} then \code{n_years} must have length 1.
 #' @examples
 #' # Set a prior: flat for GP parameters, Haldane for P(exceedance)
 #' prior_args <- list(prior = "flatflat", bin_prior = "haldane",
@@ -419,6 +424,12 @@ predict.bcthresh <- function(object, lambda = object$lambda, ...) {
   user_args <- list(...)
   if (is.null(user_args$type)){
     user_args$type <- "p"
+  }
+  # Check that which_u and n_years are compatible
+  if (!is.null(user_args$which_u) && !is.null(user_args$n_years)) {
+    if (user_args$which_u == "all" && length(user_args$n_years) > 1){
+      stop("If which = \"all\" then n_years must have length 1")
+    }
   }
   # Create an object of class "ithresh" for lambda = lambda[1]
   temp <- choose_lambda(object, lambda = lambda[1])
@@ -443,7 +454,25 @@ predict.bcthresh <- function(object, lambda = object$lambda, ...) {
   } else {
     ret_obj <- predict(temp, ...)
   }
-  # If there are other lambdas then call predict.ithresh again
+  # Create arrays in which to store the relevant results
+  # The 3rd dimension is lambda
+  if (user_args$type %in% c("p", "d", "q")) {
+    ret_obj$x <- array(ret_obj$x, dim = c(nrow(ret_obj$x), ncol(ret_obj$x),
+                                          length(lambda)))
+    ret_obj$y <- array(ret_obj$y, dim = c(nrow(ret_obj$y), ncol(ret_obj$y),
+                                          length(lambda)))
+  } else if (user_args$type == "i") {
+    ret_obj$long <- array(ret_obj$long, dim = c(nrow(ret_obj$long),
+                                                ncol(ret_obj$long),
+                                                length(lambda)))
+    ret_obj$short <- array(ret_obj$short, dim = c(nrow(ret_obj$short),
+                                                  ncol(ret_obj$short),
+                                                  length(lambda)))
+  } else if (user_args$type == "r") {
+    ret_obj$y <- array(ret_obj$y, dim = c(nrow(ret_obj$y), ncol(ret_obj$y),
+                                          length(lambda)))
+  }
+  # If there are other lambdas then call predict.ithresh() again
   if (length(lambda) > 1) {
     for (i in 2:length(lambda)) {
       temp <- choose_lambda(object, lambda = lambda[i])
@@ -461,13 +490,13 @@ predict.bcthresh <- function(object, lambda = object$lambda, ...) {
         temp <- predict(temp, ...)
       }
       if (user_args$type %in% c("p", "d", "q")) {
-        ret_obj$x <- cbind(ret_obj$x, temp$x)
-        ret_obj$y <- cbind(ret_obj$y, temp$y)
+        ret_obj$x[, , i] <- temp$x
+        ret_obj$y[, , i] <- temp$y
       } else if (user_args$type == "i") {
-        ret_obj$long <- rbind(ret_obj$long, temp$long)
-        ret_obj$short <- rbind(ret_obj$short, temp$short)
+        ret_obj$long[, , i] <- temp$long
+        ret_obj$short[, , i] <- temp$short
       } else if (user_args$type == "r") {
-        ret_obj$y <- cbind(ret_obj$y, temp$y)
+        ret_obj$y[, , i] <- temp$y
       }
     }
   }

@@ -4,16 +4,22 @@
 \alias{plot.bcthreshpred}
 \title{Plot diagnostics an bcthreshpred object}
 \usage{
-\method{plot}{bcthreshpred}(x, which_lambdas = 1:length(x$lambda),
-  legend_pos, ...)
+\method{plot}{bcthreshpred}(x, lambda = x$lambda, n_years = if
+  (length(lambda) == 1) x$n_years else x$n_years[1], legend_pos, ...)
 }
 \arguments{
 \item{x}{an object of class "bthreshpred", a result of a call to
 \code{\link{ithresh}}.}
 
-\item{which_lambdas}{A numeric vector.  Specifies which values of
-\eqn{\lambda}, that is, the components of \code{x$lambda},
-to include in the plot.  The default is to use all these values.}
+\item{lambda}{A numeric vector.  Specifies which values of
+\eqn{\lambda} to include in the plot.  These values must be present
+in \code{x$lambda}.  The default is to use all these values.}
+
+\item{n_years}{A numeric vector.  Specifies which values in
+\code{x$n_years} to use for the time horizon.  If
+\code{length(lambda) > 1} then \code{n_years} must have length 1.
+The defaults are that \code{x$n_years[1]} is used if
+\code{length(lambda) > 1} and \code{x$years} otherwise.}
 
 \item{legend_pos}{The position of the legend specified using the argument
 \code{x} in \code{\link[graphics]{legend}}.  If \code{legend_pos} is
