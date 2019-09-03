@@ -23,7 +23,6 @@ rbc <- function(n = 1, lambda = 1, sim_fn = stats::rexp, ...) {
   return(inv_bc(sim_fn(n, ...), lambda = lambda))
 }
 
-#' @export
 MN_median <- function(lambda = 1, npy, N, quantile_fn = stats::qexp, ...) {
   return(inv_bc(quantile_fn(-log(2) / (N * npy), log.p = TRUE, ...),
          lambda = lambda))
@@ -40,7 +39,8 @@ MN_median <- function(lambda = 1, npy, N, quantile_fn = stats::qexp, ...) {
 #' @param rbc_args A named list of arguments to be passed to \code{rbc},
 #'   including any arguments to be passed to \code{sim_fn} via \code{...}
 #'   in \code{rbc}.
-#' @param quantile_args A named list of arguments to be
+#' @param MN_args A named list of arguments containing the number of
+#'   observations per years \code{npy} and the time horizon \code{N}.
 #' @param bcthresh_args A named list of arguments to be passed to
 #'   \code{bcthresh}.  In particular: \code{probs, lambda, n, prior}.
 #'   The defaults for \code{probs, lambda} and \code{n} are
@@ -75,7 +75,6 @@ MN_median <- function(lambda = 1, npy, N, quantile_fn = stats::qexp, ...) {
 #' bcthresh_args <- c(list(lambda = c(1, 1.5, 2, 2.5, 3)), prior_args)
 #' rbc_args <- list(n = 1000, lambda = 2)
 #' MN_args <- list(npy = 20, N = 10 ^ seq(2, 4, len = 15))
-#' MN_args <- c(MN_args, lambda = rbc_args$lambda)
 #' res <- bc_sim_study(2, rbc_args, bcthresh_args, MN_args)
 #' plot(res)
 #' @export
@@ -132,6 +131,7 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
   # Remove data from the returned list bcthresh_args
   bcthresh_args$data <- NULL
   # Calculate the true medians
+  MN_args <- c(MN_args, lambda = rbc_args$lambda)
   true_medians <- do.call(MN_median, MN_args)
   temp <- list(pred_perf = res_array, rbc_args = rbc_args,
                bcthresh_args = bcthresh_args, MN_args = MN_args,
@@ -285,7 +285,7 @@ bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, rmse,
   n_lambda <- length(lambda)
   N <- x$MN_args$N[which_N]
   true_median <- x$true_medians[which_N]
-  dens <- apply(x$best_array, 2, density)
+  dens <- apply(x$best_array, 2, stats::density)
   my_xlim <- range(sapply(dens, "[", "x"))
   my_ylim <- range(sapply(dens, "[", "y"))
   my_lty <- 1
@@ -315,6 +315,6 @@ bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, rmse,
   # Calculate RMSEs
   my_plot(dens, ...)
   my_legend(...)
-  abline(v = true_median, lwd = 3, lty = 2)
+  graphics::abline(v = true_median, lwd = 3, lty = 2)
   return(invisible())
 }
