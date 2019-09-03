@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{bc_sim_study}(x, type = 1, stat = -1, which_N = 1,
   which_lambdas = 1:length(x$bcthresh_args$lambda), normalise = FALSE,
-  legend_pos = "bottom", ...)
+  legend_pos, rmse = FALSE, ...)
 }
 \arguments{
 \item{x}{an object inheriting from class "bc_sim_study", a result of a call to
@@ -17,8 +17,9 @@
   \item{type = 1: }{plots averages measures of predictive performance
     against threshold level by the value of \eqn{\lambda}.}
   \item{type = 2: }{plots kernel density estimates of the predictive
-    density of the median of \eqn{N}-year maxima, with the true value
-    indicated using a vertical line.}
+    density of the median of \eqn{N}-year maxima by the value of
+    \eqn{\lambda}, using the best threshold for each \eqn{\lambda}, with the
+    true value of the median indicated using a vertical line.}
 }}
 
 \item{stat}{A numeric scalar.  Determines the statistic(s) used to
@@ -48,6 +49,10 @@ and less than 1 for all other values of \eqn{\lambda}.}
 
 \item{legend_pos}{The position of the legend specified using the argument
 \code{x} in \code{\link[graphics]{legend}}.}
+
+\item{rmse}{A logical scalar.  If \code{type = 2} should we add a legend
+in the bottom right of the plot giving the estimated root mean squared
+error for each value of \eqn{lambda}?}
 
 \item{...}{Additional graphical parameters to be passed to
 \code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.

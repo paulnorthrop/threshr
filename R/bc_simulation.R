@@ -156,8 +156,9 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 #'   \item{type = 1: }{plots averages measures of predictive performance
 #'     against threshold level by the value of \eqn{\lambda}.}
 #'   \item{type = 2: }{plots kernel density estimates of the predictive
-#'     density of the median of \eqn{N}-year maxima, with the true value
-#'     indicated using a vertical line.}
+#'     density of the median of \eqn{N}-year maxima by the value of
+#'     \eqn{\lambda}, using the best threshold for each \eqn{\lambda}, with the
+#'     true value of the median indicated using a vertical line.}
 #' }
 #' @param stat A numeric scalar.  Determines the statistic(s) used to
 #'   summarise measures of performance across different simulated datasets,
@@ -182,6 +183,9 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 #'   and less than 1 for all other values of \eqn{\lambda}.
 #' @param legend_pos The position of the legend specified using the argument
 #'   \code{x} in \code{\link[graphics]{legend}}.
+#' @param rmse A logical scalar.  If \code{type = 2} should we add a legend
+#'   in the bottom right of the plot giving the estimated root mean squared
+#'   error for each value of \eqn{lambda}?
 #' @param ... Additional graphical parameters to be passed to
 #'   \code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.
 #'   The default setting plots solid lines (\code{lty = 1}) of width 2
@@ -200,17 +204,23 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 #' @export
 plot.bc_sim_study <- function(x, type = 1, stat = -1, which_N = 1,
                               which_lambdas = 1:length(x$bcthresh_args$lambda),
-                              normalise = FALSE, legend_pos = "bottom", ...) {
+                              normalise = FALSE, legend_pos, rmse = FALSE,
+                              ...) {
   if (type != 1 & type != 2) {
     stop("type must be equal to 1 or 2")
   }
+  if (missing(legend_pos)) {
+    legend_pos <- ifelse(type == 1, "bottom", "topright")
+  }
   if (type == 1) {
-    bcsim_type1_plot(x, stat, which_lambdas, normalise, legend_pos)
+    bcsim_type1_plot(x, stat, which_lambdas, normalise, legend_pos, ...)
   } else {
-    bcsim_type2_plot(x, which_N, which_lambdas, legend_pos)
+    bcsim_type2_plot(x, which_N, which_lambdas, legend_pos, rmse, ...)
   }
   return(invisible())
 }
+
+# Plots of type 1
 
 bcsim_type1_plot <- function(x, stat, which_lambdas, normalise, legend_pos,
                              ...) {
@@ -262,5 +272,48 @@ bcsim_type1_plot <- function(x, stat, which_lambdas, normalise, legend_pos,
   # levels (dimension 1) and values of lambda (dimension 3)
   my_matplot(x$bcthresh_args$probs, ymat, ...)
   my_legend(...)
+  return(invisible())
+}
+
+# Plots of type 2
+
+bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, rmse,
+                             ...) {
+  # Choose the values of lambda
+  x$best_array <- as.matrix(x$best_array[which_N, , which_lambdas])
+  lambda <- x$bcthresh_args$lambda[which_lambdas]
+  n_lambda <- length(lambda)
+  N <- x$MN_args$N[which_N]
+  true_median <- x$true_medians[which_N]
+  dens <- apply(x$best_array, 2, density)
+  my_xlim <- range(sapply(dens, "[", "x"))
+  my_ylim <- range(sapply(dens, "[", "y"))
+  my_lty <- 1
+  my_col <- 1:n_lambda
+  if (rmse) {
+    RMSEs <- apply(x$best_array - true_median, 2, stats::sd)
+    my_title <- expression(lambda ~ (RMSE))
+    my_leg <- paste0(lambda, " (", signif(RMSEs, 2), ")")
+  } else {
+    my_title <- expression(lambda)
+    my_leg <- lambda
+  }
+  my_plot <- function(x, ..., lty = my_lty, col = my_col, lwd = 2,
+                      xlab = paste0("median of ", N, "-year maximum"),
+                      ylab = "density", type = "l", xlim = my_xlim,
+                      ylim = my_ylim, title = NULL) {
+    graphics::plot(NA, ..., xlab = xlab, ylab = ylab, type = type, xlim = xlim,
+                   ylim = ylim)
+    mapply(graphics::lines, x, lty = lty, col = col, lwd = lwd, ...)
+  }
+  my_legend <- function(..., x = legend_pos, legend = my_leg, lty = my_lty,
+                        col = my_col, lwd = 2, title = my_title, adj = 0) {
+    graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd,
+                     title = title, adj = adj, ...)
+  }
+  # Calculate RMSEs
+  my_plot(dens, ...)
+  my_legend(...)
+  abline(v = true_median, lwd = 3, lty = 2)
   return(invisible())
 }
