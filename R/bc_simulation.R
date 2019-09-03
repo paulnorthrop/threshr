@@ -151,6 +151,14 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 #'
 #' @param x an object inheriting from class "bc_sim_study", a result of a call to
 #'   \code{\link{bc_sim_study}}.
+#' @param type An integer scalar.  Determine the type of plot.
+#' \itemize{
+#'   \item{type = 1: }{plots averages measures of predictive performance
+#'     against threshold level by the value of \eqn{\lambda}.}
+#'   \item{type = 2: }{plots kernel density estimates of the predictive
+#'     density of the median of \eqn{N}-year maxima, with the true value
+#'     indicated using a vertical line.}
+#' }
 #' @param stat A numeric scalar.  Determines the statistic(s) used to
 #'   summarise measures of performance across different simulated datasets,
 #'   for each each combination of \eqn{\lambda} and threshold level.
@@ -158,6 +166,9 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 #'   100\code{stat}\% sample quantile is used, with \code{stat} being passed
 #'   as the argument \code{probs} to \code{\link[stats]{quantile}}.
 #'   For example, if \code{stat = 0.5} then the sample median is used.
+#' @param which_N A numeric scalar  Specifies which value of \eqn{N}, that is,
+#'   which component of \code{x$MN_args$N} is used as the time horizon when
+#'   \code{type = 2}.
 #' @param which_lambdas A numeric vector.  Specifies which values of
 #'   \eqn{\lambda}, that is, the components of \code{x$bcthresh_args$lambda},
 #'   to include in the plot.  The default is to use all these values.
@@ -187,9 +198,22 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 #' @section Examples:
 #' See the examples in \code{\link{bc_sim_study}}.
 #' @export
-plot.bc_sim_study <- function(x, stat = -1,
+plot.bc_sim_study <- function(x, type = 1, stat = -1, which_N = 1,
                               which_lambdas = 1:length(x$bcthresh_args$lambda),
                               normalise = FALSE, legend_pos = "bottom", ...) {
+  if (type != 1 & type != 2) {
+    stop("type must be equal to 1 or 2")
+  }
+  if (type == 1) {
+    bcsim_type1_plot(x, stat, which_lambdas, normalise, legend_pos)
+  } else {
+    bcsim_type2_plot(x, which_N, which_lambdas, legend_pos)
+  }
+  return(invisible())
+}
+
+bcsim_type1_plot <- function(x, stat, which_lambdas, normalise, legend_pos,
+                             ...) {
   # Choose the values of lambda
   x$pred_perf <- x$pred_perf[, , which_lambdas, drop = FALSE]
   lambda <- x$bcthresh_args$lambda[which_lambdas]

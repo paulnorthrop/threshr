@@ -4,13 +4,22 @@
 \alias{plot.bc_sim_study}
 \title{Plot method for objects of class "bc_sim_study"}
 \usage{
-\method{plot}{bc_sim_study}(x, stat = -1,
+\method{plot}{bc_sim_study}(x, type = 1, stat = -1, which_N = 1,
   which_lambdas = 1:length(x$bcthresh_args$lambda), normalise = FALSE,
   legend_pos = "bottom", ...)
 }
 \arguments{
 \item{x}{an object inheriting from class "bc_sim_study", a result of a call to
 \code{\link{bc_sim_study}}.}
+
+\item{type}{An integer scalar.  Determine the type of plot.
+\itemize{
+  \item{type = 1: }{plots averages measures of predictive performance
+    against threshold level by the value of \eqn{\lambda}.}
+  \item{type = 2: }{plots kernel density estimates of the predictive
+    density of the median of \eqn{N}-year maxima, with the true value
+    indicated using a vertical line.}
+}}
 
 \item{stat}{A numeric scalar.  Determines the statistic(s) used to
 summarise measures of performance across different simulated datasets,
@@ -19,6 +28,10 @@ If \code{stat = -1} then the mean is used.  Otherwise, the
 100\code{stat}\% sample quantile is used, with \code{stat} being passed
 as the argument \code{probs} to \code{\link[stats]{quantile}}.
 For example, if \code{stat = 0.5} then the sample median is used.}
+
+\item{which_N}{A numeric scalar  Specifies which value of \eqn{N}, that is,
+which component of \code{x$MN_args$N} is used as the time horizon when
+\code{type = 2}.}
 
 \item{which_lambdas}{A numeric vector.  Specifies which values of
 \eqn{\lambda}, that is, the components of \code{x$bcthresh_args$lambda},
