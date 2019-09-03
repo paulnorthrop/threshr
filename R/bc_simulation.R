@@ -291,9 +291,10 @@ bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, rmse,
   my_lty <- 1
   my_col <- 1:n_lambda
   if (rmse) {
-    RMSEs <- apply(x$best_array - true_median, 2, stats::sd)
+    rmse_fun <- function(x) sqrt(mean(x ^ 2))
+    RMSEs <- apply(x$best_array - true_median, 2, rmse_fun)
     my_title <- expression(lambda ~ (RMSE))
-    my_leg <- paste0(lambda, " (", signif(RMSEs, 2), ")")
+    my_leg <- paste0(lambda, " (", signif(RMSEs, 3), ")")
   } else {
     my_title <- expression(lambda)
     my_leg <- lambda
