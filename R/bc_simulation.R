@@ -302,10 +302,12 @@ bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, summary,
     bias <- apply(x$best_array - true_median, 2, mean)
     stdev <- apply(x$best_array - true_median, 2, stats::sd)
     rmse_fun <- function(x) sqrt(mean(x ^ 2))
-    RMSEs <- apply(x$best_array - true_median, 2, rmse_fun)
-    row1 <- c("lambda", "bias", "SD", "RMSE")
-    rest <- cbind(lambda, bias, stdev, RMSEs)
-    perf_stats <- rbind(row1, signif(rest, digits))
+    RMSE <- apply(x$best_array - true_median, 2, rmse_fun)
+    col1 <- c(expression(lambda), lambda)
+    col2 <- c("bias", signif(bias, digits))
+    col3 <- c("SD", signif(stdev, digits))
+    col4 <- c("RMSE", signif(RMSE, digits))
+    perf_stats <- c(col1, col2, col3, col4)
   } else {
   }
   my_title <- expression(lambda)
