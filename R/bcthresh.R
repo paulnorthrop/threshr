@@ -123,7 +123,7 @@
 #' # Exponentiated exponential data ----------------------------
 #'
 #' eprobs <- seq(0, 0.9, 0.1)
-#' elambda <- seq(-0.25, 0.5, 0.5)
+#' elambda <- seq(-0.25, 0.5, 0.25)
 #' set.seed(49)
 #' y <- rexp(1000)
 #' x <- exp(y)
@@ -253,6 +253,14 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
   }
   for_set_prior <- c(list(prior = cv_control$prior, model = "gp"),
                      cv_control$h_prior)
+#
+# NOT READY YET.  EDIT revdbayes, inc use_rcpp = TRUE
+#
+#  # If lambda is negative then impose the constraint that the upper endpoint
+#  # of the transformed distribution must be < -1 / lambda
+#  if (lambda < 0) {
+#    for_set_prior <- c(for_set_prior, list(upper = 0))
+#  }
   gp_prior <- do.call(revdbayes::set_prior, for_set_prior)
   cv_control$prior <- NULL
   cv_control$h_prior <- NULL
@@ -322,6 +330,12 @@ bccv_fn <- function(data, u_vec, v_vec, n_u, n_v, use_rcpp, raw_data, lambda,
         for_post$init_ests <- temp$mle * 0.95
       }
     }
+    #
+    # NOT READY YET.  EDIT revdbayes, inc use_rcpp = TRUE
+    #
+#    if (lambda < 0) {
+#      for_post$prior$upper <- -1 / lambda - u
+#    }
     # If an error occurs (this can sometimes happen if there are few excesses)
     # then try trans = "BC".  This tends to be slower but the Box-Cox
     # transformation towards normality can improve stability of the
