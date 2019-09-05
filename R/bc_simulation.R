@@ -262,10 +262,11 @@ bcsim_type1_plot <- function(x, stat, which_lambdas, normalise, legend_pos,
     graphics::matplot(x, y, ..., lty = lty, col = col, lwd = lwd, xlab = xlab,
                       ylab = ylab, type = type, ylim = ylim)
   }
-  my_legend <- function(..., x = legend_pos,
-                        legend = paste0("lambda = ", lambda), lty = my_lty,
-                        col = my_col, lwd = 2) {
-    graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd)
+  my_title <- expression(lambda)
+  my_legend <- function(..., x = legend_pos, legend = lambda, lty = my_lty,
+                        col = my_col, lwd = 2, title = my_title) {
+    graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd,
+                     title = title, ...)
   }
   # Apply the averaging function over dimensions 1 and 3 of x$pred_perf
   # i.e. average over simulations (dimension 2) for for different threshold
