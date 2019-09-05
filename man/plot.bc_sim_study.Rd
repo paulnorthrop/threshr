@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{bc_sim_study}(x, type = 1, stat = -1, which_N = 1,
   which_lambdas = 1:length(x$bcthresh_args$lambda), normalise = FALSE,
-  legend_pos, rmse = FALSE, ...)
+  legend_pos, summary = FALSE, digits = 2, ...)
 }
 \arguments{
 \item{x}{an object inheriting from class "bc_sim_study", a result of a call to
@@ -47,12 +47,19 @@ is used across of values of \eqn{\lambda} that appear in the plot,
 with the property that the values sum to 1 for one value of \eqn{\lambda}
 and less than 1 for all other values of \eqn{\lambda}.}
 
-\item{legend_pos}{The position of the legend specified using the argument
-\code{x} in \code{\link[graphics]{legend}}.}
+\item{legend_pos}{The position of the legend that indicates which curves
+relates to which value of \eqn{\lambda}, to be passed as the argument
+\code{x} in \code{\link[graphics]{legend}}.  The default is
+\code{"bottom"} for \code{type = 1} and \code{"topleft"} for
+\code{type = 2}.}
 
-\item{rmse}{A logical scalar.  If \code{type = 2} should we add a legend
-in the bottom right of the plot giving the estimated root mean squared
-error for each value of \eqn{lambda}?}
+\item{summary}{A logical scalar.  If \code{type = 2} should we add a legend,
+in the top right of the plot, giving the estimated bias, standard
+deviation and root mean squared error for each value of \eqn{lambda}?}
+
+\item{digits}{An integer scalar.  The argument \code{digits} to be passed
+to \code{\link[base:Round]{signif}} when rounding the
+statistics produced when \code{summary = TRUE}.}
 
 \item{...}{Additional graphical parameters to be passed to
 \code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.

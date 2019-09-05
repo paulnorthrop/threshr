@@ -181,11 +181,17 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 #'   is used across of values of \eqn{\lambda} that appear in the plot,
 #'   with the property that the values sum to 1 for one value of \eqn{\lambda}
 #'   and less than 1 for all other values of \eqn{\lambda}.
-#' @param legend_pos The position of the legend specified using the argument
-#'   \code{x} in \code{\link[graphics]{legend}}.
-#' @param rmse A logical scalar.  If \code{type = 2} should we add a legend
-#'   in the bottom right of the plot giving the estimated root mean squared
-#'   error for each value of \eqn{lambda}?
+#' @param legend_pos The position of the legend that indicates which curves
+#'   relates to which value of \eqn{\lambda}, to be passed as the argument
+#'   \code{x} in \code{\link[graphics]{legend}}.  The default is
+#'   \code{"bottom"} for \code{type = 1} and \code{"topleft"} for
+#'   \code{type = 2}.
+#' @param summary A logical scalar.  If \code{type = 2} should we add a legend,
+#'   in the top right of the plot, giving the estimated bias, standard
+#'   deviation and root mean squared error for each value of \eqn{lambda}?
+#' @param digits An integer scalar.  The argument \code{digits} to be passed
+#'   to \code{\link[base:Round]{signif}} when rounding the
+#'   statistics produced when \code{summary = TRUE}.
 #' @param ... Additional graphical parameters to be passed to
 #'   \code{\link[graphics]{matplot}} and \code{\link[graphics]{legend}}.
 #'   The default setting plots solid lines (\code{lty = 1}) of width 2
@@ -204,18 +210,19 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 #' @export
 plot.bc_sim_study <- function(x, type = 1, stat = -1, which_N = 1,
                               which_lambdas = 1:length(x$bcthresh_args$lambda),
-                              normalise = FALSE, legend_pos, rmse = FALSE,
-                              ...) {
+                              normalise = FALSE, legend_pos, summary = FALSE,
+                              digits = 2, ...) {
   if (type != 1 & type != 2) {
     stop("type must be equal to 1 or 2")
   }
   if (missing(legend_pos)) {
-    legend_pos <- ifelse(type == 1, "bottom", "topright")
+    legend_pos <- ifelse(type == 1, "bottom", "topleft")
   }
   if (type == 1) {
     bcsim_type1_plot(x, stat, which_lambdas, normalise, legend_pos, ...)
   } else {
-    bcsim_type2_plot(x, which_N, which_lambdas, legend_pos, rmse, ...)
+    bcsim_type2_plot(x, which_N, which_lambdas, legend_pos, summary, digits,
+                     ...)
   }
   return(invisible())
 }
@@ -278,8 +285,8 @@ bcsim_type1_plot <- function(x, stat, which_lambdas, normalise, legend_pos,
 
 # Plots of type 2
 
-bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, rmse,
-                             ...) {
+bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, summary,
+                             digits, ...) {
   # Choose the values of lambda
   x$best_array <- as.matrix(x$best_array[which_N, , which_lambdas])
   lambda <- x$bcthresh_args$lambda[which_lambdas]
@@ -291,15 +298,18 @@ bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, rmse,
   my_ylim <- range(sapply(dens, "[", "y"))
   my_lty <- 1
   my_col <- 1:n_lambda
-  if (rmse) {
+  if (summary) {
+    bias <- apply(x$best_array - true_median, 2, mean)
+    stdev <- apply(x$best_array - true_median, 2, stats::sd)
     rmse_fun <- function(x) sqrt(mean(x ^ 2))
     RMSEs <- apply(x$best_array - true_median, 2, rmse_fun)
-    my_title <- expression(lambda ~ (RMSE))
-    my_leg <- paste0(lambda, " (", signif(RMSEs, 3), ")")
+    row1 <- c("lambda", "bias", "SD", "RMSE")
+    rest <- cbind(lambda, bias, stdev, RMSEs)
+    perf_stats <- rbind(row1, signif(rest, digits))
   } else {
-    my_title <- expression(lambda)
-    my_leg <- lambda
   }
+  my_title <- expression(lambda)
+  my_leg <- lambda
   my_plot <- function(x, ..., lty = my_lty, col = my_col, lwd = 2,
                       xlab = paste0("median of ", N, "-year maximum"),
                       ylab = "density", type = "l", xlim = my_xlim,
@@ -309,13 +319,14 @@ bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, rmse,
     mapply(graphics::lines, x, lty = lty, col = col, lwd = lwd, ...)
   }
   my_legend <- function(..., x = legend_pos, legend = my_leg, lty = my_lty,
-                        col = my_col, lwd = 2, title = my_title, adj = 0) {
+                        col = my_col, lwd = 2, title = my_title) {
     graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd,
-                     title = title, adj = adj, ...)
+                     title = title, ...)
   }
   # Calculate RMSEs
   my_plot(dens, ...)
   my_legend(...)
+  legend("topright", legend = perf_stats, ncol = 4)
   graphics::abline(v = true_median, lwd = 3, lty = 2)
   return(invisible())
 }
