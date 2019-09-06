@@ -16,7 +16,10 @@
 \itemize{
   \item{type = 1: }{plots averages measures of predictive performance
     against threshold level by the value of \eqn{\lambda}.}
-  \item{type = 2: }{plots kernel density estimates of the predictive
+  \item{type = 2: }{plots, for each value of \eqn{\lambda}, the proportions
+    of simulations on which each threshold has the largest measure of
+    predictive performance.}
+  \item{type = 3: }{plots kernel density estimates of the predictive
     density of the median of \eqn{N}-year maxima by the value of
     \eqn{\lambda}, using the best threshold for each \eqn{\lambda}, with the
     true value of the median indicated using a vertical line.}

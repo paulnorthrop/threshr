@@ -155,7 +155,10 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 #' \itemize{
 #'   \item{type = 1: }{plots averages measures of predictive performance
 #'     against threshold level by the value of \eqn{\lambda}.}
-#'   \item{type = 2: }{plots kernel density estimates of the predictive
+#'   \item{type = 2: }{plots, for each value of \eqn{\lambda}, the proportions
+#'     of simulations on which each threshold has the largest measure of
+#'     predictive performance.}
+#'   \item{type = 3: }{plots kernel density estimates of the predictive
 #'     density of the median of \eqn{N}-year maxima by the value of
 #'     \eqn{\lambda}, using the best threshold for each \eqn{\lambda}, with the
 #'     true value of the median indicated using a vertical line.}
@@ -212,16 +215,24 @@ plot.bc_sim_study <- function(x, type = 1, stat = -1, which_N = 1,
                               which_lambdas = 1:length(x$bcthresh_args$lambda),
                               normalise = FALSE, legend_pos, summary = FALSE,
                               digits = 2, ...) {
-  if (type != 1 & type != 2) {
+  if (!(type %in% 1:3)) {
     stop("type must be equal to 1 or 2")
   }
   if (missing(legend_pos)) {
-    legend_pos <- ifelse(type == 1, "bottom", "topleft")
+    if (type == 1) {
+      legend_pos <- "bottom"
+    } else if (type == 2) {
+      legend_pos <- "topright"
+    } else {
+      legend_pos <- "topleft"
+    }
   }
   if (type == 1) {
     bcsim_type1_plot(x, stat, which_lambdas, normalise, legend_pos, ...)
+  } else if (type == 2) {
+    bcsim_type2_plot(x, which_lambdas, legend_pos, ...)
   } else {
-    bcsim_type2_plot(x, which_N, which_lambdas, legend_pos, summary, digits,
+    bcsim_type3_plot(x, which_N, which_lambdas, legend_pos, summary, digits,
                      ...)
   }
   return(invisible())
@@ -240,6 +251,9 @@ bcsim_type1_plot <- function(x, stat, which_lambdas, normalise, legend_pos,
     stop("''stat'' must be a numeric scalar")
   }
   my_ylim <- NULL
+  # Apply the averaging function over dimensions 1 and 3 of x$pred_perf
+  # i.e. average over simulations (dimension 2) for for different threshold
+  # levels (dimension 1) and values of lambda (dimension 3)
   if (stat == -1) {
     my_ylab <- "mean CV performance"
     ymat <- apply(x$pred_perf, MARGIN = c(1, 3), mean)
@@ -276,9 +290,6 @@ bcsim_type1_plot <- function(x, stat, which_lambdas, normalise, legend_pos,
     graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd,
                      title = title, ...)
   }
-  # Apply the averaging function over dimensions 1 and 3 of x$pred_perf
-  # i.e. average over simulations (dimension 2) for for different threshold
-  # levels (dimension 1) and values of lambda (dimension 3)
   my_matplot(x$bcthresh_args$probs, ymat, ...)
   my_legend(...)
   return(invisible())
@@ -286,7 +297,36 @@ bcsim_type1_plot <- function(x, stat, which_lambdas, normalise, legend_pos,
 
 # Plots of type 2
 
-bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, summary,
+bcsim_type2_plot <- function(x, which_lambdas, legend_pos, ...) {
+  # Calculate the proportions for each value of lambda
+  propns <- apply(x$best_u, 2, table) / dim(x$pred_perf)[2]
+  # Select the requested lambdas
+  propns <- propns[, which_lambdas]
+  lambda <- x$bcthresh_args$lambda[which_lambdas]
+  my_lty <- 1
+  my_col <- 1:n_lambda
+  my_ylab <- "best threshold proportion"
+  my_matplot <- function(x, y, ..., lty = my_lty, col = my_col, lwd = 2,
+                         xlab = "quantile of training threshold / %",
+                         ylab = my_ylab, type = "l") {
+    graphics::matplot(x, y, ..., lty = lty, col = col, lwd = lwd, xlab = xlab,
+                      ylab = ylab, type = type)
+  }
+  my_title <- expression(lambda)
+  my_legend <- function(..., x = legend_pos, legend = lambda, lty = my_lty,
+                        col = my_col, lwd = 2, title = my_title,
+                        xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL) {
+    graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd,
+                     title = title, ...)
+  }
+  my_matplot(x$bcthresh_args$probs, propns, ...)
+  my_legend(...)
+  return(invisible())
+}
+
+# Plots of type 3
+
+bcsim_type3_plot <- function(x, which_N, which_lambdas, legend_pos, summary,
                              digits, ...) {
   # Choose the values of lambda
   x$best_array <- as.matrix(x$best_array[which_N, , which_lambdas])
@@ -327,10 +367,11 @@ bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, summary,
     graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd,
                      title = title, ...)
   }
-  # Calculate RMSEs
   my_plot(dens, ...)
   my_legend(...)
-  legend("topright", legend = perf_stats, ncol = 4)
+  graphics::legend("topright", legend = perf_stats, ncol = 4)
   graphics::abline(v = true_median, lwd = 3, lty = 2)
   return(invisible())
 }
+
+
