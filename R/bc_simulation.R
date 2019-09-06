@@ -271,7 +271,8 @@ bcsim_type1_plot <- function(x, stat, which_lambdas, normalise, legend_pos,
   }
   my_title <- expression(lambda)
   my_legend <- function(..., x = legend_pos, legend = lambda, lty = my_lty,
-                        col = my_col, lwd = 2, title = my_title) {
+                        col = my_col, lwd = 2, title = my_title,
+                        xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL) {
     graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd,
                      title = title, ...)
   }
@@ -321,7 +322,8 @@ bcsim_type2_plot <- function(x, which_N, which_lambdas, legend_pos, summary,
     mapply(graphics::lines, x, lty = lty, col = col, lwd = lwd, ...)
   }
   my_legend <- function(..., x = legend_pos, legend = my_leg, lty = my_lty,
-                        col = my_col, lwd = 2, title = my_title) {
+                        col = my_col, lwd = 2, title = my_title,
+                        xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL) {
     graphics::legend(x = x, legend = legend, lty = lty, col = col, lwd = lwd,
                      title = title, ...)
   }
