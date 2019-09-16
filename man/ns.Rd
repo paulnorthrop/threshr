@@ -13,7 +13,8 @@ ns
 }
 \description{
 A numeric vector containing 628 hindcasts of storm peak significant wave
-heights, metres, from 1964 to 1995 at an unnamed location in the North Sea.
+heights, in metres, from 1964 to 1995 at an unnamed location in the North
+Sea.
 }
 \references{
 Northrop, P. J., N. Attalides, and P. Jonathan. (2017).

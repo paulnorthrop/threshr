@@ -13,7 +13,7 @@ gom
 }
 \description{
 A numeric vector containing 315 hindcasts of storm peak significant wave
-heights, metres, from 1900 to 2005 at an unnamed location in the Gulf
+heights, in metres, from 1900 to 2005 at an unnamed location in the Gulf
 of Mexico.
 }
 \references{
