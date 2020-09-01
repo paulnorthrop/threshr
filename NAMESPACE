@@ -3,7 +3,6 @@
 S3method(plot,ithresh)
 S3method(plot,ithreshpred)
 S3method(plot,stability)
-S3method(predict,bcthresh)
 S3method(predict,ithresh)
 S3method(print,ithresh)
 S3method(summary,ithresh)
