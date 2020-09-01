@@ -8,3 +8,13 @@
 ^R/highest_threshold\.R$
 ^appveyor\.yml$
 ^create_logo$
+^R/bcthresh\.R$
+^R/bc_simulation\.R$
+^R/bcthresh_methods\.R$
+^R/bcthreshpred_methods\.R$
+^R/choose_lambda\.R$
+^R/yjthresh\.R$
+^R/test-predict_bcthresh_vs_ithresh\.R$
+^R/test-yjthresh_vs_bcthresh\.R$
+^R/test-bcthresh\.R$
+^R/test-choose_lambda\.R$
