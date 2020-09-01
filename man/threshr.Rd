@@ -3,7 +3,6 @@
 \docType{package}
 \name{threshr}
 \alias{threshr}
-\alias{threshr-package}
 \title{threshr: Threshold Selection and Uncertainty for Extreme Value Analysis}
 \description{
 Provides functions for the selection of extreme value threshold.

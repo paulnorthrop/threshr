@@ -4,8 +4,14 @@
 \alias{plot.stability}
 \title{Plot diagnostics for a stability object}
 \usage{
-\method{plot}{stability}(x, y, ..., prob = TRUE, top_scale = c("none",
-  "excesses", "opposite"), vertical = TRUE)
+\method{plot}{stability}(
+  x,
+  y,
+  ...,
+  prob = TRUE,
+  top_scale = c("none", "excesses", "opposite"),
+  vertical = TRUE
+)
 }
 \arguments{
 \item{x}{an object of class "stability", a result of a call to

@@ -4,7 +4,9 @@
 \name{ns}
 \alias{ns}
 \title{Storm peak significant wave heights from the North Sea}
-\format{A vector containing 628 observations.}
+\format{
+A vector containing 628 observations.
+}
 \source{
 Oceanweather Inc. (1995) NEXT -- North Sea hindcast study.
 }

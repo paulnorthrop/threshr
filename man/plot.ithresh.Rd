@@ -4,9 +4,17 @@
 \alias{plot.ithresh}
 \title{Plot diagnostics an ithresh object}
 \usage{
-\method{plot}{ithresh}(x, y, ..., which_v = NULL, prob = TRUE,
-  top_scale = TRUE, add_legend = FALSE, legend_pos = "topleft",
-  which_u = NULL)
+\method{plot}{ithresh}(
+  x,
+  y,
+  ...,
+  which_v = NULL,
+  prob = TRUE,
+  top_scale = TRUE,
+  add_legend = FALSE,
+  legend_pos = "topleft",
+  which_u = NULL
+)
 }
 \arguments{
 \item{x}{an object of class \code{"ithresh"}, a result of a call to

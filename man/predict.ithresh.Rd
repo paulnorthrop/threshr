@@ -4,10 +4,18 @@
 \alias{predict.ithresh}
 \title{Predictive inference for the largest value observed in N years.}
 \usage{
-\method{predict}{ithresh}(object, npy = NULL, n_years = 100,
-  which_u = c("best", "all"), which_v = 1L, u_prior = rep(1,
-  length(object$u_vec)), type = c("p", "d", "q", "i", "r"),
-  hpd = FALSE, x = NULL, ...)
+\method{predict}{ithresh}(
+  object,
+  npy = NULL,
+  n_years = 100,
+  which_u = c("best", "all"),
+  which_v = 1L,
+  u_prior = rep(1, length(object$u_vec)),
+  type = c("p", "d", "q", "i", "r"),
+  hpd = FALSE,
+  x = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{An object of class \code{"ithresh"}, a result of a call to

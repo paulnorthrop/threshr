@@ -4,8 +4,13 @@
 \alias{plot.bcthreshpred}
 \title{Plot diagnostics an bcthreshpred object}
 \usage{
-\method{plot}{bcthreshpred}(x, lambda = x$lambda, n_years = if
-  (length(lambda) == 1) x$n_years else x$n_years[1], legend_pos, ...)
+\method{plot}{bcthreshpred}(
+  x,
+  lambda = x$lambda,
+  n_years = if (length(lambda) == 1) x$n_years else x$n_years[1],
+  legend_pos,
+  ...
+)
 }
 \arguments{
 \item{x}{an object of class "bthreshpred", a result of a call to

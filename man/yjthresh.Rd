@@ -5,8 +5,7 @@
 \title{Threshold selection in the i.i.d. case, assisted by Yeo-Johnson
 transformation}
 \usage{
-yjthresh(data, probs, lambda, ..., n_v = 1, npy = NULL,
-  use_rcpp = TRUE)
+yjthresh(data, probs, lambda, ..., n_v = 1, npy = NULL, use_rcpp = TRUE)
 }
 \arguments{
 \item{data}{A numeric vector of observations.  Any missing values will

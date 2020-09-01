@@ -4,8 +4,15 @@
 \alias{stability}
 \title{Generalized Pareto parameter estimate stability}
 \usage{
-stability(data, u_vec, prof = FALSE, conf = 95, mult = 1:2,
-  plot_prof = FALSE, ...)
+stability(
+  data,
+  u_vec,
+  prof = FALSE,
+  conf = 95,
+  mult = 1:2,
+  plot_prof = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{A numeric vector of observations.}

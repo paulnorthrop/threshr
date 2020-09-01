@@ -4,9 +4,14 @@
 \alias{plot.bcthresh}
 \title{Plot method for objects of class "bcthresh"}
 \usage{
-\method{plot}{bcthresh}(x, which_v = length(x$v_vec),
-  which_lambdas = 1:length(x$lambda), normalise = FALSE,
-  legend_pos = "bottom", ...)
+\method{plot}{bcthresh}(
+  x,
+  which_v = length(x$v_vec),
+  which_lambdas = 1:length(x$lambda),
+  normalise = FALSE,
+  legend_pos = "bottom",
+  ...
+)
 }
 \arguments{
 \item{x}{an object inheriting from class \code{"bcthresh"}, a result of a

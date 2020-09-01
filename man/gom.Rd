@@ -4,7 +4,9 @@
 \name{gom}
 \alias{gom}
 \title{Storm peak significant wave heights from the Gulf of Mexico}
-\format{A vector containing 315 observations.}
+\format{
+A vector containing 315 observations.
+}
 \source{
 Oceanweather Inc. (2005) GOMOS -- Gulf of Mexico hindcast study.
 }

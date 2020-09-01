@@ -4,9 +4,18 @@
 \alias{plot.bc_sim_study}
 \title{Plot method for objects of class "bc_sim_study"}
 \usage{
-\method{plot}{bc_sim_study}(x, type = 1, stat = -1, which_N = 1,
-  which_lambdas = 1:length(x$bcthresh_args$lambda), normalise = FALSE,
-  legend_pos, summary = FALSE, digits = 2, ...)
+\method{plot}{bc_sim_study}(
+  x,
+  type = 1,
+  stat = -1,
+  which_N = 1,
+  which_lambdas = 1:length(x$bcthresh_args$lambda),
+  normalise = FALSE,
+  legend_pos,
+  summary = FALSE,
+  digits = 2,
+  ...
+)
 }
 \arguments{
 \item{x}{an object inheriting from class "bc_sim_study", a result of a call to
