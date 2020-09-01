@@ -219,7 +219,7 @@
 #' # We make use of a C++ function and function create_prior_xptr() to create
 #' # the required pointer from the revdbayes package
 #'
-#' prior_ptr <- revdbayes:::create_prior_xptr("gp_flat")
+#' prior_ptr <- revdbayes::create_prior_xptr("gp_flat")
 #' gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2, prior = prior_ptr,
 #'                   h_prior = list(min_xi = -1))
 #' @references Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
