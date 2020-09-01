@@ -19,8 +19,7 @@
 }
 \arguments{
 \item{object}{An object of class \code{"ithresh"}, a result of a call to
-\code{\link{ithresh}} or \code{\link{choose_lambda}}, or an object of
-class "bcthresh", a result of a call to \code{\link{bcthresh}}.}
+\code{\link{ithresh}}.}
 
 \item{npy}{A numeric scalar. The mean number of observations per year
 of data, after excluding any missing values, i.e. the number of
