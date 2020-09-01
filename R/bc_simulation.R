@@ -303,6 +303,7 @@ bcsim_type2_plot <- function(x, which_lambdas, legend_pos, ...) {
   # Select the requested lambdas
   propns <- propns[, which_lambdas]
   lambda <- x$bcthresh_args$lambda[which_lambdas]
+  n_lambda <- length(lambda)
   my_lty <- 1
   my_col <- 1:n_lambda
   my_ylab <- "best threshold proportion"
@@ -335,6 +336,12 @@ bcsim_type3_plot <- function(x, which_N, which_lambdas, legend_pos, summary,
   N <- x$MN_args$N[which_N]
   true_median <- x$true_medians[which_N]
   dens <- apply(x$best_array, 2, stats::density)
+  # Work on the log-scale: y = log x
+#  my_log_dens <- function(x) {
+#    temp <- stats::density(x)
+#    temp$y <- temp$y / temp$x
+#  }
+#  dens <- apply(log(x$best_array), 2, my_log_dens)
   my_xlim <- range(sapply(dens, "[", "x"))
   my_ylim <- range(sapply(dens, "[", "y"))
   my_lty <- 1
