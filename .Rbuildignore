@@ -14,8 +14,8 @@
 ^R/bcthreshpred_methods\.R$
 ^R/choose_lambda\.R$
 ^R/yjthresh\.R$
-^R/test-predict_bcthresh_vs_ithresh\.R$
-^R/test-yjthresh_vs_bcthresh\.R$
-^R/test-bcthresh\.R$
-^R/test-choose_lambda\.R$
 ^R/bc_predictive\.R$
+^tests/testthat/test-predict_bcthresh_vs_ithresh\.R$
+^tests/testthat/test-yjthresh_vs_bcthresh\.R$
+^tests/testthat/test-bcthresh\.R$
+^tests/testthat/test-choose_lambda\.R$
