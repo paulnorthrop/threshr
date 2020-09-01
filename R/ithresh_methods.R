@@ -161,15 +161,17 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
     # Add names for labelling the axes
     colnames(temp$bin_sim_vals) <- "p[u]"
     colnames(temp$sim_vals) <- c("sigma[u]", "xi")
-    # Produce the plot.  Create a list for sending to revdbayes:::plot.evpost()
+    # Produce the plot.  Create a list for sending to revdbayes::plot.evpost()
     for_plot_evpost <- list(x = temp, ...)
     # If the user has tried to use ru_scale = TRUE then remove it
     # because no simulated values have been stored on the ru scale
     if (!is.null(for_plot_evpost$ru_scale)) {
       for_plot_evpost$ru_scale <- NULL
     }
-    # plot is revdbayes:::plot.evpost
-    suppressWarnings(do.call(revdbayes:::plot.evpost, for_plot_evpost))
+    # plot is revdbayes::plot.evpost
+#    suppressWarnings(do.call(revdbayes::plot.evpost, for_plot_evpost))
+    class(for_plot_evpost) <- "evpost"
+    suppressWarnings(do.call(plot, for_plot_evpost))
     return(invisible(temp))
   }
   # Use only the validation thresholds in columns which_v.

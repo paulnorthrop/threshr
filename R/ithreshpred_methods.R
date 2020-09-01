@@ -88,8 +88,8 @@ plot.ithreshpred <- function(x, ..., ave_only = FALSE, add_best = FALSE) {
   if (x$which_u == "best" || is.numeric(x$which_u)) {
     temp <- x
     class(temp) <- "evpred"
-    # plot is revdbayes:::plot.evpred
-#    revdbayes:::plot.evpred(temp, ...)
+    # plot is revdbayes::plot.evpred
+#    revdbayes::plot.evpred(temp, ...)
     plot(temp, ...)
     for_plot <- list(...)
     return(invisible(for_plot))
@@ -143,8 +143,8 @@ plot.ithreshpred <- function(x, ..., ave_only = FALSE, add_best = FALSE) {
         for_plot$leg_text <- c("averaged", "single")
       }
     }
-    # plot is revdbayes:::plot.evpred
-#    do.call(revdbayes:::plot.evpred, for_plot)
+    # plot is revdbayes::plot.evpred
+#    do.call(revdbayes::plot.evpred, for_plot)
     do.call(plot, for_plot)
     # Replot the `average' line, so that it appears on top
     for_lines <- list(x = temp$x, y = temp$y[, 1], lty = for_plot$lty[1],
