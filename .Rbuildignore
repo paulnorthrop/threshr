@@ -18,3 +18,4 @@
 ^R/test-yjthresh_vs_bcthresh\.R$
 ^R/test-bcthresh\.R$
 ^R/test-choose_lambda\.R$
+^R/bc_predictive\.R$
