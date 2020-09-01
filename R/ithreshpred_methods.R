@@ -89,7 +89,8 @@ plot.ithreshpred <- function(x, ..., ave_only = FALSE, add_best = FALSE) {
     temp <- x
     class(temp) <- "evpred"
     # plot is revdbayes:::plot.evpred
-    revdbayes:::plot.evpred(temp, ...)
+#    revdbayes:::plot.evpred(temp, ...)
+    plot(temp, ...)
     for_plot <- list(...)
     return(invisible(for_plot))
   }
@@ -143,7 +144,8 @@ plot.ithreshpred <- function(x, ..., ave_only = FALSE, add_best = FALSE) {
       }
     }
     # plot is revdbayes:::plot.evpred
-    do.call(revdbayes:::plot.evpred, for_plot)
+#    do.call(revdbayes:::plot.evpred, for_plot)
+    do.call(plot, for_plot)
     # Replot the `average' line, so that it appears on top
     for_lines <- list(x = temp$x, y = temp$y[, 1], lty = for_plot$lty[1],
                       lwd = for_plot$lwd[1], col = for_plot$col[1])
