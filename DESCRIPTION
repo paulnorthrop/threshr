@@ -1,7 +1,7 @@
 Package: threshr
 Title: Threshold Selection and Uncertainty for Extreme Value Analysis
-Version: 1.0.1.9000
-Date: 2019-03-02
+Version: 1.0.2
+Date: 2019-09-05
 Authors@R: c(
     person(c("Paul", "J."), "Northrop", email = "p.northrop@ucl.ac.uk", 
       role = c("aut", "cre", "cph")),
@@ -31,5 +31,5 @@ Suggests: knitr,
     rmarkdown,
     testthat
 VignetteBuilder: knitr
-URL: http://github.com/paulnorthrop/threshr
-BugReports: http://github.com/paulnorthrop/threshr/issues
+URL: https://github.com/paulnorthrop/threshr
+BugReports: https://github.com/paulnorthrop/threshr/issues
