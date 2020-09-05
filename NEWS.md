@@ -10,6 +10,8 @@
 
 * In `predict.ithresh()` further arguments can now be passed to `revdbayes::predict.evpost`.  In particular, the level(s) of predictive intervals can be set.  An example has been added to the documentation.
 
+* pkgdown documentation at [https://paulnorthrop.github.io/threshr/](https://paulnorthrop.github.io/threshr/)
+
 # threshr 1.0.1
 
 ## Bug fixes and minor improvements
