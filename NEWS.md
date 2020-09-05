@@ -12,6 +12,8 @@
 
 * pkgdown documentation at [https://paulnorthrop.github.io/threshr/](https://paulnorthrop.github.io/threshr/)
 
+* revdbayes:: is used instead of revdbayes::: to avoid CRAN package check NOTEs.
+
 # threshr 1.0.1
 
 ## Bug fixes and minor improvements
