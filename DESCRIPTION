@@ -31,5 +31,5 @@ Suggests: knitr,
     rmarkdown,
     testthat
 VignetteBuilder: knitr
-URL: https://github.com/paulnorthrop/threshr
+URL: https://paulnorthrop.github.io/threshr/, https://github.com/paulnorthrop/threshr
 BugReports: https://github.com/paulnorthrop/threshr/issues
