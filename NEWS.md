@@ -1,8 +1,4 @@
-# threshr 1.0.1.9000
-
-## New features
-
-* A new function `bcthresh()` is used to select a Box-Cox transformation of the raw data for which a lower extreme value threshold may be selected.
+# threshr 1.0.2
 
 ## Bug fixes and minor improvements
 
