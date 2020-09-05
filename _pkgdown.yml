@@ -1,0 +1,33 @@
+destination: docs
+
+development:
+  mode: unreleased
+
+template:
+  params:
+    bootswatch: paper
+
+reference:
+  - title: Package
+    desc: ~
+    contents:
+      - "threshr"
+  - title: Threshold selection
+    desc: ~
+    contents:
+      - "ithresh"
+      - "stability"
+  - title: Example data
+    desc: ~
+    contents:
+      - "gom"
+      - "ns"
+  - title: Generics
+    desc: ~
+    contents:
+      - "plot.ithresh"
+      - "plot.ithreshpred"
+      - "plot.stability"
+      - "print.ithresh"
+      - "predict.ithresh"
+      - "summary.ithresh"

@@ -19,3 +19,6 @@
 ^tests/testthat/test-yjthresh_vs_bcthresh\.R$
 ^tests/testthat/test-bcthresh\.R$
 ^tests/testthat/test-choose_lambda\.R$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
