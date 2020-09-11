@@ -3,11 +3,9 @@ context("Box-Cox")
 # Check that bc() is correct for lambda = 0
 
 x <- 1:10
-for (i in length(x)) {
-  test_that(paste("bc for lambda = 0, x = ", x = x), {
-    testthat::expect_equal(bc(x = x, lambda = 0), log(x))
-  })
-}
+test_that(paste("bc for lambda = 0, x = ", x = x), {
+  testthat::expect_equal(bc(x = x, lambda = 0), log(x))
+})
 
 # Check that bc() throws an error when x < 0
 
