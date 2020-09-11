@@ -12,12 +12,10 @@ for (i in length(x)) {
 # Check that bc() throws an error when x < 0
 
 x <- -1
-for (i in length(x)) {
-  temp <- try(bc(x = x, lambda = 0), silent = TRUE)
-  test_that(paste("bc for lambda = 0, x = ", x = x), {
-    testthat::expect_equal(attr(temp, "class"), "try-error")
-  })
-}
+temp <- try(bc(x = x, lambda = 0), silent = TRUE)
+test_that(paste("bc for lambda = 0, x = ", x = x), {
+  testthat::expect_equal(attr(temp, "class"), "try-error")
+})
 
 # Check that bc() is correct for lambda very slightly smaller in
 # magnitude than lambda_tol = 1 / 50 and m (Taylor series polynomial order)
