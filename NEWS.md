@@ -1,4 +1,8 @@
-# threshr 1.0.2.9000
+# threshr 1.0.3
+
+## Bug fixes and minor improvements
+
+* Tests in `test-box_cox.R` and `test-inv_box_cox.R` have been modified to avoid errors in the upcoming new release of the `testthat` package.
 
 # threshr 1.0.2
 

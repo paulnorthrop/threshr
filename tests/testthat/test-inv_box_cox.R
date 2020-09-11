@@ -3,7 +3,7 @@ context("Inverse Box-Cox")
 # Check that inv_bc() is correct for lambda = 0
 
 x <- 1:10
-test_that(paste("inv_bc for lambda = 0, x = ", x = x), {
+test_that("inv_bc for lambda = 0, x > 0", {
   testthat::expect_equal(inv_bc(x = x, lambda = 0), exp(x))
 })
 

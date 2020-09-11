@@ -3,7 +3,7 @@ context("Box-Cox")
 # Check that bc() is correct for lambda = 0
 
 x <- 1:10
-test_that(paste("bc for lambda = 0, x = ", x = x), {
+test_that("bc for lambda = 0, x > 0", {
   testthat::expect_equal(bc(x = x, lambda = 0), log(x))
 })
 
