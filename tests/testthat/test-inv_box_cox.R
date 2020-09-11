@@ -3,49 +3,39 @@ context("Inverse Box-Cox")
 # Check that inv_bc() is correct for lambda = 0
 
 x <- 1:10
-for (i in length(x)) {
-  test_that(paste("inv_bc for lambda = 0, x = ", x = x), {
-    testthat::expect_equal(inv_bc(x = x, lambda = 0), exp(x))
-  })
-}
+test_that(paste("inv_bc for lambda = 0, x = ", x = x), {
+  testthat::expect_equal(inv_bc(x = x, lambda = 0), exp(x))
+})
 
 # Check that inv_bc() throws an error when x is out of range
 
 lambda <- 2
 x <- -1 / lambda
-for (i in length(x)) {
-  temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
-  test_that(paste("bc for lambda = 2, x is out of range, x = ", x = x), {
-    testthat::expect_equal(attr(temp, "class"), "try-error")
-  })
-}
+temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
+test_that(paste("bc for lambda = 2, x is out of range, x = ", x = x), {
+  testthat::expect_equal(attr(temp, "class"), "try-error")
+})
 
 lambda <- 2
 x <- -1 / lambda - 0.0001
-for (i in length(x)) {
-  temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
-  test_that(paste("bc for lambda = 2, x is out of range, x = ", x = x), {
-    testthat::expect_equal(attr(temp, "class"), "try-error")
-  })
-}
+temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
+test_that(paste("bc for lambda = 2, x is out of range, x = ", x = x), {
+  testthat::expect_equal(attr(temp, "class"), "try-error")
+})
 
 lambda <- -2
 x <- -1 / lambda
-for (i in length(x)) {
-  temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
-  test_that(paste("bc for lambda = -2, x is out of range, x = ", x = x), {
-    testthat::expect_equal(attr(temp, "class"), "try-error")
-  })
-}
+temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
+test_that(paste("bc for lambda = -2, x is out of range, x = ", x = x), {
+  testthat::expect_equal(attr(temp, "class"), "try-error")
+})
 
 lambda <- -2
 x <- -1 / lambda + 0.0001
-for (i in length(x)) {
-  temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
-  test_that(paste("bc for lambda = -2, x is out of range, x = ", x = x), {
-    testthat::expect_equal(attr(temp, "class"), "try-error")
-  })
-}
+temp <- try(inv_bc(x = x, lambda = lambda), silent = TRUE)
+test_that(paste("bc for lambda = -2, x is out of range, x = ", x = x), {
+  testthat::expect_equal(attr(temp, "class"), "try-error")
+})
 
 # Check that inv_box_cox() is correct for lambda very slightly smaller in
 # magnitude than lambda_tol = 1 / 50 and m (Taylor series polynomial order)
