@@ -1,4 +1,4 @@
-context("choose_lambda")
+#context("choose_lambda")
 
 seed <- 29082019
 my_tol <- 1e-5

@@ -1,4 +1,4 @@
-context("bcthresh")
+#context("bcthresh")
 
 # Set a tolerance for the comparison of the simulated values
 

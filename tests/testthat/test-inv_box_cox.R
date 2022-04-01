@@ -1,4 +1,4 @@
-context("Inverse Box-Cox")
+#context("Inverse Box-Cox")
 
 # Check that inv_bc() is correct for lambda = 0
 

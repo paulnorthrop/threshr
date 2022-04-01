@@ -1,4 +1,4 @@
-context("plot and summary")
+#context("plot and summary")
 
 # Set a tolerance for the comparison of the simulated values
 
@@ -19,7 +19,7 @@ test_that("summary.ithresh: double", {
   testthat::expect_type(check_summary, "double")
 })
 test_that("summary.ithresh: matrix", {
-  testthat::expect_is(check_summary, "matrix")
+  testthat::expect(is.matrix(check_summary), TRUE)
 })
 test_that("summary.ithresh: n_v-row matrix", {
   testthat::expect_equal(nrow(check_summary), n_v)

@@ -1,4 +1,4 @@
-context("ithresh")
+#context("ithresh")
 
 # Set a tolerance for the comparison of the simulated values
 

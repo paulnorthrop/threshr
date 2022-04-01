@@ -1,5 +1,9 @@
 # threshr 1.0.3.9000
 
+## Bug fixes and minor improvements
+
+* Activated 3rd edition of the `testthat` package
+
 # threshr 1.0.3
 
 ## Bug fixes and minor improvements

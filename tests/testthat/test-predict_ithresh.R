@@ -1,4 +1,4 @@
-context("predict.ithresh function")
+#context("predict.ithresh function")
 
 # We check predict.ithresh, for different choices of the argument type.
 

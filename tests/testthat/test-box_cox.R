@@ -1,4 +1,4 @@
-context("Box-Cox")
+#context("Box-Cox")
 
 # Check that bc() is correct for lambda = 0
 

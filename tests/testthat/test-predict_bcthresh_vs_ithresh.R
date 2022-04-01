@@ -1,4 +1,4 @@
-context("predict: bcthresh vs ithresh")
+#context("predict: bcthresh vs ithresh")
 
 # We check that predict.bcthresh aress predict.ithresh, for different choices
 # of the argument type.
@@ -44,13 +44,13 @@ c3d$y <- array(c3d$y, dim = c(nrow(c3d$y), 1, 1))
 
 # Equal apart from the class, so used equivalent
 test_that("bcthresh vs ithresh: pred_perf", {
-  testthat::expect_equivalent(c1d, b1d, tolerance = my_tol)
+  testthat::expect_equal(c1d, b1d, tolerance = my_tol, ignore_attr = TRUE)
 })
 test_that("bcthresh vs ithresh: pred_perf", {
-  testthat::expect_equivalent(c2d, b2d, tolerance = my_tol)
+  testthat::expect_equal(c2d, b2d, tolerance = my_tol, ignore_attr = TRUE)
 })
 test_that("bcthresh vs ithresh: pred_perf", {
-  testthat::expect_equivalent(c3d, b3d, tolerance = my_tol)
+  testthat::expect_equal(c3d, b3d, tolerance = my_tol, ignore_attr = TRUE)
 })
 
 ## Distribution function
@@ -78,13 +78,13 @@ c3p$y <- array(c3p$y, dim = c(nrow(c3p$y), 1, 1))
 
 # Equal apart from the class, so used equivalent
 test_that("bcthresh vs ithresh: pred_perf", {
-  testthat::expect_equivalent(c1p, b1p, tolerance = my_tol)
+  testthat::expect_equal(c1p, b1p, tolerance = my_tol, ignore_attr = TRUE)
 })
 # Why are these different? ... because the xs are equally-spaced on different scales
 test_that("bcthresh vs ithresh: pred_perf", {
-  testthat::expect_equivalent(c2p, b2p, tolerance = my_tol)
+  testthat::expect_equal(c2p, b2p, tolerance = my_tol, ignore_attr = TRUE)
 })
 test_that("bcthresh vs ithresh: pred_perf", {
-  testthat::expect_equivalent(c3p, b3p, tolerance = my_tol)
+  testthat::expect_equal(c3p, b3p, tolerance = my_tol, ignore_attr = TRUE)
 })
 

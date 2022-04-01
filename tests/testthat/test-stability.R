@@ -1,4 +1,4 @@
-context("stability")
+#context("stability")
 
 # We check that the results from stability using prof = FALSE and prof = TRUE
 # are identical.
