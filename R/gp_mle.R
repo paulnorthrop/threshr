@@ -83,7 +83,8 @@ gp_obs_info <- function(gp_pars, y, eps = 1e-5) {
     s1 <- 12 * z ^ 2 * y ^ 2 / 5
     s2 <- 3 * z * y / 2
     s3 <- 2 / 3
-    i[2, 2] <- sum(y ^ 3 * (s1 - s2 + s3) / s ^ 3 - (y / s) ^ 2 / t0 ^ 2)
+    s4 <- y ^ 2 / t0 ^ 2
+    i[2, 2] <- sum(y ^ 3 * (s1 - s2 + s3) / s ^ 3 - s4 / s ^ 2)
   } else {
     t1 <- 2 * log(t0) / z ^ 3
     t2 <- 2 * y / (z ^ 2 * t0)
