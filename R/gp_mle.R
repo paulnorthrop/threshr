@@ -56,6 +56,8 @@ gp_obs_info <- function(gp_pars, y, eps = 1e-5, m = 3) {
   #   eps     : A (small, positive) numeric scalar.  If abs(xi) is smaller than
   #             eps then we approximate the [2, 2] element of the information
   #             matrix using a Taylor series approximation.
+  #   m       : A non-negative integer.  The order of the polynomial used to
+  #             make this approximation.
   #
   # Returns:
   #   A 2 by 2 numeric matrix.  The observed information matrix.
