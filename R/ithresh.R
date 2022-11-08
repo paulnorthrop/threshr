@@ -45,7 +45,7 @@
 #'     using revdbayes} for information about creating
 #'     a pointer to a C++ function.  See also the \strong{Examples} section.
 #'
-#'     If the user supplies and R function then \code{\link{rpost}} will be
+#'     If the user supplies an R function then \code{\link{rpost}} will be
 #'     used for posterior simulation, rather than (the faster)
 #'     \code{\link{rpost_rcpp}}, regardless of the input value of
 #'     \code{use_rcpp}.
