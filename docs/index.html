@@ -27,6 +27,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -39,23 +41,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">threshr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">1.0.2</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">1.0.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -72,8 +68,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/paulnorthrop/threshr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/paulnorthrop/threshr/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -89,36 +85,38 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="threshr" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#threshr" class="anchor"></a>threshr</h1></div>
-
-<div id="threshold-selection-and-uncertainty-for-extreme-value-analysis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#threshold-selection-and-uncertainty-for-extreme-value-analysis" class="anchor"></a>Threshold Selection and Uncertainty for Extreme Value Analysis</h2>
-<div id="what-does-threshr-do" class="section level3">
-<h3 class="hasAnchor">
-<a href="#what-does-threshr-do" class="anchor"></a>What does threshr do?</h3>
-<p>The <code>threshr</code> package deals primarily with the selection of thresholds for use in extreme value models. It also performs predictive inferences about future extreme values. These inferences can either be based on a single threshold or on a weighted average of inferences from multiple thresholds. The weighting reflects an estimated measure of the predictive performance of the threshold and can incorporate prior probabilities supplied by a user. At the moment only the simplest case, where the data can be treated as independent identically distributed observations, is considered, as described in <a href="https://doi.org/10.1111/rssc.12159">Northrop et al. (2017)</a>. Future releases will tackle more general situations.</p>
+<div class="section level1">
+<div class="page-header"><h1 id="threshr">threshr<a class="anchor" aria-label="anchor" href="#threshr"></a>
+</h1></div>
+<p><a href="https://ci.appveyor.com/project/paulnorthrop/threshr" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/paulnorthrop/threshr?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <a href="https://github.com/paulnorthrop/threshr/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/paulnorthrop/threshr/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/github/paulnorthrop/threshr?branch=master" class="external-link"><img src="https://codecov.io/github/paulnorthrop/threshr/coverage.svg?branch=master" alt="Coverage Status"></a> <a href="https://cran.r-project.org/package=threshr" class="external-link"><img src="https://www.r-pkg.org/badges/version/threshr" alt="CRAN_Status_Badge"></a> <a href="https://cran.r-project.org/package=threshr" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/threshr?color=brightgreen" alt="Downloads (monthly)"></a> <a href="https://cran.r-project.org/package=threshr" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/threshr?color=brightgreen" alt="Downloads (total)"></a></p>
+<div class="section level2">
+<h2 id="threshold-selection-and-uncertainty-for-extreme-value-analysis">Threshold Selection and Uncertainty for Extreme Value Analysis<a class="anchor" aria-label="anchor" href="#threshold-selection-and-uncertainty-for-extreme-value-analysis"></a>
+</h2>
+<div class="section level3">
+<h3 id="what-does-threshr-do">What does threshr do?<a class="anchor" aria-label="anchor" href="#what-does-threshr-do"></a>
+</h3>
+<p>The <code>threshr</code> package deals primarily with the selection of thresholds for use in extreme value models. It also performs predictive inferences about future extreme values. These inferences can either be based on a single threshold or on a weighted average of inferences from multiple thresholds. The weighting reflects an estimated measure of the predictive performance of the threshold and can incorporate prior probabilities supplied by a user. At the moment only the simplest case, where the data can be treated as independent identically distributed observations, is considered, as described in <a href="https://doi.org/10.1111/rssc.12159" class="external-link">Northrop et al. (2017)</a>. Future releases will tackle more general situations.</p>
 </div>
-<div id="a-simple-example" class="section level3">
-<h3 class="hasAnchor">
-<a href="#a-simple-example" class="anchor"></a>A simple example</h3>
+<div class="section level3">
+<h3 id="a-simple-example">A simple example<a class="anchor" aria-label="anchor" href="#a-simple-example"></a>
+</h3>
 <p>The main function in the threshr package is <code>ithresh</code>. It uses Bayesian leave-one-out cross-validation to compare the extreme value predictive ability resulting from the use of each of a user-supplied set of thresholds. The following code produces a threshold diagnostic plot using a dataset <code>gom</code> containing 315 storm peak significant waveheights. We set a vector <code>u_vec</code> of thresholds; call <code>ithresh</code>, supplying the data and thresholds; and use then plot the results. In this minimal example (<code>ithresh</code> has further arguments) thresholds are judged in terms of the quality of prediction of whether the validation observation lies above the highest threshold in <code>u_vec</code> and, if it does, how much it exceeds this highest threshold.</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">threshr</span>)
-<span class="no">u_vec_gom</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span>(<span class="no">gom</span>, <span class="kw">probs</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">0.9</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="fl">0.05</span>))
-<span class="no">gom_cv</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/ithresh.html">ithresh</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">gom</span>, <span class="kw">u_vec</span> <span class="kw">=</span> <span class="no">u_vec_gom</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">gom_cv</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paulnorthrop.github.io/threshr/" class="external-link">threshr</a></span><span class="op">)</span></span>
+<span><span class="va">u_vec_gom</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">gom</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.9</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">gom_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ithresh.html">ithresh</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">gom</span>, u_vec <span class="op">=</span> <span class="va">u_vec_gom</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gom_cv</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="installation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h3>
+<div class="section level3">
+<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h3>
 <p>To get the current released version from CRAN:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"threshr"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"threshr"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="vignette" class="section level3">
-<h3 class="hasAnchor">
-<a href="#vignette" class="anchor"></a>Vignette</h3>
+<div class="section level3">
+<h3 id="vignette">Vignette<a class="anchor" aria-label="anchor" href="#vignette"></a>
+</h3>
 <p>See <code><a href="articles/threshr-vignette.html">vignette("threshr-vignette", package = "threshr")</a></code> for an overview of the package.</p>
 </div>
 </div>
@@ -127,49 +125,51 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=threshr">https://​cloud.r-project.org/​package=threshr</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/paulnorthrop/threshr/">https://​github.com/​paulnorthrop/​threshr/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/paulnorthrop/threshr/issues">https://​github.com/​paulnorthrop/​threshr/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=threshr" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/paulnorthrop/threshr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/paulnorthrop/threshr/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>GPL (&gt;= 2)</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing threshr</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Paul J. Northrop <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
 <li>Nicolas Attalides <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://travis-ci.org/paulnorthrop/threshr"><img src="https://travis-ci.org/paulnorthrop/threshr.svg?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/paulnorthrop/threshr"><img src="https://ci.appveyor.com/api/projects/status/github/paulnorthrop/threshr?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://codecov.io/github/paulnorthrop/threshr?branch=master"><img src="https://codecov.io/github/paulnorthrop/threshr/coverage.svg?branch=master" alt="Coverage Status"></a></li>
-<li><a href="https://cran.r-project.org/package=threshr"><img src="https://www.r-pkg.org/badges/version/threshr" alt="CRAN_Status_Badge"></a></li>
-</ul>
-</div>
-</div>
+
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Paul J. Northrop, Nicolas Attalides.</p>
+  <p></p>
+<p>Developed by Paul J. Northrop, Nicolas Attalides.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -177,6 +177,8 @@
 
   
 
+
+  
 
   </body>
 </html>
