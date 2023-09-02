@@ -7,7 +7,7 @@
 \method{plot}{ithreshpred}(x, ..., ave_only = FALSE, add_best = FALSE)
 }
 \arguments{
-\item{x}{an object of class "ithreshpred", a result of a call to
+\item{x}{an object of class \code{"ithreshpred"}, a result of a call to
 \code{\link{ithresh}}.}
 
 \item{...}{Additional arguments passed on to

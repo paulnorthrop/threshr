@@ -18,8 +18,7 @@
 #' @param lambda A numeric vector containing values of the Box-Cox
 #'   transformation parameter \eqn{\lambda}.  See \strong{Details} for advice
 #'   on setting \code{lambda}.
-#' @details See \code{\link{ithresh}} and/or
-#'   \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
+#' @details See \code{\link{ithresh}} and/or Northrop et al. (2017)
 #'   for details of the threshold selection algorithm that is applied
 #'   for a given value of \eqn{\lambda}.  The measure of predictive
 #'   performance is calculated on the scale of the raw (\eqn{\lambda = 1})

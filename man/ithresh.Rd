@@ -45,8 +45,7 @@ set at sample quantiles of  \code{data} using
     \code{use_rcpp}.
 
     Default: \code{prior = "mdi"} with \code{a = 0.6} and \code{min_xi = -1}.
-    This particular prior is studied in
-    \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}}.
+    This particular prior is studied in Northrop et al. (2017).}
   \item {\code{h_prior}} {A \emph{list} of further arguments
     (hyperparameters) for the GP prior specified in \code{prior}.}
   \item {\code{bin_prior}} {A prior for the threshold exceedance probability
@@ -149,9 +148,7 @@ fitted using each of a user-supplied set of thresholds is assessed using
 leave-one-out cross-validation in a Bayesian setup.
 These models are based on a Generalized Pareto (GP) distribution for
 threshold excesses and a binomial model for the probability of threshold
-exceedance.  See
-\href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
-for details.
+exceedance.  See Northrop et al. (2017) for details.
 }
 \details{
 For a given threshold in \code{u_vec}:
@@ -167,11 +164,10 @@ For a given threshold in \code{u_vec}:
   \item {the ability of this binomial-GP model to predict data
     thresholded at the validation threshold(s) specified by \code{n_v} is
     assessed using leave-one-out cross-validation (the measure of
-    this is given in equation (7) of
-    \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}).}
+    this is given in equation (7) of Northrop et al. (2017).}
 }
-  See \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
-  and the introductory threshr vignette for further details and examples.
+  See Northrop et al. (2017) and the introductory threshr vignette for
+  further details and examples.
 }
 \examples{
 # Note:

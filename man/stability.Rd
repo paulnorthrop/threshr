@@ -51,7 +51,7 @@ for each threshold.  If \code{FALSE} then nothing is plotted.}
 the profile-likelihood for \eqn{xi} is based.}
 }
 \value{
-An object (list) of class "stability" with components:
+An object (list) of class \code{"stability"} with components:
     \item{ests}{MLEs of the GP shape parameter \eqn{\xi}.}
     \item{ses}{Estimated SEs of the MLEs of \eqn{\xi}.}
     \item{lower}{Lower limit of 100\code{conf}\% confidence intervals

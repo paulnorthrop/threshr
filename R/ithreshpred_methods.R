@@ -5,7 +5,7 @@
 #' \code{plot} method for class \code{"ithreshpred"}.  Produces plots to
 #' summarise the predictive inferences made by \code{\link{predict.ithresh}}.
 #'
-#' @param x an object of class "ithreshpred", a result of a call to
+#' @param x an object of class \code{"ithreshpred"}, a result of a call to
 #'   \code{\link{ithresh}}.
 #' @param ... Additional arguments passed on to
 #'   \code{\link[revdbayes]{plot.evpred}}.

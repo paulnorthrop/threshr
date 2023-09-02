@@ -14,7 +14,7 @@
 )
 }
 \arguments{
-\item{x}{an object of class "stability", a result of a call to
+\item{x}{an object of class \code{"stability"}, a result of a call to
 \code{\link{stability}}.}
 
 \item{y}{Not used.}
@@ -46,7 +46,7 @@ In addition to producing the plot a list of the arguments used
   returned (invisibly).
 }
 \description{
-\code{plot} method for objects of class "stability" returned from
+\code{plot} method for objects of class \code{"stability"} returned from
 \code{\link{stability}}
 }
 \details{

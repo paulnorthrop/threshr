@@ -2,10 +2,10 @@
 
 #' Plot diagnostics an bcthreshpred object
 #'
-#' \code{plot} method for class "bcthreshpred".  Produces plots to summarise
-#' the predictive inferences made by \code{\link{predict.bcthresh}}.
+#' \code{plot} method for class \code{"bcthreshpred"}.  Produces plots to
+#' summarise the predictive inferences made by \code{\link{predict.bcthresh}}.
 #'
-#' @param x an object of class "bthreshpred", a result of a call to
+#' @param x an object of class \code{"bthreshpred"}, a result of a call to
 #'   \code{\link{ithresh}}.
 #' @param lambda A numeric vector.  Specifies which values of
 #'   \eqn{\lambda} to include in the plot.  These values must be present

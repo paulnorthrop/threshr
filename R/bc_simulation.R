@@ -143,14 +143,14 @@ bc_sim_study <- function(sims, rbc_args, bcthresh_args, MN_args) {
 
 # ============================== plot.bc_sim_study ============================
 
-#' Plot method for objects of class "bc_sim_study"
+#' Plot method for objects of class \code{"bc_sim_study"}
 #'
-#' \code{plot} method for class "bc_sim_study". Plots the summaries of
+#' \code{plot} method for class \code{"bc_sim_study"}. Plots the summaries of
 #' predictive performance against quantile of training threshold for different
 #' values of \eqn{\lambda}: those stored in \code{x$lambda}.
 #'
-#' @param x an object inheriting from class "bc_sim_study", a result of a call to
-#'   \code{\link{bc_sim_study}}.
+#' @param x an object inheriting from class \code{"bc_sim_study"}, a result of
+#'   a call to \code{\link{bc_sim_study}}.
 #' @param type An integer scalar.  Determine the type of plot.
 #' \itemize{
 #'   \item{type = 1: }{plots averages measures of predictive performance

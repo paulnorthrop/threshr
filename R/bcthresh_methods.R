@@ -1,11 +1,11 @@
 # ================================ print.bcthresh =============================
 
-#' Print method for objects of class "bcthresh"
+#' Print method for objects of class \code{"bcthresh"}
 #'
-#' \code{print} method for class "bcthresh".
+#' \code{print} method for class \code{"bcthresh"}.
 #'
-#' @param x an object inheriting from class "bcthresh", a result of a call to
-#'   \code{\link{bcthresh}}.
+#' @param x an object inheriting from class \code{"bcthresh"}, a result of a
+#'   call to \code{\link{bcthresh}}.
 #' @param digits An integer. Used for number formatting with
 #'   \code{\link[base]{format}} and \code{\link[base:Round]{signif}}.
 #' @param ... Additional optional arguments. At present no optional
@@ -47,10 +47,10 @@ print.bcthresh <- function(x, digits = 2, ...) {
 
 #' Summarizing measures of threshold predictive performance
 #'
-#' \code{summary} method for class "bcthresh"
+#' \code{summary} method for class \code{"bcthresh"}
 #'
-#' @param object an object inheriting from class "bcthresh", a result of a call
-#'   to \code{\link{bcthresh}}.
+#' @param object an object inheriting from class \code{"bcthresh"}, a result of
+#'   a call to \code{\link{bcthresh}}.
 #' @param digits An integer. Used for number formatting with
 #'   \code{\link[base]{format}} and \code{\link[base:Round]{signif}}.
 #' @param ... Additional optional arguments. At present no optional
@@ -81,9 +81,9 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 
 # ================================ plot.bcthresh =============================
 
-#' Plot method for objects of class "bcthresh"
+#' Plot method for objects of class \code{"bcthresh"}
 #'
-#' \code{plot} method for class "bcthresh".
+#' \code{plot} method for class \code{"bcthresh"}.
 #'
 #' @param x an object inheriting from class \code{"bcthresh"}, a result of a
 #'   call to \code{\link{bcthresh}}.

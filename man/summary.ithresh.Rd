@@ -7,7 +7,7 @@
 \method{summary}{ithresh}(object, ...)
 }
 \arguments{
-\item{object}{an object of class "ithresh", a result of a call to
+\item{object}{an object of class \code{"ithresh"}, a result of a call to
 \code{ithresh}.}
 
 \item{...}{Additional optional arguments. At present no optional
@@ -31,7 +31,7 @@ Returns a numeric matrix with 5 columns and \code{n_v} rows,
 }
 }
 \description{
-\code{summary} method for class "ithresh"
+\code{summary} method for class \code{"ithresh"}
 }
 \examples{
 u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))

@@ -2,13 +2,13 @@
 % Please edit documentation in R/ithresh_methods.R
 \name{print.ithresh}
 \alias{print.ithresh}
-\title{Print method for objects of class "ithresh"}
+\title{Print method for objects of class \code{"ithresh"}}
 \usage{
 \method{print}{ithresh}(x, digits = 2, ...)
 }
 \arguments{
-\item{x}{an object inheriting from class "ithresh", a result of a call to
-\code{\link{ithresh}}.}
+\item{x}{an object inheriting from class \code{"ithresh"}, a result of a
+call to \code{\link{ithresh}}.}
 
 \item{digits}{An integer. Used for number formatting with
 \code{\link[base]{format}} and \code{\link[base:Round]{signif}}.}
@@ -21,7 +21,7 @@ The argument \code{x}, invisibly, as for all
   \code{\link[base]{print}} methods.
 }
 \description{
-\code{print} method for class "ithresh".
+\code{print} method for class \code{"ithresh"}.
 }
 \details{
 Prints a matrix of the estimated threshold weights.

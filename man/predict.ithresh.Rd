@@ -41,11 +41,9 @@ then \code{n_years} must have length one.}
   If \code{which_u = "all"} then \emph{all} the thresholds are used to
   perform prediction.  The inferences from each threshold are weighted
   according to the \emph{posterior threshold weights} given in
-  equation (15) of
-  \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
-  based on the prior probabilities of thresholds in \code{u_prior}
-  and column \code{which_v} of the measures of predictive performance in
-  \code{object$pred_perf}.
+  equation (15) of Northrop et al. (2017) based on the prior probabilities
+  of thresholds in \code{u_prior} and column \code{which_v} of the measures
+  of predictive performance in \code{object$pred_perf}.
 
   Otherwise, \code{which_u} is a numeric scalar that indicates which
   element of \code{object$u_vec} the user wishes to select as a single
@@ -106,8 +104,8 @@ for predictive intervals when \code{type = "i"};
 \code{log} (relevant when \code{type = "d"}).}
 }
 \value{
-An list object of class "ithreshpred" with a similar structure to
-  an object of class "evpred" returned from
+An list object of class \code{"ithreshpred"} with a similar
+  structure to an object of class \class{"evpred"} returned from
   \code{\link[revdbayes]{predict.evpost}} is returned \emph{invisibly}.
   In addition, the object contains
   \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec},
@@ -147,8 +145,7 @@ The function \code{\link[revdbayes]{predict.evpost}} is used to
   perform predictive based on the binomial-GP posterior sample generated
   using a given training threshold.  For mathematical details of the
   single threshold and multiple threshold cases see Sections 2.3 and 3 of
-  \href{https://doi.org/10.1111/rssc.12159}{Northrop et al. (2017)}
-  respectively.
+  Northrop et al. (2017) respectively.
 }
 \examples{
 # Note:

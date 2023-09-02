@@ -49,7 +49,7 @@
 #'   shape parameter may be approximately constant. See Chapter 4 of
 #'   Coles (2001).  See also the vignette "Introducing threshr".
 #' @return
-#'   An object (list) of class "stability" with components:
+#'   An object (list) of class \code{"stability"} with components:
 #'     \item{ests}{MLEs of the GP shape parameter \eqn{\xi}.}
 #'     \item{ses}{Estimated SEs of the MLEs of \eqn{\xi}.}
 #'     \item{lower}{Lower limit of 100\code{conf}\% confidence intervals
@@ -247,10 +247,10 @@ gp_profxi <- function (z, xlow, xup, conf = 0.95, nint = 100,
 
 #' Plot diagnostics for a stability object
 #'
-#' \code{plot} method for objects of class "stability" returned from
+#' \code{plot} method for objects of class \code{"stability"} returned from
 #' \code{\link{stability}}
 #'
-#' @param x an object of class "stability", a result of a call to
+#' @param x an object of class \code{"stability"}, a result of a call to
 #'   \code{\link{stability}}.
 #' @param y Not used.
 #' @param prob A logical scalar.  If \code{TRUE} then the levels of thresholds
