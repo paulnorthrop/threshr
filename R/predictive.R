@@ -93,7 +93,7 @@
 #'   single threshold and multiple threshold cases see Sections 2.3 and 3 of
 #'   Northrop et al. (2017) respectively.
 #' @return An list object of class \code{"ithreshpred"} with a similar
-#'   structure to an object of class \class{"evpred"} returned from
+#'   structure to an object of class \code{"evpred"} returned from
 #'   \code{\link[revdbayes]{predict.evpost}} is returned \emph{invisibly}.
 #'   In addition, the object contains
 #'   \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec},

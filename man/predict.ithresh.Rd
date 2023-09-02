@@ -105,7 +105,7 @@ for predictive intervals when \code{type = "i"};
 }
 \value{
 An list object of class \code{"ithreshpred"} with a similar
-  structure to an object of class \class{"evpred"} returned from
+  structure to an object of class \code{"evpred"} returned from
   \code{\link[revdbayes]{predict.evpost}} is returned \emph{invisibly}.
   In addition, the object contains
   \code{u_vec = object$u_vec} and \code{v_vec = object$v_vec},
