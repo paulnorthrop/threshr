@@ -22,8 +22,7 @@
 #'   Cross-validatory extreme value threshold selection and uncertainty
 #'   with application to ocean storm severity.
 #'   \emph{Journal of the Royal Statistical Society Series C: Applied
-#'   Statistics}, \strong{66}(1), 93-120.
-#'   \url{https://doi.org/10.1111/rssc.12159}
+#'   Statistics}, \strong{66}(1), 93-120. \doi{10.1111/rssc.12159}
 #'
 #' @seealso The packages \code{\link[revdbayes]{revdbayes}} and
 #'   \code{\link[rust]{rust}}.
@@ -47,8 +46,7 @@
 #'   Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
 #'   Application to Ocean Storm Severity. \emph{Journal of the Royal
 #'   Statistical Society: Series C (Applied Statistics)}, \strong{66}(1),
-#'   93-120.
-#'   doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
+#'   93-120. \doi{10.1111/rssc.12159}.
 "gom"
 
 #' Storm peak significant wave heights from the North Sea
@@ -63,6 +61,5 @@
 #'   Cross-Validatory Extreme Value Threshold Selection and Uncertainty with
 #'   Application to Ocean Storm Severity. \emph{Journal of the Royal
 #'   Statistical Society: Series C (Applied Statistics)}, \strong{66}(1),
-#'   93-120.
-#'   doi:\href{https://doi.org/10.1111/rssc.12159}{10.1111/rssc.12159}.
+#'   93-120. \doi{10.1111/rssc.12159}.
 "ns"

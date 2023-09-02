@@ -227,19 +227,19 @@ gom_cv <- ithresh(data = gom, u_vec = u_vec_gom, n_v = 2, prior = prior_ptr,
 Northrop, P.J. and Attalides, N. (2016) Posterior propriety in
   Bayesian extreme value analyses using reference priors
   \emph{Statistica Sinica}, \strong{26}(2), 721--743
-  \url{https://doi.org/10.5705/ss.2014.034}.
+  \doi{10.5705/ss.2014.034}.
 
 Northrop, P. J., Attalides, N. and Jonathan, P. (2017)
   Cross-validatory extreme value threshold selection and uncertainty
   with application to ocean storm severity.
   \emph{Journal of the Royal Statistical Society Series C: Applied
   Statistics}, \strong{66}(1), 93-120.
-  \url{https://doi.org/10.1111/rssc.12159}
+  \doi{10.1111/rssc.12159}
 
 Jonathan, P. and Ewans, K. (2013) Statistical modelling
   of extreme ocean environments for marine design : a review.
   \emph{Ocean Engineering}, \strong{62}, 91-109.
-  \url{https://doi.org/10.1016/j.oceaneng.2013.01.004}
+  \doi{10.1016/j.oceaneng.2013.01.004}
 }
 \seealso{
 \code{\link{plot.ithresh}} for the S3 plot method for objects of

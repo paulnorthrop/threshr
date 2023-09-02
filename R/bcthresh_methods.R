@@ -123,7 +123,7 @@ summary.bcthresh <- function(object, digits = 2, ...) {
 #'   with application to ocean storm severity.
 #'   \emph{Journal of the Royal Statistical Society Series C: Applied
 #'   Statistics}, \strong{66}(1), 93-120.
-#'   \url{https://doi.org/10.1111/rssc.12159}
+#'   \doi{10.1111/rssc.12159}
 #' @export
 plot.bcthresh <- function(x, which_v = length(x$v_vec),
                           which_lambdas = 1:length(x$lambda),

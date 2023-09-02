@@ -68,7 +68,7 @@
 #'   based on leave-one-out cross-validation.
 #' @references Coles, S. G. (2001) \emph{An Introduction to Statistical
 #'   Modeling of Extreme Values}, Springer-Verlag, London.
-#'   \url{https://doi.org/10.1007/978-1-4471-3675-0_3}
+#'   \doi{10.1007/978-1-4471-3675-0_3}
 #' @seealso \code{\link{plot.stability}} for the S3 \code{plot} method for
 #'   objects of class \code{stability}.
 #' @seealso \code{\link[stats]{quantile}}.
