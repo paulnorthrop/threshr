@@ -30,11 +30,10 @@
 #' @seealso \code{\link{ithresh}} for threshold selection in the i.i.d. case
 #'   based on leave-one-out cross-validation.
 #' @docType package
-#' @name threshr
 #' @import methods
 #' @importFrom stats predict
 #' @importFrom graphics plot
-NULL
+"_PACKAGE"
 
 #' Storm peak significant wave heights from the Gulf of Mexico
 #'
