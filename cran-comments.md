@@ -11,4 +11,4 @@
 
 ## Downstream dependencies
 
-threshr has no downsteam dependencies
+threshr has no downstream dependencies
