@@ -70,7 +70,7 @@ the argument \code{x} in \code{\link[graphics]{legend}}.}
 
   Otherwise, \code{which_u} is a numeric scalar that selects training
   threshold \code{x$u_vec[which_u]}.  Therefore, \code{which_u} must
-  be an integer in {1, ..., \code{length(x$u_vec)}}.}
+  be an integer in \code{1, ..., length(x$u_vec)}.}
 }
 \value{
 If \code{which_u} is supplied then the object with which

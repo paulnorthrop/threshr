@@ -19,15 +19,15 @@ Returns a numeric matrix with 5 columns and \code{n_v} rows,
   determines how many of the largest training thresholds are used
   a validation thresholds.  The columns contain:
 \itemize{
-  \item {column 1:} {the validation threshold v}
-  \item {column 2:} {the sample quantile to which the validation threshold
-    corresponds}
-  \item {column 3:} {the best training threshold u judged using the
-    validation threshold v}
-  \item {column 4:} {the sample quantile to which the best training
-    threshold corresponds}
-  \item {column 5:} {the index of the vector \code{u_vec} of training
-    thresholds to which the threshold in column2 corresponds}
+  \item column 1: the validation threshold v
+  \item column 2: the sample quantile to which the validation threshold
+    corresponds
+  \item column 3: the best training threshold u judged using the
+    validation threshold v
+  \item column 4: the sample quantile to which the best training
+    threshold corresponds
+  \item column 5: the index of the vector \code{u_vec} of training
+    thresholds to which the threshold in column2 corresponds
 }
 }
 \description{

@@ -39,7 +39,7 @@
 #'   Otherwise, \code{which_u} is a numeric scalar that indicates which
 #'   element of \code{object$u_vec} the user wishes to select as a single
 #'   threshold on which to base prediction, that is, \code{which_u} must
-#'   be an integer in {1, ..., \code{length(object$u_vec)}}.
+#'   be an integer in \code{1, ..., length(object$u_vec)}.
 #' @param which_v A numeric scalar. Indicates which element of
 #'   \code{object$v_vec} is used in selecting a single threshold
 #'   (if \code{which_u = "best"}) or weighting the inferences from

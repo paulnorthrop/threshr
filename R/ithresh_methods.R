@@ -49,7 +49,7 @@
 #'
 #'   Otherwise, \code{which_u} is a numeric scalar that selects training
 #'   threshold \code{x$u_vec[which_u]}.  Therefore, \code{which_u} must
-#'   be an integer in {1, ..., \code{length(x$u_vec)}}.
+#'   be an integer in \code{1, ..., length(x$u_vec)}.
 #' @param ... Additional arguments passed on to \code{\link[graphics]{matplot}}
 #'   and/or \code{\link[graphics]{legend}} and/or \code{\link[graphics]{axis}}.
 #'   If \code{which_u} is supplied then these arguments are passed to
@@ -292,15 +292,15 @@ plot.ithresh <- function(x, y, ..., which_v = NULL, prob = TRUE,
 #'   determines how many of the largest training thresholds are used
 #'   a validation thresholds.  The columns contain:
 #' \itemize{
-#'   \item {column 1:} {the validation threshold v}
-#'   \item {column 2:} {the sample quantile to which the validation threshold
-#'     corresponds}
-#'   \item {column 3:} {the best training threshold u judged using the
-#'     validation threshold v}
-#'   \item {column 4:} {the sample quantile to which the best training
-#'     threshold corresponds}
-#'   \item {column 5:} {the index of the vector \code{u_vec} of training
-#'     thresholds to which the threshold in column2 corresponds}
+#'   \item column 1: the validation threshold v
+#'   \item column 2: the sample quantile to which the validation threshold
+#'     corresponds
+#'   \item column 3: the best training threshold u judged using the
+#'     validation threshold v
+#'   \item column 4: the sample quantile to which the best training
+#'     threshold corresponds
+#'   \item column 5: the index of the vector \code{u_vec} of training
+#'     thresholds to which the threshold in column2 corresponds
 #' }
 #' @examples
 #' u_vec_gom <- quantile(gom, probs = seq(0, 0.9, by = 0.05))

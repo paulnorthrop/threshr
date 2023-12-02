@@ -1,3 +1,9 @@
+# threshr 1.0.5
+
+## Bug fixes
+
+* Fixed issues with the incorrect use of \itemize in some Rd files.
+
 # threshr 1.0.4
 
 ## Bug fixes and minor improvements

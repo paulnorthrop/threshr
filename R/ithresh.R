@@ -30,9 +30,9 @@
 #'   extreme value posterior distributions.
 #'   In particular:
 #' \itemize{
-#'   \item {\code{n}} {The size of the posterior sample used to perform
-#'     predictive inference.  Default: \code{n = 1000}.}
-#'   \item {\code{prior}} {A prior for GP parameters to be passed to the
+#'   \item \code{n}. The size of the posterior sample used to perform
+#'     predictive inference.  Default: \code{n = 1000}.
+#'   \item \code{prior}. A prior for GP parameters to be passed to the
 #'     \strong{revdbayes} function \code{\link[revdbayes]{set_prior}}.
 #'     Can be either a character scalar that chooses an in-built prior,
 #'     or a user-supplied R function or pointer to a compiled C++ function.
@@ -49,28 +49,28 @@
 #'     \code{use_rcpp}.
 #'
 #'     Default: \code{prior = "mdi"} with \code{a = 0.6} and \code{min_xi = -1}.
-#'     This particular prior is studied in Northrop et al. (2017).}
-#'   \item {\code{h_prior}} {A \emph{list} of further arguments
-#'     (hyperparameters) for the GP prior specified in \code{prior}.}
-#'   \item {\code{bin_prior}} {A prior for the threshold exceedance probability
+#'     This particular prior is studied in Northrop et al. (2017).
+#'   \item \code{h_prior}. A \emph{list} of further arguments
+#'     (hyperparameters) for the GP prior specified in \code{prior}.
+#'   \item \code{bin_prior}. A prior for the threshold exceedance probability
 #'     \eqn{p} to be passed to the \strong{revdbayes} function
 #'     \code{\link[revdbayes]{set_bin_prior}}.
 #'     Can either be a character scalar that chooses an in-built prior,
 #'     or a user_supplied R function.
 #'
-#'     Default: \code{prior = "jeffreys"}, i.e. Beta(1/2, 1/2).}
-#'   \item {\code{h_bin_prior}} {A \emph{list} of further arguments
+#'     Default: \code{prior = "jeffreys"}, i.e. Beta(1/2, 1/2).
+#'   \item \code{h_bin_prior}. A \emph{list} of further arguments
 #'     (hyperparameters) for the binomial prior specified in \code{bin_prior}.
 #'     See the \code{\link[revdbayes]{set_bin_prior}} documentation for details
-#'     of the in-built priors.}
-#'   \item {\code{trans}} {A character scalar: either \code{"none"} or
+#'     of the in-built priors.
+#'   \item \code{trans}. A character scalar: either \code{"none"} or
 #'     \code{"BC"}.  See \code{\link{rpost_rcpp}} for details.
 #'     The default is \code{"none"}, which is usually faster than \code{"BC"}.
 #'     However, if there are very few threshold excesses then using
 #'     \code{trans = "BC"} can make the optimizations involved in the
 #'     generalized ratio-of-uniforms algorithm more stable.  If using
 #'     \code{trans = "none"} produces an error for a particular posterior
-#'     simulation then \code{trans = "BC"} is used instead.}
+#'     simulation then \code{trans = "BC"} is used instead.
 #' }
 #' @param n_v A numeric scalar.
 #'   Each of the \code{n_v} largest values in \code{u_vec} will be used
@@ -100,58 +100,58 @@
 #'   the (slower) function \code{\link[revdbayes]{rpost}} is used.
 #' @details For a given threshold in \code{u_vec}:
 #' \itemize{
-#'   \item {the number of values in \code{data} that exceed the threshold,
+#'   \item the number of values in \code{data} that exceed the threshold,
 #'     and the amounts (the \emph{threshold excesses}) by which these value
-#'     exceed the threshold are calculated;}
-#'   \item {\code{\link[revdbayes]{rpost_rcpp}}
+#'     exceed the threshold are calculated;
+#'   \item \code{\link[revdbayes]{rpost_rcpp}}
 #'     (or \code{\link[revdbayes]{rpost}}) is used to sample from the posterior
 #'     distributions of the parameters of a GP model for the threshold
 #'     excesses and a binomial model for the probability of threshold
-#'     exceedance;}
-#'   \item {the ability of this binomial-GP model to predict data
+#'     exceedance;
+#'   \item the ability of this binomial-GP model to predict data
 #'     thresholded at the validation threshold(s) specified by \code{n_v} is
 #'     assessed using leave-one-out cross-validation (the measure of
-#'     this is given in equation (7) of Northrop et al. (2017).}
+#'     this is given in equation (7) of Northrop et al. (2017).
 #' }
 #'   See Northrop et al. (2017) and the introductory threshr vignette for
 #'   further details and examples.
 #' @return An object (list) of class \code{"ithresh"}, containing the
 #'   components
 #'   \itemize{
-#'     \item{\code{pred_perf}:} A numeric matrix with \code{length(u_vec)}
+#'     \item \code{pred_perf}: A numeric matrix with \code{length(u_vec)}
 #'     rows and \code{n_v} columns.  Each column contains the values of
 #'     the measure of predictive performance.  Entries corresponding
 #'     to cases where the training threshold is above the validation
 #'     threshold will be \code{NA}.
-#'     \item{\code{u_vec}:} The argument \code{u_vec} to \code{ithresh}.
-#'     \item{\code{v_vec}:} A numeric vector.  The validation thresholds
+#'     \item \code{u_vec}: The argument \code{u_vec} to \code{ithresh}.
+#'     \item \code{v_vec}: A numeric vector.  The validation thresholds
 #'       implied by the argument \code{n_v} to \code{ithresh}.
-#'     \item{\code{u_ps}:} A numeric vector. The approximate levels of the
+#'     \item \code{u_ps}: A numeric vector. The approximate levels of the
 #'       sample quantiles to which the values in \code{u_vec} correspond,
 #'       i.e. the approximate percentage of the data the lie at or below
 #'       each element in \code{u_vec}.
-#'     \item{\code{v_ps}:} A numeric vector.  The values in \code{u_ps}
+#'     \item \code{v_ps}: A numeric vector.  The values in \code{u_ps}
 #'       that correspond to the validation thresholds.
-#'     \item{\code{sim_vals}:} A numeric matrix with 4 columns and
+#'     \item \code{sim_vals}: A numeric matrix with 4 columns and
 #'       \code{n} x \code{length(u_vec)} rows.  The \eqn{j}th block of
 #'       \code{n} rows contains in columns 1-3 the posterior samples of
 #'       the threshold exceedance probability, the GP scale
 #'       parameter and the GP shape parameter respectively,
 #'       based on training threshold \code{u_vec[i]},
 #'       and in column 4 the value of \eqn{j}.
-#'     \item{\code{n}:} A numeric scalar.  The value of \code{n}.
-#'     \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
-#'     \item{\code{data}:} The argument \code{data} to \code{ithresh}
+#'     \item \code{n}: A numeric scalar.  The value of \code{n}.
+#'     \item \code{npy}: A numeric scalar.  The value of \code{npy}.
+#'     \item \code{data}: The argument \code{data} to \code{ithresh}
 #'       detailed above, with any missing values removed.
-#'     \item{\code{use_rcpp}:} A logical scalar indicating whether
+#'     \item \code{use_rcpp}: A logical scalar indicating whether
 #'       \code{\link[revdbayes]{rpost_rcpp}} (\code{use_rcpp = TRUE}) or
 #'       \code{\link[revdbayes]{rpost}} (\code{use_rcpp = FALSE})
 #'       was used for posterior simulation.
-#'     \item{\code{for_post}:} A list containing arguments with which
+#'     \item \code{for_post}: A list containing arguments with which
 #'       \code{\link[revdbayes]{rpost_rcpp}}
 #'       (or \code{\link[revdbayes]{rpost}}) was called, including
 #'       any user-supplied arguments to these functions.
-#'     \item{\code{call:}} The call to \code{ithresh}.
+#'     \item \code{call:} The call to \code{ithresh}.
 #'   }
 #' @seealso \code{\link{plot.ithresh}} for the S3 plot method for objects of
 #'   class \code{ithresh}.
