@@ -1,6 +1,6 @@
 Package: threshr
 Title: Threshold Selection and Uncertainty for Extreme Value Analysis
-Version: 1.0.4
+Version: 1.0.5
 Date: 2023-12-02
 Authors@R: c(
     person(c("Paul", "J."), "Northrop", email = "p.northrop@ucl.ac.uk", 
