@@ -153,7 +153,7 @@ the argument <code>x</code> in <code><a href="https://rdrr.io/r/graphics/legend.
   validation threshold.</p>
 <p>Otherwise, <code>which_u</code> is a numeric scalar that selects training
   threshold <code>x$u_vec[which_u]</code>.  Therefore, <code>which_u</code> must
-  be an integer in 1, ..., <code>length(x$u_vec)</code>.</p></dd>
+  be an integer in <code>1, ..., length(x$u_vec)</code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -216,7 +216,7 @@ the argument <code>x</code> in <code><a href="https://rdrr.io/r/graphics/legend.
 <span class="r-in"><span><span class="co"># See which threshold was used</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gom_cv</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        v v quantile best u best u quantile index of u_vec</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 4.6070         80 3.6545              65             14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 4.6070         80 3.3878              60             13</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 5.1302         85 3.6545              65             14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 5.8246         90 3.6545              65             14</span>
 <span class="r-in"><span></span></span>
