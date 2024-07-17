@@ -1,4 +1,4 @@
-A patch to fix the problems at https://cran.r-project.org/web/checks/check_results_smovie.html has been fixed.
+A patch to fix the NOTEs at https://cran.r-project.org/web/checks/check_results_threshr.html.
 
 ## R CMD check results
 
@@ -13,4 +13,4 @@ A patch to fix the problems at https://cran.r-project.org/web/checks/check_resul
 
 ## Downstream dependencies
 
-threshr has no downstream dependencies
+None
