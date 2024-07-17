@@ -1,3 +1,9 @@
+# threshr 1.0.6
+
+## Bug fixes and minor improvements
+
+* Fixed 3 \link{} targets with missing (revdbayes) package anchors in the Rd file for `ithresh()`.
+
 # threshr 1.0.5
 
 ## Bug fixes
