@@ -43,9 +43,9 @@
 #'     using revdbayes} for information about creating
 #'     a pointer to a C++ function.  See also the \strong{Examples} section.
 #'
-#'     If the user supplies an R function then \code{\link{rpost}} will be
-#'     used for posterior simulation, rather than (the faster)
-#'     \code{\link{rpost_rcpp}}, regardless of the input value of
+#'     If the user supplies an R function then \code{\link[revdbayes]{rpost}}
+#'     will be used for posterior simulation, rather than (the faster)
+#'     \code{\link[revdbayes]{rpost_rcpp}}, regardless of the input value of
 #'     \code{use_rcpp}.
 #'
 #'     Default: \code{prior = "mdi"} with \code{a = 0.6} and \code{min_xi = -1}.
@@ -64,7 +64,7 @@
 #'     See the \code{\link[revdbayes]{set_bin_prior}} documentation for details
 #'     of the in-built priors.
 #'   \item \code{trans}. A character scalar: either \code{"none"} or
-#'     \code{"BC"}.  See \code{\link{rpost_rcpp}} for details.
+#'     \code{"BC"}.  See \code{\link[revdbayes]{rpost_rcpp}} for details.
 #'     The default is \code{"none"}, which is usually faster than \code{"BC"}.
 #'     However, if there are very few threshold excesses then using
 #'     \code{trans = "BC"} can make the optimizations involved in the
