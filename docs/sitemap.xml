@@ -1,66 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/threshr-vignette.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gom.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ithresh.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ns.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.ithresh.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.ithreshpred.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.stability.html</loc>
-  </url>
-  <url>
-    <loc>/reference/predict.ithresh.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.ithresh.html</loc>
-  </url>
-  <url>
-    <loc>/reference/stability.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.ithresh.html</loc>
-  </url>
-  <url>
-    <loc>/reference/threshr-internal.html</loc>
-  </url>
-  <url>
-    <loc>/reference/threshr-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/threshr.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/threshr-vignette.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/gom.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/ithresh.html</loc></url>
+<url><loc>/reference/ns.html</loc></url>
+<url><loc>/reference/plot.ithresh.html</loc></url>
+<url><loc>/reference/plot.ithreshpred.html</loc></url>
+<url><loc>/reference/plot.stability.html</loc></url>
+<url><loc>/reference/predict.ithresh.html</loc></url>
+<url><loc>/reference/print.ithresh.html</loc></url>
+<url><loc>/reference/stability.html</loc></url>
+<url><loc>/reference/summary.ithresh.html</loc></url>
+<url><loc>/reference/threshr-internal.html</loc></url>
+<url><loc>/reference/threshr-package.html</loc></url>
 </urlset>
+
