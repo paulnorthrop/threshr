@@ -1,3 +1,9 @@
+# threshr 1.0.6.9000
+
+## Bug fixes and minor improvements
+
+* Corrected a typo in the description of of the component `sim_vals` of the object returned from `ithresh`. `u_vec[i]` should be `u_vec[j]`. Thank you to Ye Liu for spotting this. [Issue 3](https://github.com/paulnorthrop/threshr/issues/3#issue-2832668692)
+
 # threshr 1.0.6
 
 ## Bug fixes and minor improvements
