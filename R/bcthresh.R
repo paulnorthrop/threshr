@@ -62,7 +62,7 @@
 #'       block of \code{n} rows contains in columns 1-3 the posterior samples
 #'       of the threshold exceedance probability, the GP scale
 #'       parameter and the GP shape parameter respectively,
-#'       based on training threshold \code{u_vec[i]},
+#'       based on training threshold \code{u_vec[j]},
 #'       and in column 4 the value of \eqn{j}.
 #'     \item{\code{n}:} A numeric scalar.  The value of \code{n}.
 #'     \item{\code{npy}:} A numeric scalar.  The value of \code{npy}.
