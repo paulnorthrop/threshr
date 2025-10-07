@@ -19,7 +19,7 @@ test_that("summary.ithresh: double", {
   testthat::expect_type(check_summary, "double")
 })
 test_that("summary.ithresh: matrix", {
-  testthat::expect(is.matrix(check_summary), TRUE)
+  testthat::expect_true(is.matrix(check_summary))
 })
 test_that("summary.ithresh: n_v-row matrix", {
   testthat::expect_equal(nrow(check_summary), n_v)
@@ -164,4 +164,3 @@ test_that("plot.ithreshpred: correct col", {
   testthat::expect_equal(check_pars$col, rep(my_col, n_col_y),
                          tolerance = my_tol)
 })
-
