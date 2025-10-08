@@ -1,8 +1,9 @@
-# threshr 1.0.6.9000
+# threshr 1.0.7
 
 ## Bug fixes and minor improvements
 
 * Corrected a typo in the description of of the component `sim_vals` of the object returned from `ithresh`. `u_vec[i]` should be `u_vec[j]`. Thank you to Ye Liu for spotting this. [Issue 3](https://github.com/paulnorthrop/threshr/issues/3#issue-2832668692)
+* Fix for upcoming testthat 3.3.0 release (#4). Pull request by @hadley.
 
 # threshr 1.0.6
 
