@@ -1,4 +1,4 @@
-A patch to fix the NOTEs at https://cran.r-project.org/web/checks/check_results_threshr.html.
+A fix for the upcoming testthat 3.3.0 release 
 
 ## R CMD check results
 
@@ -6,9 +6,8 @@ A patch to fix the NOTEs at https://cran.r-project.org/web/checks/check_results_
 
 ## Test environments
 
-- Debian Linux, clang (R-devel) on R-hub
-- Fedora Linux, GCC (R-devel) on R-hub
 - macOS (R-release), ubuntu (R-oldrel, R-release, R-devel), windows (R-release) using the rcmdcheck package
+- macOS builder 
 - win-builder (R-devel, R-release and R-oldrelease)
 
 ## Downstream dependencies
