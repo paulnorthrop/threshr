@@ -3,8 +3,6 @@
 
 # threshr
 
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/paulnorthrop/threshr?branch=master&svg=true)](https://ci.appveyor.com/project/paulnorthrop/threshr)
 [![R-CMD-check](https://github.com/paulnorthrop/threshr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/paulnorthrop/threshr/actions/workflows/R-CMD-check.yaml)
 [![Coverage
 Status](https://codecov.io/github/paulnorthrop/threshr/coverage.svg?branch=master)](https://app.codecov.io/github/paulnorthrop/threshr?branch=master)
