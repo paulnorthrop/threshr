@@ -101,25 +101,25 @@ set at sample quantiles of  <code>data</code> using
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Further (optional) arguments to be passed to the
-  <code><a href="https://paulnorthrop.github.io/revdbayes/reference/revdbayes-package.html" class="external-link">revdbayes</a></code> function
-  <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code> (or <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>),
+  <code><a href="https://github.com/paulnorthrop/revdbayes/reference/revdbayes-package.html" class="external-link">revdbayes</a></code> function
+  <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code> (or <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>),
   which use the generalized ratio-of-uniforms method to simulate from
   extreme value posterior distributions.
   In particular:</p><ul><li><p><code>n</code>. The size of the posterior sample used to perform
     predictive inference.  Default: <code>n = 1000</code>.</p></li>
 <li><p><code>prior</code>. A prior for GP parameters to be passed to the
-    <strong>revdbayes</strong> function <code><a href="https://paulnorthrop.github.io/revdbayes/reference/set_prior.html" class="external-link">set_prior</a></code>.
+    <strong>revdbayes</strong> function <code><a href="https://github.com/paulnorthrop/revdbayes/reference/set_prior.html" class="external-link">set_prior</a></code>.
     Can be either a character scalar that chooses an in-built prior,
     or a user-supplied R function or pointer to a compiled C++ function.
-    See the <code><a href="https://paulnorthrop.github.io/revdbayes/reference/set_prior.html" class="external-link">set_prior</a></code> documentation for details
+    See the <code><a href="https://github.com/paulnorthrop/revdbayes/reference/set_prior.html" class="external-link">set_prior</a></code> documentation for details
     of the in-built priors.
     See the <strong>revdbayes</strong> vignette
     <a href="https://cran.r-project.org/package=revdbayes" class="external-link">Faster simulation
     using revdbayes</a> for information about creating
     a pointer to a C++ function.  See also the <strong>Examples</strong> section.</p>
-<p>If the user supplies an R function then <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>
+<p>If the user supplies an R function then <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>
     will be used for posterior simulation, rather than (the faster)
-    <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code>, regardless of the input value of
+    <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code>, regardless of the input value of
     <code>use_rcpp</code>.</p>
 <p>Default: <code>prior = "mdi"</code> with <code>a = 0.6</code> and <code>min_xi = -1</code>.
     This particular prior is studied in Northrop et al. (2017).</p></li>
@@ -127,16 +127,16 @@ set at sample quantiles of  <code>data</code> using
     (hyperparameters) for the GP prior specified in <code>prior</code>.</p></li>
 <li><p><code>bin_prior</code>. A prior for the threshold exceedance probability
     \(p\) to be passed to the <strong>revdbayes</strong> function
-    <code><a href="https://paulnorthrop.github.io/revdbayes/reference/set_bin_prior.html" class="external-link">set_bin_prior</a></code>.
+    <code><a href="https://github.com/paulnorthrop/revdbayes/reference/set_bin_prior.html" class="external-link">set_bin_prior</a></code>.
     Can either be a character scalar that chooses an in-built prior,
     or a user_supplied R function.</p>
 <p>Default: <code>prior = "jeffreys"</code>, i.e. Beta(1/2, 1/2).</p></li>
 <li><p><code>h_bin_prior</code>. A <em>list</em> of further arguments
     (hyperparameters) for the binomial prior specified in <code>bin_prior</code>.
-    See the <code><a href="https://paulnorthrop.github.io/revdbayes/reference/set_bin_prior.html" class="external-link">set_bin_prior</a></code> documentation for details
+    See the <code><a href="https://github.com/paulnorthrop/revdbayes/reference/set_bin_prior.html" class="external-link">set_bin_prior</a></code> documentation for details
     of the in-built priors.</p></li>
 <li><p><code>trans</code>. A character scalar: either <code>"none"</code> or
-    <code>"BC"</code>.  See <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code> for details.
+    <code>"BC"</code>.  See <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code> for details.
     The default is <code>"none"</code>, which is usually faster than <code>"BC"</code>.
     However, if there are very few threshold excesses then using
     <code>trans = "BC"</code> can make the optimizations involved in the
@@ -174,10 +174,10 @@ and so on.</p></dd>
 
 <dt id="arg-use-rcpp">use_rcpp<a class="anchor" aria-label="anchor" href="#arg-use-rcpp"></a></dt>
 <dd><p>A logical scalar.  If <code>TRUE</code> (the default) the
-revdbayes function <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code> is used for
+revdbayes function <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code> is used for
 posterior simulation.  If <code>FALSE</code>, or if the user supplies an R
 function to set the prior for GP parameters,
-the (slower) function <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost.html" class="external-link">rpost</a></code> is used.</p></dd>
+the (slower) function <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost.html" class="external-link">rpost</a></code> is used.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -209,12 +209,12 @@ the (slower) function <code><a href="https://paulnorthrop.github.io/revdbayes/re
 <li><p><code>data</code>: The argument <code>data</code> to <code>ithresh</code>
       detailed above, with any missing values removed.</p></li>
 <li><p><code>use_rcpp</code>: A logical scalar indicating whether
-      <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code> (<code>use_rcpp = TRUE</code>) or
-      <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost.html" class="external-link">rpost</a></code> (<code>use_rcpp = FALSE</code>)
+      <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code> (<code>use_rcpp = TRUE</code>) or
+      <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost.html" class="external-link">rpost</a></code> (<code>use_rcpp = FALSE</code>)
       was used for posterior simulation.</p></li>
 <li><p><code>for_post</code>: A list containing arguments with which
-      <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code>
-      (or <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>) was called, including
+      <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code>
+      (or <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>) was called, including
       any user-supplied arguments to these functions.</p></li>
 <li><p><code>call:</code> The call to <code>ithresh</code>.</p></li>
 </ul></div>
@@ -223,8 +223,8 @@ the (slower) function <code><a href="https://paulnorthrop.github.io/revdbayes/re
     <p>For a given threshold in <code>u_vec</code>:</p><ul><li><p>the number of values in <code>data</code> that exceed the threshold,
     and the amounts (the <em>threshold excesses</em>) by which these value
     exceed the threshold are calculated;</p></li>
-<li><p><code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code>
-    (or <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>) is used to sample from the posterior
+<li><p><code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code>
+    (or <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>) is used to sample from the posterior
     distributions of the parameters of a GP model for the threshold
     excesses and a binomial model for the probability of threshold
     exceedance;</p></li>
@@ -261,13 +261,13 @@ the (slower) function <code><a href="https://paulnorthrop.github.io/revdbayes/re
   predictive performance.</p>
 <p><code><a href="predict.ithresh.html">predict.ithresh</a></code> for predictive inference for the
   largest value observed in N years.</p>
-<p><code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost.html" class="external-link">rpost</a></code> in the
-  <code><a href="https://paulnorthrop.github.io/revdbayes/reference/revdbayes-package.html" class="external-link">revdbayes</a></code> package for details of the arguments
+<p><code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost.html" class="external-link">rpost</a></code> in the
+  <code><a href="https://github.com/paulnorthrop/revdbayes/reference/revdbayes-package.html" class="external-link">revdbayes</a></code> package for details of the arguments
   that can be passed to
-  <code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code>/<code><a href="https://paulnorthrop.github.io/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>.</p>
-<p><code><a href="https://paulnorthrop.github.io/revdbayes/reference/set_prior.html" class="external-link">set_prior</a></code> and
-  <code><a href="https://paulnorthrop.github.io/revdbayes/reference/set_bin_prior.html" class="external-link">set_bin_prior</a></code> in the
-  <code><a href="https://paulnorthrop.github.io/revdbayes/reference/revdbayes-package.html" class="external-link">revdbayes</a></code> package for details of how to set a
+  <code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost_rcpp.html" class="external-link">rpost_rcpp</a></code>/<code><a href="https://github.com/paulnorthrop/revdbayes/reference/rpost.html" class="external-link">rpost</a></code>.</p>
+<p><code><a href="https://github.com/paulnorthrop/revdbayes/reference/set_prior.html" class="external-link">set_prior</a></code> and
+  <code><a href="https://github.com/paulnorthrop/revdbayes/reference/set_bin_prior.html" class="external-link">set_bin_prior</a></code> in the
+  <code><a href="https://github.com/paulnorthrop/revdbayes/reference/revdbayes-package.html" class="external-link">revdbayes</a></code> package for details of how to set a
   prior distributions for GP parameters and for the exceedance probability
   \(p\).</p>
 <p><code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></code>.</p></div>
@@ -321,7 +321,7 @@ the (slower) function <code><a href="https://paulnorthrop.github.io/revdbayes/re
 <span class="r-in"><span><span class="co"># We make use of a C++ function and function create_prior_xptr() to create</span></span></span>
 <span class="r-in"><span><span class="co"># the required pointer from the revdbayes package</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">prior_ptr</span> <span class="op">&lt;-</span> <span class="fu">revdbayes</span><span class="fu">::</span><span class="fu"><a href="https://paulnorthrop.github.io/revdbayes/reference/create_prior_xptr.html" class="external-link">create_prior_xptr</a></span><span class="op">(</span><span class="st">"gp_flat"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">prior_ptr</span> <span class="op">&lt;-</span> <span class="fu">revdbayes</span><span class="fu">::</span><span class="fu"><a href="https://github.com/paulnorthrop/revdbayes/reference/create_prior_xptr.html" class="external-link">create_prior_xptr</a></span><span class="op">(</span><span class="st">"gp_flat"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gom_cv</span> <span class="op">&lt;-</span> <span class="fu">ithresh</span><span class="op">(</span>data <span class="op">=</span> <span class="va">gom</span>, u_vec <span class="op">=</span> <span class="va">u_vec_gom</span>, n_v <span class="op">=</span> <span class="fl">2</span>, prior <span class="op">=</span> <span class="va">prior_ptr</span>,</span></span>
 <span class="r-in"><span>                  h_prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>min_xi <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>

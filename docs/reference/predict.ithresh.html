@@ -155,7 +155,7 @@ validation thresholds in <code>object$v_vec</code>.</p></dd>
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>A character vector.
-  Passed to <code><a href="https://paulnorthrop.github.io/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>.
+  Passed to <code><a href="https://github.com/paulnorthrop/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>.
   Indicates which type of inference is required:</p><ul><li><p>"p" for the predictive distribution function,</p></li>
 <li><p>"d" for the predictive density function,</p></li>
 <li><p>"q" for the predictive quantile function,</p></li>
@@ -167,22 +167,22 @@ validation thresholds in <code>object$v_vec</code>.</p></dd>
 
 <dt id="arg-hpd">hpd<a class="anchor" aria-label="anchor" href="#arg-hpd"></a></dt>
 <dd><p>A logical scalar.  The argument <code>hpd</code> of
-<code><a href="https://paulnorthrop.github.io/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>. Only relevant if
+<code><a href="https://github.com/paulnorthrop/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>. Only relevant if
 <code>type = "i"</code>.</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A numeric vector.  The argument <code>x</code> of
-<code><a href="https://paulnorthrop.github.io/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>.  In the current context this
+<code><a href="https://github.com/paulnorthrop/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>.  In the current context this
 must be a vector (not a matrix, as suggested by the documentation of
-<code><a href="https://paulnorthrop.github.io/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>).  If <code>x</code> is not supplied
+<code><a href="https://github.com/paulnorthrop/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>).  If <code>x</code> is not supplied
 then a default value is set within
-<code><a href="https://paulnorthrop.github.io/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>.</p></dd>
+<code><a href="https://github.com/paulnorthrop/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to be passed to
-<code><a href="https://paulnorthrop.github.io/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>.  In particular:
+<code><a href="https://github.com/paulnorthrop/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code>.  In particular:
 <code>level</code>, which can be used to set (multiple) levels
 for predictive intervals when <code>type = "i"</code>;
 <code>lower_tail</code> (relevant when <code>type = "p"</code> or <code>"q"</code>) and
@@ -193,7 +193,7 @@ for predictive intervals when <code>type = "i"</code>;
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An list object of class <code>"ithreshpred"</code> with a similar
   structure to an object of class <code>"evpred"</code> returned from
-  <code><a href="https://paulnorthrop.github.io/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code> is returned <em>invisibly</em>.
+  <code><a href="https://github.com/paulnorthrop/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code> is returned <em>invisibly</em>.
   In addition, the object contains
   <code>u_vec = object$u_vec</code> and <code>v_vec = object$v_vec</code>,
   <code>which_v</code> and the index <code>best_u</code> in
@@ -214,7 +214,7 @@ for predictive intervals when <code>type = "i"</code>;
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The function <code><a href="https://paulnorthrop.github.io/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code> is used to
+    <p>The function <code><a href="https://github.com/paulnorthrop/revdbayes/reference/predict.evpost.html" class="external-link">predict.evpost</a></code> is used to
   perform predictive based on the binomial-GP posterior sample generated
   using a given training threshold.  For mathematical details of the
   single threshold and multiple threshold cases see Sections 2.3 and 3 of
