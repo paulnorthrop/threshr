@@ -25,7 +25,7 @@ to produce a crude graphical diagnostic for threshold choice."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">threshr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,8 @@ to produce a crude graphical diagnostic for threshold choice.</p>
 
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>A numeric vector of observations.</p></dd>
+<dd><p>A numeric vector of observations. Any missing (<code>NA</code>) values
+are removed before fitting GP models.</p></dd>
 
 
 <dt id="arg-u-vec">u_vec<a class="anchor" aria-label="anchor" href="#arg-u-vec"></a></dt>
@@ -128,7 +129,7 @@ for each threshold.  If <code>FALSE</code> then nothing is plotted.</p></dd>
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Further (optional) arguments to be passed to the
 <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim</a></code> function for the optimizations on which
-the profile-likelihood for \(xi\) is based.</p></dd>
+the profile-likelihood for \(\xi\) is based.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -159,7 +160,7 @@ the profile-likelihood for \(xi\) is based.</p></dd>
      in <code>u_vec</code> correspond.</p></dd>
 
     <dt>data</dt>
-<dd><p>The input <code>data</code>.</p></dd>
+<dd><p>The input <code>data</code>, with any missing values removed.</p></dd>
 
     <dt>conf</dt>
 <dd><p>The input <code>conf</code>.</p></dd>
