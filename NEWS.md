@@ -2,7 +2,7 @@
 
 ## Bug fixes and minor improvements
 
-* In `stability()` any missing (`NA`) values are removed before fitting GP models. Thank you to Tatsuki Yamane for spotting this problem. 
+* In `stability()` and in the internal function `gp_mle()`, any missing (`NA`) values are removed before fitting GP models. Thank you to Tatsuki Yamane for spotting this problem. 
 
 # threshr 1.0.7
 
