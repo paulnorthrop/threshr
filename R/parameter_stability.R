@@ -88,7 +88,7 @@
 stability <- function(data, u_vec, prof = FALSE, conf = 95, mult = 1:2,
                       plot_prof = FALSE, ...){
   # Remove missing values
-  data <- na.omit(data)
+  data <- as.numeric(stats::na.omit(data))
   # Put thresholds in ascending order and remove any repeated values.
   u_vec <- unique(sort(u_vec))
   n_u <- length(u_vec)
