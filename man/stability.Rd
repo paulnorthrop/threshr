@@ -48,7 +48,7 @@ for each threshold.  If \code{FALSE} then nothing is plotted.}
 
 \item{...}{Further (optional) arguments to be passed to the
 \code{\link[stats]{optim}} function for the optimizations on which
-the profile-likelihood for \eqn{xi} is based.}
+the profile-likelihood for \eqn{\xi} is based.}
 }
 \value{
 An object (list) of class \code{"stability"} with components:

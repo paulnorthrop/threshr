@@ -37,7 +37,7 @@
 #'   for each threshold.  If \code{FALSE} then nothing is plotted.
 #' @param ... Further (optional) arguments to be passed to the
 #'   \code{\link[stats]{optim}} function for the optimizations on which
-#'   the profile-likelihood for \eqn{xi} is based.
+#'   the profile-likelihood for \eqn{\xi} is based.
 #' @details
 #'   For each threshold in \code{u_vec} a GP model is fitted by maximum
 #'   likelihood estimation to the threshold excesses, i.e. the amounts
