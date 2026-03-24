@@ -15,7 +15,8 @@ stability(
 )
 }
 \arguments{
-\item{data}{A numeric vector of observations.}
+\item{data}{A numeric vector of observations. Any missing (\code{NA}) values
+are removed before fitting GP models.}
 
 \item{u_vec}{A numeric vector of thresholds to be applied to the data.
 Any duplicated values will be removed.  These could be set at sample
@@ -62,7 +63,7 @@ An object (list) of class \code{"stability"} with components:
     \item{u_vec}{The thresholds supplied by the user.}
     \item{u_ps}{The approximate sample quantiles to which the thresholds
      in \code{u_vec} correspond.}
-    \item{data}{The input \code{data}.}
+    \item{data}{The input \code{data}, with any missing values removed.}
     \item{conf}{The input \code{conf}.}
   Each of these components is a numeric vector of length
 \code{length(u_vec)}.

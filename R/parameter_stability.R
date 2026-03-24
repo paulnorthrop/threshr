@@ -10,7 +10,8 @@
 #' using \code{\link{plot.stability}},
 #' to produce a crude graphical diagnostic for threshold choice.
 #'
-#' @param data  A numeric vector of observations.
+#' @param data A numeric vector of observations. Any missing (\code{NA}) values
+#'   are removed before fitting GP models.
 #' @param u_vec A numeric vector of thresholds to be applied to the data.
 #'   Any duplicated values will be removed.  These could be set at sample
 #'   quantiles of \code{data} using \code{\link[stats]{quantile}}.
@@ -60,7 +61,7 @@
 #'     \item{u_vec}{The thresholds supplied by the user.}
 #'     \item{u_ps}{The approximate sample quantiles to which the thresholds
 #'      in \code{u_vec} correspond.}
-#'     \item{data}{The input \code{data}.}
+#'     \item{data}{The input \code{data}, with any missing values removed.}
 #'     \item{conf}{The input \code{conf}.}
 #'   Each of these components is a numeric vector of length
 #' \code{length(u_vec)}.
@@ -86,6 +87,8 @@
 #' @export
 stability <- function(data, u_vec, prof = FALSE, conf = 95, mult = 1:2,
                       plot_prof = FALSE, ...){
+  # Remove missing values
+  data <- na.omit(data)
   # Put thresholds in ascending order and remove any repeated values.
   u_vec <- unique(sort(u_vec))
   n_u <- length(u_vec)
