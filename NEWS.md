@@ -1,3 +1,9 @@
+# threshr 1.0.8
+
+## Bug fixes and minor improvements
+
+* In `stability()` any missing (`NA`) values are removed before fitting GP models. Thank you to Tatsuki Yamane for spotting this problem. 
+
 # threshr 1.0.7
 
 ## Bug fixes and minor improvements
