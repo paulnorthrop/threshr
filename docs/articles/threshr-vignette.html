@@ -181,7 +181,7 @@ sum to 1, against training threshold. See equations (7) and (14) of
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gom_cv</span>, lwd <span class="op">=</span> <span class="fl">2</span>, cex.axis <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Gulf of Mexico: significant wave height / m"</span>, side <span class="op">=</span> <span class="fl">3</span>, line <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="threshr-vignette_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"><img src="threshr-vignette_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="threshr-vignette_files/figure-html/unnamed-chunk-4-1.png" alt="Predictive threshold selections plots for the North Sea and Gulf of Mexico data. The thresholds with the best estimated performance are the 25% sample quantile for the North Sea data and the 60% sample quantile for the Gulf of Mexico data." width="672" style="display: block; margin: auto;"><img src="threshr-vignette_files/figure-html/unnamed-chunk-4-2.png" alt="Predictive threshold selections plots for the North Sea and Gulf of Mexico data. The thresholds with the best estimated performance are the 25% sample quantile for the North Sea data and the 60% sample quantile for the Gulf of Mexico data." width="672" style="display: block; margin: auto;"></p>
 <p>The summary method identifies which training threshold is estimated
 to perform best.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -201,7 +201,7 @@ threshold, as below.</p>
 <span><span class="co"># (based on the lowest validation threshold)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ns_cv</span>, which_u <span class="op">=</span> <span class="st">"best"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gom_cv</span>, which_u <span class="op">=</span> <span class="st">"best"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="threshr-vignette_files/figure-html/unnamed-chunk-6-1.png" width="331.2"><img src="threshr-vignette_files/figure-html/unnamed-chunk-6-2.png" width="331.2"></p>
+<p><img src="threshr-vignette_files/figure-html/unnamed-chunk-6-1.png" alt="Plots of the posterior samples and contours of the posterior densities at the best thresholds for the North Sea (left) and Gulf of Mexico (right). Both plots exhibit negative posterior dependence between the GP scale and shape parameters." width="331.2"><img src="threshr-vignette_files/figure-html/unnamed-chunk-6-2.png" alt="Plots of the posterior samples and contours of the posterior densities at the best thresholds for the North Sea (left) and Gulf of Mexico (right). Both plots exhibit negative posterior dependence between the GP scale and shape parameters." width="331.2"></p>
 </div>
 <div class="section level2">
 <h2 id="predictive-inference-for-future-extremes">Predictive inference for future extremes<a class="anchor" aria-label="anchor" href="#predictive-inference-for-future-extremes"></a>
@@ -224,7 +224,7 @@ The default is <span class="math inline">\(N = 100\)</span>.</p>
 <code class="sourceCode R"><span><span class="co"># Predictive distribution function</span></span>
 <span><span class="va">best_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">gom_cv</span>, n_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1000</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"d"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">best_p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="threshr-vignette_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="threshr-vignette_files/figure-html/unnamed-chunk-7-1.png" alt="Plots of the posterior predictive densities of the 100-year and 1000-year maxima for the Gulf of Mexico data. Both density functions are strongly positively skewed." width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="inferences-averaged-over-multiple-thresholds">Inferences averaged over multiple thresholds<a class="anchor" aria-label="anchor" href="#inferences-averaged-over-multiple-thresholds"></a>
@@ -241,7 +241,7 @@ distribution function. If <code>which_u = "all"</code> then
 <code class="sourceCode R"><span><span class="co">### All thresholds plus weighted average of inferences over all thresholds</span></span>
 <span><span class="va">all_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">gom_cv</span>, which_u <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">all_p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="threshr-vignette_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="threshr-vignette_files/figure-html/unnamed-chunk-8-1.png" alt="Plots of the distribution function of the 100-year maxima for the Gulf of Mexico data: one grey curve for each threshold and a black curve for the weighted average over all the thresholds considered." width="672" style="display: block; margin: auto;"></p>
 <p>As we expect, the estimated distribution function obtained by the
 weighted average over all thresholds lies between the pointwise envelope
 of the curves of the individual thresholds.</p>
