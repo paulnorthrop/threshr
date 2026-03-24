@@ -167,3 +167,14 @@ inv_yj <- function(x, lambda = 1, lambda_tol = 1 / 50, m = 4) {
   retval[xgt0] <- inv_bc(x[xgt0], lambda, lambda_tol, m) - 1
   return(retval)
 }
+
+# ============================= Used in gp_mle() ============================ #
+
+#' @keywords internal
+#' @rdname threshr-internal
+diag_pos <- function(x) {
+  # Diagonal elements of a matrix, returning NA for any negative values
+  y <- diag(x)
+  y[y < 0] <- NA
+  return(y)
+}
