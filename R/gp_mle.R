@@ -1,10 +1,3 @@
-diag_pos <- function(x) {
-  # Diagonal elements of a matrix, returning NA for any negative values
-  y <- diag(x)
-  y[y < 0] <- NA
-  return(y)
-}
-
 # =========================== gp_mle ===========================
 
 gp_mle <- function(gp_data) {
