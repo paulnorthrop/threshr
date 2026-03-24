@@ -1,5 +1,3 @@
-A fix for the upcoming testthat 3.3.0 release 
-
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
